@@ -29,6 +29,18 @@
       document.getElementById("regular-time").innerHTML = `It took ` +
         `${afterTime - beforeTime} milliseconds to calculate this.`;
     }
+    function startRegularMemoFib() {
+      const n = parseInt(document.getElementById('regular-memo-n').value);
+      const button = document.getElementById('regular-memo-submit');
+      button.disabled = true;
+      const beforeTime = new Date().getTime();
+      document.getElementById("regular-memo-result").innerHTML = `The ${n}th ` +
+        `Fibonacci number is ${regularMemoFib(n)}.`;
+      button.disabled = false;
+      const afterTime = new Date().getTime();
+      document.getElementById("regular-memo-time").innerHTML = `It took ` +
+        `${afterTime - beforeTime} milliseconds to calculate this.`;
+    }
 
     async function asyncFib(n) {
       if (n <= 0) return 0;
@@ -53,6 +65,18 @@
       return regularFib(n - 1) + regularFib(n - 2);
     }
 
+    function regularMemoFib(n, memo = {}) {
+      if (n <= 0) return 0;
+      if (n === 1) return 1;
+      if (memo[n]) return memo[n];
+
+      const first = regularMemoFib(n - 1, memo);
+      const second = regularMemoFib(n - 2, memo);
+      memo[n] = first + second;
+
+      return memo[n];
+    }
+
     function appendCode(fcn, htmlElement) {
       const arr = fcn.toString().split("\n");
       arr.forEach(function (line, idx) {
@@ -75,12 +99,15 @@
       appendCode(asyncFib, asyncSource);
       const regularSource = document.getElementById('regular-source');
       appendCode(regularFib, regularSource);
+      const regularMemoSource = document.getElementById('regular-memo-source');
+      appendCode(regularMemoFib, regularMemoSource);
     });
 
   </script>
   <style>
     body {
       display: flex;
+      flex-wrap: wrap;
       font-size: 1em;
     }
 
@@ -166,6 +193,17 @@
     </div>
     <div class="result" id="regular-result"></div>
     <div class="result" id="regular-time"></div>
+  </div>
+  <div class="container" id="regular-memo-container">
+    <h1>Regular Memoized Fib</h1>
+    <div class="source" id="regular-memo-source"></div>
+    <h3>Benchmark</h3>
+    <div>
+      <input id="regular-memo-n" type="number" value="10" />
+      <button id="regular-memo-submit" onclick="startRegularMemoFib()">Calculate!</button>
+    </div>
+    <div class="result" id="regular-memo-result"></div>
+    <div class="result" id="regular-memo-time"></div>
   </div>
 </body>
 
