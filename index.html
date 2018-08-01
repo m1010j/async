@@ -36,16 +36,12 @@
 
       let sum = 0;
 
-      await Promise.all([
-        asyncFib(n - 1).then(function (n) {
-          sum += n;
-        }),
-        asyncFib(n - 2).then(function (n) {
-          sum += n;
-        }),
+      const prevValues = await Promise.all([
+        asyncFib(n - 1),
+        asyncFib(n - 2),
       ]);
 
-      return sum;
+      return prevValues[0] + prevValues[1];
     }
 
     function regularFib(n) {
