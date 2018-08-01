@@ -17,6 +17,7 @@
           `${afterTime - beforeTime} milliseconds to calculate this.`;
       });
     }
+
     function startRegularFib() {
       const n = parseInt(document.getElementById('regular-n').value);
       const button = document.getElementById('regular-submit');
@@ -29,6 +30,22 @@
       document.getElementById("regular-time").innerHTML = `It took ` +
         `${afterTime - beforeTime} milliseconds to calculate this.`;
     }
+
+    function startAsyncMemoFib() {
+      const n = parseInt(document.getElementById('async-memo-n').value);
+      const button = document.getElementById('async-memo-submit');
+      button.disabled = true;
+      const beforeTime = new Date().getTime();
+      asyncMemoFib(n).then(function (result) {
+        document.getElementById("async-memo-result").innerHTML = `The ${n}th ` +
+          `Fibonacci number is ${result}.`;
+        button.disabled = false;
+        const afterTime = new Date().getTime();
+        document.getElementById("async-memo-time").innerHTML = `It took ` +
+          `${afterTime - beforeTime} milliseconds to calculate this.`;
+      });
+    }
+
     function startRegularMemoFib() {
       const n = parseInt(document.getElementById('regular-memo-n').value);
       const button = document.getElementById('regular-memo-submit');
@@ -46,8 +63,6 @@
       if (n <= 0) return 0;
       if (n === 1) return 1;
 
-      let sum = 0;
-
       const prevValues = await Promise.all([
         asyncFib(n - 1),
         asyncFib(n - 2),
@@ -60,9 +75,21 @@
       if (n <= 0) return 0;
       if (n === 1) return 1;
 
-      let sum = 0;
-
       return regularFib(n - 1) + regularFib(n - 2);
+    }
+
+    async function asyncMemoFib(n, memo = {}) {
+      if (n <= 0) return 0;
+      if (n === 1) return 1;
+      if (memo[n]) return memo[n];
+
+      const prevValues = await Promise.all([
+        asyncMemoFib(n - 1, memo),
+        asyncMemoFib(n - 2, memo),
+      ]);
+
+      memo[n] = prevValues[0] + prevValues[1];
+      return memo[n];
     }
 
     function regularMemoFib(n, memo = {}) {
@@ -99,6 +126,8 @@
       appendCode(asyncFib, asyncSource);
       const regularSource = document.getElementById('regular-source');
       appendCode(regularFib, regularSource);
+      const asyncMemoSource = document.getElementById('async-memo-source');
+      appendCode(asyncMemoFib, asyncMemoSource);
       const regularMemoSource = document.getElementById('regular-memo-source');
       appendCode(regularMemoFib, regularMemoSource);
     });
@@ -193,6 +222,17 @@
     </div>
     <div class="result" id="regular-result"></div>
     <div class="result" id="regular-time"></div>
+  </div>
+  <div class="container" id="async-memo-container">
+    <h1>Async Memoized Fib</h1>
+    <div class="source" id="async-memo-source"></div>
+    <h3>Benchmark</h3>
+    <div>
+      <input id="async-memo-n" type="number" value="10" />
+      <button id="async-memo-submit" onclick="startAsyncMemoFib()">Calculate!</button>
+    </div>
+    <div class="result" id="async-memo-result"></div>
+    <div class="result" id="async-memo-time"></div>
   </div>
   <div class="container" id="regular-memo-container">
     <h1>Regular Memoized Fib</h1>
