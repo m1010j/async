@@ -1,11 +1,15 @@
 import { asyncFib } from './fib_functions/async.js';
 import { asyncMemoFib } from './fib_functions/async_memo.js';
+import { asyncBusyFib } from './fib_functions/async_busy.js';
 import { syncFib } from './fib_functions/sync.js';
 import { syncMemoFib } from './fib_functions/sync_memo.js';
+import { syncBusyFib } from './fib_functions/sync_busy.js';
 import { startAsyncFib } from './click_handlers/async.js';
 import { startAsyncMemoFib } from './click_handlers/async_memo.js';
+import { startAsyncBusyFib } from './click_handlers/async_busy.js';
 import { startSyncFib } from './click_handlers/sync.js';
 import { startSyncMemoFib } from './click_handlers/sync_memo.js';
+import { startSyncBusyFib } from './click_handlers/sync_busy.js';
 import appendCode from './utils/append_code.js';
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -17,6 +21,10 @@ document.addEventListener('DOMContentLoaded', function() {
   appendCode(syncMemoFib, syncMemoSource);
   const asyncMemoSource = document.getElementById('async-memo-source');
   appendCode(asyncMemoFib, asyncMemoSource);
+  const syncBusySource = document.getElementById('sync-busy-source');
+  appendCode(syncBusyFib, syncBusySource);
+  const asyncBusySource = document.getElementById('async-busy-source');
+  appendCode(asyncBusyFib, asyncBusySource);
 
   const syncForm = document.getElementById('sync-form');
   syncForm.onsubmit = startSyncFib;
@@ -26,4 +34,8 @@ document.addEventListener('DOMContentLoaded', function() {
   syncMemoForm.onsubmit = startSyncMemoFib;
   const asyncMemoForm = document.getElementById('async-memo-form');
   asyncMemoForm.onsubmit = startAsyncMemoFib;
+  const syncBusyForm = document.getElementById('sync-busy-form');
+  syncBusyForm.onsubmit = startSyncBusyFib;
+  const asyncBusyForm = document.getElementById('async-busy-form');
+  asyncBusyForm.onsubmit = startAsyncBusyFib;
 });
