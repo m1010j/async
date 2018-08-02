@@ -1,5 +1,7 @@
-import { asyncFib, asyncMemoFib } from './fib_functions/async.js';
-import { regularFib, regularMemoFib } from './fib_functions/regular.js';
+import { asyncFib } from './fib_functions/async.js';
+import { asyncMemoFib } from './fib_functions/async_memo.js';
+import { regularFib } from './fib_functions/regular.js';
+import { regularMemoFib } from './fib_functions/regular_memo.js';
 import { startAsyncFib } from './click_handlers/async.js';
 import { startAsyncMemoFib } from './click_handlers/async_memo.js';
 import { startRegularFib } from './click_handlers/regular.js';
