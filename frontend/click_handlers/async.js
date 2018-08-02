@@ -12,16 +12,17 @@ export const startAsyncFib = function(e) {
   const resultDiv = document.getElementById('async-result');
   const timeDiv = document.getElementById('async-time');
 
-  const beforeTime = new Date().getTime();
   let worker;
   if (window.Worker) {
     worker = new Worker('./workers/async.js');
+    const beforeTime = new Date().getTime();
     worker.postMessage({ n });
     worker.onmessage = function(e) {
       displayResult(n, button, beforeTime, resultDiv, timeDiv, e.data.n);
       worker.terminate();
     };
   } else {
+    const beforeTime = new Date().getTime();
     displayResult(n, button, beforeTime, resultDiv, timeDiv, asyncFib(n));
   }
 };

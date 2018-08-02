@@ -12,16 +12,17 @@ export const startAsyncMemoFib = function(e) {
   const resultDiv = document.getElementById('async-memo-result');
   const timeDiv = document.getElementById('async-memo-time');
 
-  const beforeTime = new Date().getTime();
   let worker;
   if (window.Worker) {
     worker = new Worker('./workers/async_memo.js');
+    const beforeTime = new Date().getTime();
     worker.postMessage({ n });
     worker.onmessage = function(e) {
       displayResult(n, button, beforeTime, resultDiv, timeDiv, e.data.n);
       worker.terminate();
     };
   } else {
+    const beforeTime = new Date().getTime();
     displayResult(n, button, beforeTime, resultDiv, timeDiv, asyncMemoFib(n));
   }
 };

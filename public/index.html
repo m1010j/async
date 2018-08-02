@@ -9,8 +9,21 @@
 </head>
 
 <body>
-  <h1>The Cost of Asynchronicity</h1>
+  <h1>Explorations in Asynchronicity</h1>
   <main>
+    <div class="container" id="sync-container">
+      <h2>Sync Fib</h2>
+      <div class="source" id="sync-source"></div>
+      <h3>Benchmark</h3>
+      <div>
+        <form id="sync-form">
+          <input id="sync-n" type="number" value="10" />
+          <input type="submit" class="submit" id="sync-submit" value="Calculate!">
+        </form>
+      </div>
+      <div class="result" id="sync-result"></div>
+      <div class="result" id="sync-time"></div>
+    </div>
     <div class="container" id="async-container">
       <h2>Async Fib</h2>
       <div class="source" id="async-source"></div>
@@ -24,18 +37,18 @@
       <div class="result" id="async-result"></div>
       <div class="result" id="async-time"></div>
     </div>
-    <div class="container" id="regular-container">
-      <h2>Regular Fib</h2>
-      <div class="source" id="regular-source"></div>
+    <div class="container" id="sync-memo-container">
+      <h2>Sync Memoized Fib</h2>
+      <div class="source" id="sync-memo-source"></div>
       <h3>Benchmark</h3>
       <div>
-        <form id="regular-form">
-          <input id="regular-n" type="number" value="10" />
-          <input type="submit" class="submit" id="regular-submit" value="Calculate!">
+        <form id="sync-memo-form">
+          <input id="sync-memo-n" type="number" value="10" />
+          <input type="submit" class="submit" id="sync-memo-submit" value="Calculate!">
         </form>
       </div>
-      <div class="result" id="regular-result"></div>
-      <div class="result" id="regular-time"></div>
+      <div class="result" id="sync-memo-result"></div>
+      <div class="result" id="sync-memo-time"></div>
     </div>
     <div class="container" id="async-memo-container">
       <h2>Async Memoized Fib</h2>
@@ -49,19 +62,6 @@
       </div>
       <div class="result" id="async-memo-result"></div>
       <div class="result" id="async-memo-time"></div>
-    </div>
-    <div class="container" id="regular-memo-container">
-      <h2>Regular Memoized Fib</h2>
-      <div class="source" id="regular-memo-source"></div>
-      <h3>Benchmark</h3>
-      <div>
-        <form id="regular-memo-form">
-          <input id="regular-memo-n" type="number" value="10" />
-          <input type="submit" class="submit" id="regular-memo-submit" value="Calculate!">
-        </form>
-      </div>
-      <div class="result" id="regular-memo-result"></div>
-      <div class="result" id="regular-memo-time"></div>
     </div>
   </main>
 </body>

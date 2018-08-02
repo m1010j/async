@@ -1,5 +1,7 @@
-export default function(n) {
-  if (n === 0) return;
-
-  return busywork(n - 1);
+export function busywork(n) {
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < n; j++) {
+      i + j;
+    }
+  }
 }

@@ -1,5 +1,5 @@
 {
-  "name": "async_vs_regular_fib",
+  "name": "async_vs_sync_fib",
   "version": "1.0.0",
   "description": "",
   "main": "public/entry.js",
@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/m1010j/async-vs-regular-fib.git"
+    "url": "git+https://github.com/m1010j/async-vs-sync-fib.git"
   },
   "author": "Matthias Jenny",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/m1010j/async-vs-regular-fib/issues"
+    "url": "https://github.com/m1010j/async-vs-sync-fib/issues"
   },
-  "homepage": "https://github.com/m1010j/async-vs-regular-fib#readme",
+  "homepage": "https://github.com/m1010j/async-vs-sync-fib#readme",
   "devDependencies": {
     "webpack": "^4.16.3",
     "webpack-cli": "^3.1.0",
