@@ -1,4 +1,4 @@
-body {
+main {
   display: flex;
   flex-wrap: wrap;
   font-size: 1em;
@@ -17,7 +17,7 @@ body {
   align-items: center;
 }
 
-body > div > div {
+main > div > div {
   width: 100%;
   display: flex;
   align-items: center;
