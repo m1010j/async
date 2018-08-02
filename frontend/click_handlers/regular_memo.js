@@ -1,4 +1,4 @@
-import { regularMemoFib } from '../fib_functions/regular.js';
+import { regularMemoFib } from '../fib_functions/regular_memo.js';
 import displayResult from '../utils/display_result.js';
 import Worker from 'worker-loader!../workers/regular_memo.js';
 

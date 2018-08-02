@@ -1,4 +1,4 @@
-import { asyncMemoFib } from '../fib_functions/async.js';
+import { asyncMemoFib } from '../fib_functions/async_memo.js';
 import displayResult from '../utils/display_result.js';
 import Worker from 'worker-loader!../workers/async_memo.js';
 
