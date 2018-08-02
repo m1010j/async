@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script type="text/javascript" src="./scripts/bundle.js"></script>
+  <link rel="stylesheet" href="./stylesheets/reset.css">
+  <link rel="stylesheet" href="./stylesheets/styles.css">
+</head>
+
+<body>
+  <div class="container" id="async-container">
+    <h1>Async Fib</h1>
+    <div class="source" id="async-source"></div>
+    <h3>Benchmark</h3>
+    <div>
+      <form id="async-form">
+        <input id="async-n" type="number" value="10" />
+        <input type="submit" class="submit" id="async-submit" value="Calculate!">
+      </form>
+    </div>
+    <div class="result" id="async-result"></div>
+    <div class="result" id="async-time"></div>
+  </div>
+  <div class="container" id="regular-container">
+    <h1>Regular Fib</h1>
+    <div class="source" id="regular-source"></div>
+    <h3>Benchmark</h3>
+    <div>
+      <form id="regular-form">
+        <input id="regular-n" type="number" value="10" />
+        <input type="submit" class="submit" id="regular-submit" value="Calculate!">
+      </form>
+    </div>
+    <div class="result" id="regular-result"></div>
+    <div class="result" id="regular-time"></div>
+  </div>
+  <div class="container" id="async-memo-container">
+    <h1>Async Memoized Fib</h1>
+    <div class="source" id="async-memo-source"></div>
+    <h3>Benchmark</h3>
+    <div>
+      <form id="async-memo-form">
+        <input id="async-memo-n" type="number" value="10" />
+        <input type="submit" class="submit" id="async-memo-submit" value="Calculate!">
+      </form>
+    </div>
+    <div class="result" id="async-memo-result"></div>
+    <div class="result" id="async-memo-time"></div>
+  </div>
+  <div class="container" id="regular-memo-container">
+    <h1>Regular Memoized Fib</h1>
+    <div class="source" id="regular-memo-source"></div>
+    <h3>Benchmark</h3>
+    <div>
+      <form id="regular-memo-form">
+        <input id="regular-memo-n" type="number" value="10" />
+        <input type="submit" class="submit" id="regular-memo-submit" value="Calculate!">
+      </form>
+    </div>
+    <div class="result" id="regular-memo-result"></div>
+    <div class="result" id="regular-memo-time"></div>
+  </div>
+</body>
+
+</html>
