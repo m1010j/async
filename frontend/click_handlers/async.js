@@ -22,6 +22,6 @@ export const startAsyncFib = function(e) {
       worker.terminate();
     };
   } else {
-    displayResult(button, beforeTime, resultDiv, timeDiv, asyncFib(n));
+    displayResult(n, button, beforeTime, resultDiv, timeDiv, asyncFib(n));
   }
 };

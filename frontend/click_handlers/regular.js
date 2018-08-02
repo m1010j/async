@@ -22,6 +22,6 @@ export const startRegularFib = function(e) {
       worker.terminate();
     };
   } else {
-    displayResult(button, beforeTime, resultDiv, timeDiv, regularFib(n));
+    displayResult(n, button, beforeTime, resultDiv, timeDiv, regularFib(n));
   }
 };

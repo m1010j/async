@@ -22,6 +22,6 @@ export const startAsyncMemoFib = function(e) {
       worker.terminate();
     };
   } else {
-    displayResult(button, beforeTime, resultDiv, timeDiv, asyncMemoFib(n));
+    displayResult(n, button, beforeTime, resultDiv, timeDiv, asyncMemoFib(n));
   }
 };
