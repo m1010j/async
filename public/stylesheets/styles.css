@@ -121,6 +121,7 @@ input[type='submit']:disabled {
   border: 0.1rem solid #5f7e97;
   cursor: auto;
   font-weight: normal;
+  cursor: not-allowed;
 }
 
 code {
