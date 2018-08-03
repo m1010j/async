@@ -4,8 +4,11 @@
 <head>
   <link rel='shortcut icon' type='image/x-icon' href='./favicon.ico' />
   <script type="text/javascript" src="./bundle.js"></script>
-  <!-- <link rel="stylesheet" href="./stylesheets/reset.css"> -->
+  <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Arsenal|Oxygen+Mono" rel="stylesheet">
+  <link rel="stylesheet" href="./stylesheets/reset.css">
   <link rel="stylesheet" href="./stylesheets/styles.css">
+  <link rel="stylesheet" href="./stylesheets/sunburst.css">
 </head>
 
 <body>
@@ -17,12 +20,14 @@
       <h3>Benchmark</h3>
       <div>
         <form id="sync-form">
-          <input id="sync-n" type="number" value="10" />
-          <input type="submit" class="submit" id="sync-submit" value="Calculate!">
+          <input id="sync-n" type="number" placeholder="n" />
+          <input type="submit" class="submit" id="sync-submit" disabled value="Invoke">
         </form>
       </div>
-      <div class="result" id="sync-result"></div>
-      <div class="result" id="sync-time"></div>
+      <div class="result-container">
+        <div class="result" id="sync-result"></div>
+        <div class="result" id="sync-time"></div>
+      </div>
     </div>
     <div class="container" id="async-container">
       <h2>Async Fib</h2>
@@ -30,8 +35,8 @@
       <h3>Benchmark</h3>
       <div>
         <form id="async-form">
-          <input id="async-n" type="number" value="10" />
-          <input type="submit" class="submit" id="async-submit" value="Calculate!">
+          <input id="async-n" type="number" placeholder="n" />
+          <input type="submit" class="submit" id="async-submit" disabled value="Invoke">
         </form>
       </div>
       <div class="result" id="async-result"></div>
@@ -43,8 +48,8 @@
       <h3>Benchmark</h3>
       <div>
         <form id="sync-busy-form">
-          <input id="sync-busy-n" type="number" value="10" />
-          <input type="submit" class="submit" id="sync-busy-submit" value="Calculate!">
+          <input id="sync-busy-n" type="number" placeholder="n" />
+          <input type="submit" class="submit" id="sync-busy-submit" disabled value="Invoke">
         </form>
       </div>
       <div class="result" id="sync-busy-result"></div>
@@ -56,8 +61,8 @@
       <h3>Benchmark</h3>
       <div>
         <form id="async-busy-form">
-          <input id="async-busy-n" type="number" value="10" />
-          <input type="submit" class="submit" id="async-busy-submit" value="Calculate!">
+          <input id="async-busy-n" type="number" placeholder="n" />
+          <input type="submit" class="submit" id="async-busy-submit" disabled value="Invoke">
         </form>
       </div>
       <div class="result" id="async-busy-result"></div>
@@ -69,8 +74,8 @@
       <h3>Benchmark</h3>
       <div>
         <form id="sync-memo-form">
-          <input id="sync-memo-n" type="number" value="10" />
-          <input type="submit" class="submit" id="sync-memo-submit" value="Calculate!">
+          <input id="sync-memo-n" type="number" placeholder="n" />
+          <input type="submit" class="submit" id="sync-memo-submit" disabled value="Invoke">
         </form>
       </div>
       <div class="result" id="sync-memo-result"></div>
@@ -82,8 +87,8 @@
       <h3>Benchmark</h3>
       <div>
         <form id="async-memo-form">
-          <input id="async-memo-n" type="number" value="10" />
-          <input type="submit" class="submit" id="async-memo-submit" value="Calculate!">
+          <input id="async-memo-n" type="number" placeholder="n" />
+          <input type="submit" class="submit" id="async-memo-submit" disabled value="Invoke">
         </form>
       </div>
       <div class="result" id="async-memo-result"></div>

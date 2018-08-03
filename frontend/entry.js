@@ -38,4 +38,26 @@ document.addEventListener('DOMContentLoaded', function() {
   syncMemoForm.onsubmit = startSyncMemoFib;
   const asyncMemoForm = document.getElementById('async-memo-form');
   asyncMemoForm.onsubmit = startAsyncMemoFib;
+
+  const formIds = {
+    'sync-n': 'sync-submit',
+    'async-n': 'async-submit',
+    'sync-busy-n': 'sync-busy-submit',
+    'async-busy-n': 'async-busy-submit',
+    'sync-memo-n': 'sync-memo-submit',
+    'async-memo-n': 'async-memo-submit',
+  };
+  const numberInputs = Object.keys(formIds).map(function(id) {
+    return document.getElementById(id);
+  });
+  numberInputs.forEach(function(input) {
+    input.onchange = function() {
+      const submitButton = document.getElementById(formIds[input.id]);
+      if (parseInt(input.value) > 0) {
+        submitButton.disabled = false;
+      } else {
+        submitButton.disabled = true;
+      }
+    };
+  });
 });

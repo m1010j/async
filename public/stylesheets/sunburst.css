@@ -1,0 +1,132 @@
+/* Pretty printing styles. Used with prettify.js. */
+/* Adapted from https://github.com/google/code-prettify/blob/master/styles/sunburst.css */
+
+pre .str,
+code .str {
+  color: #65b042;
+}
+pre .kwd,
+code .kwd {
+  color: #519cff;
+}
+pre .com,
+code .com {
+  color: #aeaeae;
+  font-style: italic;
+}
+pre .typ,
+code .typ {
+  color: #7cd45f;
+}
+pre .lit,
+code .lit {
+  color: #efaf50;
+}
+pre .pun,
+code .pun {
+  color: #c792ea;
+}
+pre .pln,
+code .pln {
+  color: #fff;
+}
+pre .tag,
+code .tag {
+  color: #89bdff;
+}
+pre .atn,
+code .atn {
+  color: #bdb76b;
+}
+pre .atv,
+code .atv {
+  color: #65b042;
+}
+pre .dec,
+code .dec {
+  color: #3387cc;
+}
+
+pre.prettyprint,
+code.prettyprint {
+  background-color: #000;
+  border-radius: 8px;
+}
+
+pre.prettyprint {
+  width: 95%;
+  margin: 1em auto;
+  padding: 1em;
+  white-space: pre-wrap;
+}
+
+/* Specify class=linenums on a pre to get line numbering */
+ol.linenums {
+  margin-top: 0;
+  margin-bottom: 0;
+  color: #aeaeae;
+} /* IE indents via margin-left */
+li.L0,
+li.L1,
+li.L2,
+li.L3,
+li.L5,
+li.L6,
+li.L7,
+li.L8 {
+  list-style-type: none;
+}
+/* Alternate shading for lines */
+li.L1,
+li.L3,
+li.L5,
+li.L7,
+li.L9 {
+}
+
+@media print {
+  pre .str,
+  code .str {
+    color: #060;
+  }
+  pre .kwd,
+  code .kwd {
+    color: #006;
+    font-weight: bold;
+  }
+  pre .com,
+  code .com {
+    color: #600;
+    font-style: italic;
+  }
+  pre .typ,
+  code .typ {
+    color: #404;
+    font-weight: bold;
+  }
+  pre .lit,
+  code .lit {
+    color: #044;
+  }
+  pre .pun,
+  code .pun {
+    color: #440;
+  }
+  pre .pln,
+  code .pln {
+    color: #000;
+  }
+  pre .tag,
+  code .tag {
+    color: #006;
+    font-weight: bold;
+  }
+  pre .atn,
+  code .atn {
+    color: #404;
+  }
+  pre .atv,
+  code .atv {
+    color: #060;
+  }
+}

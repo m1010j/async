@@ -12,6 +12,8 @@ export default function(fcn, htmlElement) {
         return ch === ' ' ? '&nbsp;' : ch;
       });
       const codeTag = document.createElement('code');
+      codeTag.classList.add('prettyprint');
+      codeTag.classList.add('lang-js');
       codeTag.innerHTML = newLineArr.join('');
       htmlElement.appendChild(codeTag);
     }
@@ -31,6 +33,8 @@ function busyworkTags() {
   });
   return cleanedUpLines.map(function(line) {
     const codeTag = document.createElement('code');
+    codeTag.classList.add('prettyprint');
+    codeTag.classList.add('lang-js');
     codeTag.innerHTML = line;
     return codeTag;
   });
