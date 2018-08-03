@@ -1,4 +1,4 @@
-export const syncMemoFib = function(n, memo = {}) {
+export function syncMemoFib(n, memo = {}) {
   if (n <= 0) return 0;
   if (n === 1) return 1;
   if (memo[n]) return memo[n];
@@ -8,4 +8,4 @@ export const syncMemoFib = function(n, memo = {}) {
   memo[n] = first + second;
 
   return memo[n];
-};
+}

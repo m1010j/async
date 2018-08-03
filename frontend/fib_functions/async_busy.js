@@ -1,6 +1,6 @@
 import { busywork } from '../utils/busywork.js';
 
-export const asyncBusyFib = async function(n) {
+export async function asyncBusyFib(n) {
   if (n <= 0) return 0;
   if (n === 1) return 1;
 
@@ -12,4 +12,4 @@ export const asyncBusyFib = async function(n) {
   ]);
 
   return prevValues[0] + prevValues[1];
-};
+}
