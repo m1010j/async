@@ -23,6 +23,8 @@ export const startAsyncBusyFib = function(e) {
     };
   } else {
     const beforeTime = new Date().getTime();
-    displayResult(n, button, beforeTime, resultDiv, timeDiv, asyncBusyFib(n));
+    asyncBusyFib(n).then(function(result) {
+      displayResult(n, button, beforeTime, resultDiv, timeDiv, result);
+    });
   }
 };

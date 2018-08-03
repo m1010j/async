@@ -23,6 +23,8 @@ export const startAsyncMemoFib = function(e) {
     };
   } else {
     const beforeTime = new Date().getTime();
-    displayResult(n, button, beforeTime, resultDiv, timeDiv, asyncMemoFib(n));
+    asyncMemoFib(n).then(function(result) {
+      displayResult(n, button, beforeTime, resultDiv, timeDiv, result);
+    });
   }
 };
