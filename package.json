@@ -11,7 +11,7 @@
     "start": "node ./bin/www",
     "dev": "nodemon ./bin/www",
     "webpack": "webpack --watch",
-    "postintall": "webpack"
+    "heroku-postbuild": "webpack"
   },
   "repository": {
     "type": "git",
