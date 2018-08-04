@@ -1,4 +1,4 @@
-export function syncMemoFib(n, memo = {}) {
+export default function syncMemoFib(n, memo = {}) {
   if (n <= 0) return 0;
   if (n === 1) return 1;
   if (memo[n]) return memo[n];

@@ -17,9 +17,9 @@ export default function(type) {
 
     let worker;
     if (window.Worker) {
-      worker = new Worker(`./workers/${snakeCaseize(type)}.js`);
+      worker = new Worker(`./workers/sync.js`);
       const beforeTime = new Date().getTime();
-      worker.postMessage({ n });
+      worker.postMessage({ n, type });
       worker.onmessage = function(e) {
         const afterTime = new Date().getTime();
         const duration = afterTime - beforeTime;

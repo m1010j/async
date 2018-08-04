@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   window.syncTypes.forEach(function(type) {
     const form = document.getElementById(`${hyphenize(type)}-form`);
-    form.onsubmit = startAsync(type);
+    form.onsubmit = startSync(type);
   });
 
   window.asyncTypes.forEach(function(type) {

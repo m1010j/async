@@ -1,6 +1,6 @@
 import { busywork } from '../utils/busywork.js';
 
-export async function asyncBusyFib(n) {
+export default async function asyncBusyFib(n) {
   if (n <= 0) return 0;
   if (n === 1) return 1;
 
