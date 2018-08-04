@@ -15,6 +15,15 @@ export default function() {
     'asyncMemo',
   ];
 
+  const titles = {
+    sync: 'Synchronous Fibonacci',
+    async: 'Asynchronous Fibonacci',
+    syncBusy: 'Synchronous Fibonacci with Busywork',
+    asyncBusy: 'Asynchronous Fibonacci with Busywork',
+    syncMemo: 'Memoized Synchronous Fibonacci',
+    asyncMemo: 'Memoized Asynchronous Fibonacci',
+  };
+
   types.forEach(function(type) {
     const hyphenizedType = hyphenize(type);
     const container = document.createElement('div');
@@ -22,7 +31,7 @@ export default function() {
     container.id = `${hyphenizedType}-container`;
 
     const h2 = document.createElement('h2');
-    h2.innerText = `${type}Fib`;
+    h2.innerText = titles[type];
     container.append(h2);
 
     const source = document.createElement('div');
