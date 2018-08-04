@@ -1,9 +1,43 @@
 var express = require('express');
+
 var router = express.Router();
 
 var db = require('../queries');
 
-// router.get('/api/benchmarks', db.getAllBenchmarks);
+router.get('/', (req, res) => {
+  res.send(`
+    <!DOCTYPE html>
+    <html>
+
+    <head>
+      <meta name="csrf-token" content="${req.csrfToken()}">
+      <title>Explorations in Asynchronicity</title>
+      <link rel='shortcut icon' type='image/x-icon' href='./favicon.ico' />
+      <script type="text/javascript" src="./bundle.js"></script>
+      <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+      <link href="https://fonts.googleapis.com/css?family=Arsenal|Oxygen+Mono" rel="stylesheet">
+      <link rel="stylesheet" href="./stylesheets/reset.css">
+      <link rel="stylesheet" href="./stylesheets/styles.css">
+      <link rel="stylesheet" href="./stylesheets/sunburst.css">
+      <script defer="" src="https://use.fontawesome.com/releases/v5.0.1/js/all.js"></script>
+    </head>
+
+    <body>
+      <h1>Explorations in Asynchronicity</h1>
+      <div class="subtitle">
+        <span>by
+          <a href="http://www.matthiasjenny.com">Matthias Jenny</a>
+        </span>
+        <a href="https://github.com/m1010j/async-explorations/">
+          <i class="fab fa-github"></i>
+        </a>
+      </div>
+      <main id="main"></main>
+    </body>
+
+    </html>
+  `);
+});
 router.get('/api/sync_benchmarks', db.getAllSyncBenchmarks);
 router.get('/api/sync_benchmarks/:id', db.getSingleSyncBenchmark);
 router.post('/api/sync_benchmarks', db.createSyncBenchmark);
