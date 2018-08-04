@@ -21,20 +21,25 @@ document.addEventListener('DOMContentLoaded', function() {
     form.onsubmit = startAsync(type);
   });
 
-  const formIds = {
-    'sync-n': 'sync-submit',
-    'async-n': 'async-submit',
-    'sync-busy-n': 'sync-busy-submit',
-    'async-busy-n': 'async-busy-submit',
-    'sync-memo-n': 'sync-memo-submit',
-    'async-memo-n': 'async-memo-submit',
-  };
-  const numberInputs = Object.keys(formIds).map(function(id) {
+  const inputIds = [
+    'sync-n',
+    'async-n',
+    'sync-busy-n',
+    'async-busy-n',
+    'sync-memo-n',
+    'async-memo-n',
+  ];
+
+  function nToSubmit(idString) {
+    return `${idString.slice(0, idString.length - 2)}-submit`;
+  }
+
+  const numberInputs = inputIds.map(function(id) {
     return document.getElementById(id);
   });
   numberInputs.forEach(function(input) {
     input.onchange = function() {
-      const submitButton = document.getElementById(formIds[input.id]);
+      const submitButton = document.getElementById(nToSubmit(input.id));
       if (parseInt(input.value) > 0) {
         submitButton.disabled = false;
       } else {
