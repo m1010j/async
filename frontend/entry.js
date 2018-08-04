@@ -4,31 +4,26 @@ import appendCode from './utils/append_code.js';
 import { hyphenize } from './utils/convert_string.js';
 
 document.addEventListener('DOMContentLoaded', function() {
-  ['sync', 'syncBusy', 'syncMemo', 'async', 'asyncBusy', 'asyncMemo'].forEach(
-    function(type) {
-      const source = document.getElementById(`${hyphenize(type)}-source`);
-      appendCode(type, source);
-    }
-  );
+  window.syncTypes.concat(window.asyncTypes).forEach(function(type) {
+    const source = document.getElementById(`${hyphenize(type)}-source`);
+    appendCode(type, source);
+  });
 
-  ['sync', 'syncBusy', 'syncMemo'].forEach(function(type) {
+  window.syncTypes.forEach(function(type) {
     const form = document.getElementById(`${hyphenize(type)}-form`);
     form.onsubmit = startAsync(type);
   });
 
-  ['async', 'asyncBusy', 'asyncMemo'].forEach(function(type) {
+  window.asyncTypes.forEach(function(type) {
     const form = document.getElementById(`${hyphenize(type)}-form`);
     form.onsubmit = startAsync(type);
   });
 
-  const inputIds = [
-    'sync-n',
-    'async-n',
-    'sync-busy-n',
-    'async-busy-n',
-    'sync-memo-n',
-    'async-memo-n',
-  ];
+  const inputIds = window.syncTypes
+    .concat(window.asyncTypes)
+    .map(function(type) {
+      return `${hyphenize(type)}-n`;
+    });
 
   function nToSubmit(idString) {
     return `${idString.slice(0, idString.length - 2)}-submit`;
