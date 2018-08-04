@@ -10,96 +10,11 @@
   <link rel="stylesheet" href="./stylesheets/reset.css">
   <link rel="stylesheet" href="./stylesheets/styles.css">
   <link rel="stylesheet" href="./stylesheets/sunburst.css">
-  <script type="text/javascript">
-    window.syncTypes = ['sync', 'syncBusy', 'syncMemo'];
-    window.asyncTypes = ['async', 'asyncBusy', 'asyncMemo'];
-  </script>
 </head>
 
 <body>
   <h1>Explorations in Asynchronicity</h1>
-  <main>
-    <div class="container" id="sync-container">
-      <h2>Sync Fib</h2>
-      <div class="source" id="sync-source"></div>
-      <h3>Benchmark</h3>
-      <div>
-        <form id="sync-form">
-          <input id="sync-n" type="number" placeholder="n" />
-          <input type="submit" class="submit" id="sync-submit" disabled value="Invoke">
-        </form>
-      </div>
-      <div class="result-container">
-        <div class="result" id="sync-result"></div>
-        <div class="result" id="sync-time"></div>
-      </div>
-    </div>
-    <div class="container" id="async-container">
-      <h2>Async Fib</h2>
-      <div class="source" id="async-source"></div>
-      <h3>Benchmark</h3>
-      <div>
-        <form id="async-form">
-          <input id="async-n" type="number" placeholder="n" />
-          <input type="submit" class="submit" id="async-submit" disabled value="Invoke">
-        </form>
-      </div>
-      <div class="result" id="async-result"></div>
-      <div class="result" id="async-time"></div>
-    </div>
-    <div class="container" id="sync-busy-container">
-      <h2>Sync Busywork Fib</h2>
-      <div class="source" id="sync-busy-source"></div>
-      <h3>Benchmark</h3>
-      <div>
-        <form id="sync-busy-form">
-          <input id="sync-busy-n" type="number" placeholder="n" />
-          <input type="submit" class="submit" id="sync-busy-submit" disabled value="Invoke">
-        </form>
-      </div>
-      <div class="result" id="sync-busy-result"></div>
-      <div class="result" id="sync-busy-time"></div>
-    </div>
-    <div class="container" id="async-busy-container">
-      <h2>Async Busywork Fib</h2>
-      <div class="source" id="async-busy-source"></div>
-      <h3>Benchmark</h3>
-      <div>
-        <form id="async-busy-form">
-          <input id="async-busy-n" type="number" placeholder="n" />
-          <input type="submit" class="submit" id="async-busy-submit" disabled value="Invoke">
-        </form>
-      </div>
-      <div class="result" id="async-busy-result"></div>
-      <div class="result" id="async-busy-time"></div>
-    </div>
-    <div class="container" id="sync-memo-container">
-      <h2>Sync Memoized Fib</h2>
-      <div class="source" id="sync-memo-source"></div>
-      <h3>Benchmark</h3>
-      <div>
-        <form id="sync-memo-form">
-          <input id="sync-memo-n" type="number" placeholder="n" />
-          <input type="submit" class="submit" id="sync-memo-submit" disabled value="Invoke">
-        </form>
-      </div>
-      <div class="result" id="sync-memo-result"></div>
-      <div class="result" id="sync-memo-time"></div>
-    </div>
-    <div class="container" id="async-memo-container">
-      <h2>Async Memoized Fib</h2>
-      <div class="source" id="async-memo-source"></div>
-      <h3>Benchmark</h3>
-      <div>
-        <form id="async-memo-form">
-          <input id="async-memo-n" type="number" placeholder="n" />
-          <input type="submit" class="submit" id="async-memo-submit" disabled value="Invoke">
-        </form>
-      </div>
-      <div class="result" id="async-memo-result"></div>
-      <div class="result" id="async-memo-time"></div>
-    </div>
-  </main>
+  <main id="main"></main>
 </body>
 
 </html>
