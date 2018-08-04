@@ -1,6 +1,7 @@
 import { asyncMemoFib } from '../fib_functions/async_memo.js';
 import displayResult from '../utils/display_result.js';
 import Worker from 'worker-loader!../workers/async_memo.js';
+import { post } from '../utils/fetch.js';
 
 export const startAsyncMemoFib = function(e) {
   e.preventDefault();
@@ -18,13 +19,19 @@ export const startAsyncMemoFib = function(e) {
     const beforeTime = new Date().getTime();
     worker.postMessage({ n });
     worker.onmessage = function(e) {
-      displayResult(n, button, beforeTime, resultDiv, timeDiv, e.data.n);
+      const afterTime = new Date().getTime();
+      const duration = afterTime - beforeTime;
+      displayResult(n, button, duration, resultDiv, timeDiv, e.data.n);
       worker.terminate();
+      post('async_memo', n, duration);
     };
   } else {
     const beforeTime = new Date().getTime();
     asyncMemoFib(n).then(function(result) {
-      displayResult(n, button, beforeTime, resultDiv, timeDiv, result);
+      const afterTime = new Date().getTime();
+      const duration = afterTime - beforeTime;
+      displayResult(n, button, duration, resultDiv, timeDiv, result);
+      post('async_memo', n, duration);
     });
   }
 };

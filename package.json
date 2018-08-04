@@ -2,11 +2,16 @@
   "name": "async_vs_sync_fib",
   "version": "1.0.0",
   "description": "",
-  "main": "public/entry.js",
+  "engines": {
+    "node": "8.9.0",
+    "yarn": "1.9.2"
+  },
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "webpack --watch",
-    "build": "webpack"
+    "start": "node ./bin/www",
+    "dev": "nodemon ./bin/www",
+    "webpack": "webpack --watch",
+    "postintall": "webpack"
   },
   "repository": {
     "type": "git",
@@ -18,6 +23,19 @@
     "url": "https://github.com/m1010j/async-vs-sync-fib/issues"
   },
   "homepage": "https://github.com/m1010j/async-vs-sync-fib#readme",
+  "dependencies": {
+    "bluebird": "^3.5.1",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "express": "~4.16.0",
+    "http-errors": "~1.6.2",
+    "morgan": "~1.9.0",
+    "nodemon": "^1.18.3",
+    "pg-promise": "^8.4.5",
+    "webpack": "^4.16.3",
+    "webpack-cli": "^3.1.0",
+    "worker-loader": "^2.0.0"
+  },
   "devDependencies": {
     "webpack": "^4.16.3",
     "webpack-cli": "^3.1.0",

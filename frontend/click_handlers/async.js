@@ -1,6 +1,7 @@
 import { asyncFib } from '../fib_functions/async.js';
 import displayResult from '../utils/display_result.js';
 import Worker from 'worker-loader!../workers/async.js';
+import { post } from '../utils/fetch.js';
 
 export const startAsyncFib = function(e) {
   e.preventDefault();
@@ -18,13 +19,19 @@ export const startAsyncFib = function(e) {
     const beforeTime = new Date().getTime();
     worker.postMessage({ n });
     worker.onmessage = function(e) {
-      displayResult(n, button, beforeTime, resultDiv, timeDiv, e.data.n);
+      const afterTime = new Date().getTime();
+      const duration = afterTime - beforeTime;
+      displayResult(n, button, duration, resultDiv, timeDiv, e.data.n);
       worker.terminate();
+      post('async', n, duration);
     };
   } else {
     const beforeTime = new Date().getTime();
     asyncFib(n).then(function(result) {
-      displayResult(n, button, beforeTime, resultDiv, timeDiv, result);
+      const afterTime = new Date().getTime();
+      const duration = afterTime - beforeTime;
+      displayResult(n, button, duration, resultDiv, timeDiv, result);
+      post('async', n, duration);
     });
   }
 };

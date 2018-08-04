@@ -1,6 +1,7 @@
 import { syncFib } from '../fib_functions/sync.js';
 import displayResult from '../utils/display_result.js';
 import Worker from 'worker-loader!../workers/sync.js';
+import { post } from '../utils/fetch.js';
 
 export const startSyncFib = function(e) {
   e.preventDefault();
@@ -18,11 +19,18 @@ export const startSyncFib = function(e) {
     const beforeTime = new Date().getTime();
     worker.postMessage({ n });
     worker.onmessage = function(e) {
-      displayResult(n, button, beforeTime, resultDiv, timeDiv, e.data.n);
+      const afterTime = new Date().getTime();
+      const duration = afterTime - beforeTime;
+      displayResult(n, button, duration, resultDiv, timeDiv, e.data.n);
       worker.terminate();
+      post('sync', n, duration);
     };
   } else {
     const beforeTime = new Date().getTime();
-    displayResult(n, button, beforeTime, resultDiv, timeDiv, syncFib(n));
+    const result = syncFib(n);
+    const afterTime = new Date().getTime();
+    const duration = afterTime - beforeTime;
+    displayResult(n, button, duration, resultDiv, timeDiv, result);
+    post('sync', n, duration);
   }
 };
