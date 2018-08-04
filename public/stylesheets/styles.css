@@ -54,6 +54,7 @@ h2 {
 }
 
 .container {
+  position: relative;
   padding: 0.5rem;
   width: 48rem;
   border: 0.05rem solid #42629d;
@@ -158,4 +159,63 @@ code {
   background-color: #000;
   padding: 1rem;
   box-sizing: border-box;
+}
+
+.hidden {
+  display: none;
+}
+
+.spinner-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: #000;
+  opacity: 0.5;
+}
+
+/* This spinner is adapted from: https://loading.io/css/ */
+
+.lds-ring {
+  display: inline-block;
+  position: absolute;
+  width: 6.4rem;
+  height: 6.4rem;
+  top: calc(50% - 3.2rem);
+  left: calc(50% - 3.2rem);
+}
+
+.lds-ring div {
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  width: 5.1rem;
+  height: 5.1rem;
+  margin: 0.6rem;
+  border: 0.6rem solid #fff;
+  border-radius: 50%;
+  animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  border-color: #fff transparent transparent transparent;
+}
+
+.lds-ring div:nth-child(1) {
+  animation-delay: -0.45s;
+}
+
+.lds-ring div:nth-child(2) {
+  animation-delay: -0.3s;
+}
+
+.lds-ring div:nth-child(3) {
+  animation-delay: -0.15s;
+}
+
+@keyframes lds-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

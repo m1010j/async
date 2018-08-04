@@ -89,6 +89,20 @@ export default function() {
 
     container.append(resultContainer);
 
+    const spinnerContainer = document.createElement('div');
+    spinnerContainer.classList.add('spinner-container');
+    spinnerContainer.classList.add('hidden');
+    spinnerContainer.id = `${hyphenizedType}-spinner-container`;
+
+    const spinner = document.createElement('div');
+    spinner.classList.add('lds-ring');
+    for (let i = 0; i < 4; i++) {
+      spinner.append(document.createElement('div'));
+    }
+    spinnerContainer.append(spinner);
+
+    container.append(spinnerContainer);
+
     main.append(container);
   });
 }

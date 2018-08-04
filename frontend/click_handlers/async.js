@@ -8,12 +8,19 @@ export default function(type) {
   return function(e) {
     e.preventDefault();
 
-    const button = document.getElementById(`${hyphenize(type)}-submit`);
+    const hyphenizedType = hyphenize(type);
+
+    const button = document.getElementById(`${hyphenizedType}-submit`);
     button.disabled = true;
 
-    const n = parseInt(document.getElementById(`${hyphenize(type)}-n`).value);
-    const resultDiv = document.getElementById(`${hyphenize(type)}-result`);
-    const timeDiv = document.getElementById(`${hyphenize(type)}-time`);
+    const spinnerContainer = document.getElementById(
+      `${hyphenizedType}-spinner-container`
+    );
+    spinnerContainer.classList.remove('hidden');
+
+    const n = parseInt(document.getElementById(`${hyphenizedType}-n`).value);
+    const resultDiv = document.getElementById(`${hyphenizedType}-result`);
+    const timeDiv = document.getElementById(`${hyphenizedType}-time`);
 
     let worker;
     if (window.Worker) {
@@ -23,7 +30,7 @@ export default function(type) {
       worker.onmessage = function(e) {
         const afterTime = new Date().getTime();
         const duration = afterTime - beforeTime;
-        displayResult(n, button, duration, resultDiv, timeDiv, e.data.n);
+        displayResult(n, duration, e.data.n, hyphenizedType);
         worker.terminate();
         post(`${snakeCaseize(type)}`, n, duration);
       };
@@ -32,7 +39,7 @@ export default function(type) {
       eval(`type${Fib}`)(n).then(function(result) {
         const afterTime = new Date().getTime();
         const duration = afterTime - beforeTime;
-        displayResult(n, button, duration, resultDiv, timeDiv, result);
+        displayResult(n, duration, result, hyphenizedType);
         post(`${snakeCaseize(type)}`, n, duration);
       });
     }
