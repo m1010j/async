@@ -62,13 +62,15 @@ export default function() {
     submitInput.value = 'Invoke';
     form.append(submitInput);
 
-    numberInput.onchange = function() {
-      if (parseInt(numberInput.value) > 0) {
-        submitInput.disabled = false;
-      } else {
-        submitInput.disabled = true;
-      }
-    };
+    ['change', 'keyup'].forEach(function(eventType) {
+      numberInput.addEventListener(eventType, function() {
+        if (parseInt(numberInput.value) > 0) {
+          submitInput.disabled = false;
+        } else {
+          submitInput.disabled = true;
+        }
+      });
+    });
 
     container.append(form);
 
