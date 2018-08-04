@@ -4,7 +4,7 @@
   "description": "",
   "engines": {
     "node": "8.9.0",
-    "npm": "6.2.0"
+    "yarn": "1.9.2"
   },
   "main": "app.js",
   "scripts": {
