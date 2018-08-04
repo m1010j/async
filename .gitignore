@@ -3,3 +3,4 @@ bundle.js
 bundle.js.map
 *.worker.js
 *.worker.js.map
+latest.dump
