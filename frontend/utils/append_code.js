@@ -1,7 +1,13 @@
+import { asyncFib } from '../fib_functions/async.js';
+import { asyncMemoFib } from '../fib_functions/async_memo.js';
+import { asyncBusyFib } from '../fib_functions/async_busy.js';
+import { syncFib } from '../fib_functions/sync.js';
+import { syncMemoFib } from '../fib_functions/sync_memo.js';
+import { syncBusyFib } from '../fib_functions/sync_busy.js';
 import { busywork } from './busywork.js';
 
-export default function(fcn, htmlElement) {
-  const lines = fcn.toString().split('\n');
+export default function(type, htmlElement) {
+  const lines = functions[type].toString().split('\n');
   lines.forEach(function(line, idx) {
     if (line.slice(0, 8) === '  Object') {
       busyworkTags().forEach(function(tag) {
@@ -19,6 +25,15 @@ export default function(fcn, htmlElement) {
     }
   });
 }
+
+const functions = {
+  sync: syncFib,
+  syncBusy: syncBusyFib,
+  syncMemo: syncMemoFib,
+  async: asyncFib,
+  asyncBusy: asyncBusyFib,
+  asyncMemo: asyncMemoFib,
+};
 
 function busyworkTags() {
   const lines = busywork.toString().split('\n');

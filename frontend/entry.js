@@ -1,43 +1,25 @@
-import { asyncFib } from './fib_functions/async.js';
-import { asyncMemoFib } from './fib_functions/async_memo.js';
-import { asyncBusyFib } from './fib_functions/async_busy.js';
-import { syncFib } from './fib_functions/sync.js';
-import { syncMemoFib } from './fib_functions/sync_memo.js';
-import { syncBusyFib } from './fib_functions/sync_busy.js';
-import { startAsyncFib } from './click_handlers/async.js';
-import { startAsyncMemoFib } from './click_handlers/async_memo.js';
-import { startAsyncBusyFib } from './click_handlers/async_busy.js';
-import { startSyncFib } from './click_handlers/sync.js';
-import { startSyncMemoFib } from './click_handlers/sync_memo.js';
-import { startSyncBusyFib } from './click_handlers/sync_busy.js';
+import startAsync from './click_handlers/async.js';
+import startSync from './click_handlers/sync.js';
 import appendCode from './utils/append_code.js';
+import { hyphenize } from './utils/convert_string.js';
 
 document.addEventListener('DOMContentLoaded', function() {
-  const syncSource = document.getElementById('sync-source');
-  appendCode(syncFib, syncSource);
-  const asyncSource = document.getElementById('async-source');
-  appendCode(asyncFib, asyncSource);
-  const syncBusySource = document.getElementById('sync-busy-source');
-  appendCode(syncBusyFib, syncBusySource);
-  const asyncBusySource = document.getElementById('async-busy-source');
-  appendCode(asyncBusyFib, asyncBusySource);
-  const syncMemoSource = document.getElementById('sync-memo-source');
-  appendCode(syncMemoFib, syncMemoSource);
-  const asyncMemoSource = document.getElementById('async-memo-source');
-  appendCode(asyncMemoFib, asyncMemoSource);
+  ['sync', 'syncBusy', 'syncMemo', 'async', 'asyncBusy', 'asyncMemo'].forEach(
+    function(type) {
+      const source = document.getElementById(`${hyphenize(type)}-source`);
+      appendCode(type, source);
+    }
+  );
 
-  const syncForm = document.getElementById('sync-form');
-  syncForm.onsubmit = startSyncFib;
-  const asyncForm = document.getElementById('async-form');
-  asyncForm.onsubmit = startAsyncFib;
-  const syncBusyForm = document.getElementById('sync-busy-form');
-  syncBusyForm.onsubmit = startSyncBusyFib;
-  const asyncBusyForm = document.getElementById('async-busy-form');
-  asyncBusyForm.onsubmit = startAsyncBusyFib;
-  const syncMemoForm = document.getElementById('sync-memo-form');
-  syncMemoForm.onsubmit = startSyncMemoFib;
-  const asyncMemoForm = document.getElementById('async-memo-form');
-  asyncMemoForm.onsubmit = startAsyncMemoFib;
+  ['sync', 'syncBusy', 'syncMemo'].forEach(function(type) {
+    const form = document.getElementById(`${hyphenize(type)}-form`);
+    form.onsubmit = startAsync(type);
+  });
+
+  ['async', 'asyncBusy', 'asyncMemo'].forEach(function(type) {
+    const form = document.getElementById(`${hyphenize(type)}-form`);
+    form.onsubmit = startAsync(type);
+  });
 
   const formIds = {
     'sync-n': 'sync-submit',
