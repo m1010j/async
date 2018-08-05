@@ -32,17 +32,17 @@ export default function() {
 
     const h2 = document.createElement('h2');
     h2.innerText = titles[type];
-    container.append(h2);
+    container.appendChild(h2);
 
     const source = document.createElement('div');
     source.classList.add('source');
     source.id = `${hyphenizedType}-source`;
     appendCode(type, source);
-    container.append(source);
+    container.appendChild(source);
 
     const h3 = document.createElement('h3');
     h3.innerText = 'Benchmark';
-    container.append(h3);
+    container.appendChild(h3);
 
     const form = document.createElement('form');
     form.id = `${type}-form`;
@@ -52,7 +52,7 @@ export default function() {
     numberInput.id = `${hyphenizedType}-n`;
     numberInput.type = 'number';
     numberInput.placeholder = 'n';
-    form.append(numberInput);
+    form.appendChild(numberInput);
 
     const submitInput = document.createElement('input');
     submitInput.classList.add('submit');
@@ -60,7 +60,7 @@ export default function() {
     submitInput.type = 'submit';
     submitInput.disabled = true;
     submitInput.value = 'Invoke';
-    form.append(submitInput);
+    form.appendChild(submitInput);
 
     ['change', 'keyup'].forEach(function(eventType) {
       numberInput.addEventListener(eventType, function() {
@@ -72,7 +72,7 @@ export default function() {
       });
     });
 
-    container.append(form);
+    container.appendChild(form);
 
     const resultContainer = document.createElement('div');
     resultContainer.classList.add('result-container');
@@ -80,14 +80,14 @@ export default function() {
     const result = document.createElement('div');
     result.classList.add('result');
     result.id = `${hyphenizedType}-result`;
-    resultContainer.append(result);
+    resultContainer.appendChild(result);
 
     const resultTime = document.createElement('div');
     resultTime.classList.add('result');
     resultTime.id = `${hyphenizedType}-time`;
-    resultContainer.append(resultTime);
+    resultContainer.appendChild(resultTime);
 
-    container.append(resultContainer);
+    container.appendChild(resultContainer);
 
     const spinnerContainer = document.createElement('div');
     spinnerContainer.classList.add('spinner-container');
@@ -97,12 +97,12 @@ export default function() {
     const spinner = document.createElement('div');
     spinner.classList.add('lds-ring');
     for (let i = 0; i < 4; i++) {
-      spinner.append(document.createElement('div'));
+      spinner.appendChild(document.createElement('div'));
     }
-    spinnerContainer.append(spinner);
+    spinnerContainer.appendChild(spinner);
 
-    container.append(spinnerContainer);
+    container.appendChild(spinnerContainer);
 
-    main.append(container);
+    main.appendChild(container);
   });
 }
