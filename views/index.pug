@@ -1,3 +1,8 @@
+- const types = ['sync', 'async', 'syncBusy', 'asyncBusy', 'syncMemo', 'asyncMemo'];
+- const titles = ['Synchronous Fibonacci', 'Asynchronous Fibonacci', 'Synchronous Fibonacci with Busywork', 'Asynchronous Fibonacci with Busywork', 'Memoized Synchronous Fibonacci', 'Memoized Asynchronous Fibonacci'];
+- const hyphenizedTypes = ['sync', 'async', 'sync-busy', 'async-busy', 'sync-memo', 'async-memo'];
+
+
 doctype html
 html
   head
@@ -11,11 +16,29 @@ html
     link(rel='stylesheet', href='./stylesheets/styles.css')
     link(rel='stylesheet', href='./stylesheets/sunburst.css')
     script(defer='', src='https://use.fontawesome.com/releases/v5.0.1/js/all.js')
+    script(id='types')= 'window.types = [' + types.map(function(type) { return `'${type}'` }).toString() + '];'
   body
     h1= title
     div.subtitle
       span by
-        a(href='http://www.matthiasjenny.com') Matthias Jenny
+        a(href='http://www.matthiasjenny.com')= ' Matthias Jenny'
       a(href='https://github.com/m1010j/async-explorations/')
         i.fab.fa-github
     main#main
+      each type, idx in types
+        div.container(id= hyphenizedTypes[idx] + '-container')
+          h2= titles[idx]
+          div.source(id= hyphenizedTypes[idx] + '-source')
+          h3 Benchmark
+          form(id= hyphenizedTypes[idx] + '-form')
+            input(id= hyphenizedTypes[idx] + '-n', type='number', placeholder='n')
+            input.submit(id= hyphenizedTypes[idx] + '-submit', type='submit', disabled, value='Invoke')
+          div.result-container
+            div.result(id= hyphenizedTypes[idx] + '-result')
+            div.result(id= hyphenizedTypes[idx] + '-time')
+          div.spinner-container.hidden(id= hyphenizedTypes[idx] + '-spinner-container')
+            div.lds-ring
+              div
+              div
+              div
+              div
