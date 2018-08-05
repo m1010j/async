@@ -12,14 +12,16 @@ export function post(type, n, duration) {
     browser_version_2: navigator.userAgent,
     browser_platform: navigator.platform,
     num_threads: navigator.hardwareConcurrency,
-    _csrf: token,
+    // _csrf: token,
   };
 
   return fetch(`/api/${type}_benchmarks`, {
     method: 'POST',
     body: JSON.stringify(data),
+    credentials: 'same-origin',
     headers: {
       'Content-Type': 'application/json',
+      'CSRF-Token': token,
     },
   });
 }

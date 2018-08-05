@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var csurf = require('csurf');
 var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
 var compression = require('compression');
 var logger = require('morgan');
 
@@ -22,6 +23,11 @@ app.use(csrfMiddleware);
 app.use(compression());
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'pug');
+
+app.use(function(req, res, next) {
+  res.cookie('csrf-token', req.csrfToken());
+  next();
+});
 
 app.use('/', indexRouter);
 
