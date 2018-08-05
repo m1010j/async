@@ -15,7 +15,7 @@ export default function(type, htmlElement) {
       const codeTag = document.createElement('code');
       codeTag.classList.add('prettyprint');
       codeTag.classList.add('lang-js');
-      codeTag.innerHTML = newLineArr.join('');
+      codeTag.innerHTML = newLineArr.length ? newLineArr.join('') : '<br />';
       htmlElement.appendChild(codeTag);
     }
   });
