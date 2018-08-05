@@ -3,6 +3,19 @@ html {
   font-size: 1em;
 }
 
+body::-webkit-scrollbar,
+.source::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: #132d43;
+}
+
+.source::-webkit-scrollbar-thumb {
+  background-color: #5f7d94;
+}
+
 main {
   display: flex;
   flex-wrap: wrap;
