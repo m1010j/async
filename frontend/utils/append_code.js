@@ -2,23 +2,26 @@ import functions from './functions.js';
 import { busywork } from './busywork.js';
 
 export default function(type, htmlElement) {
+  const codeTag = document.createElement('code');
+  codeTag.classList.add('prettyprint');
+  codeTag.classList.add('lang-js');
+
   const lines = functions[type].toString().split('\n');
   lines.forEach(function(line, idx) {
     if (line.slice(0, 8) === '  Object') {
       busyworkTags().forEach(function(tag) {
-        htmlElement.appendChild(tag);
+        codeTag.appendChild(tag);
       });
     } else {
       const newLineArr = line.split('').map(function(ch) {
         return ch === ' ' ? '&nbsp;' : ch;
       });
-      const codeTag = document.createElement('code');
-      codeTag.classList.add('prettyprint');
-      codeTag.classList.add('lang-js');
-      codeTag.innerHTML = newLineArr.length ? newLineArr.join('') : '<br />';
-      htmlElement.appendChild(codeTag);
+      const pTag = document.createElement('p');
+      pTag.innerHTML = newLineArr.length ? newLineArr.join('') : '<br />';
+      codeTag.appendChild(pTag);
     }
   });
+  htmlElement.appendChild(codeTag);
 }
 
 function busyworkTags() {
@@ -33,10 +36,8 @@ function busyworkTags() {
     }
   });
   return cleanedUpLines.map(function(line) {
-    const codeTag = document.createElement('code');
-    codeTag.classList.add('prettyprint');
-    codeTag.classList.add('lang-js');
-    codeTag.innerHTML = line;
-    return codeTag;
+    const pTag = document.createElement('p');
+    pTag.innerHTML = line;
+    return pTag;
   });
 }
