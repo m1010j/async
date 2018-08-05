@@ -63,11 +63,13 @@ export default function() {
     form.appendChild(submitInput);
 
     ['change', 'keyup'].forEach(function(eventType) {
-      numberInput.addEventListener(eventType, function() {
-        if (parseInt(numberInput.value) > 0) {
-          submitInput.disabled = false;
-        } else {
-          submitInput.disabled = true;
+      numberInput.addEventListener(eventType, function(e) {
+        if (!(e.key === 'Enter')) {
+          if (parseInt(numberInput.value) > 0) {
+            submitInput.disabled = false;
+          } else {
+            submitInput.disabled = true;
+          }
         }
       });
     });
