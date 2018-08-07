@@ -1,4 +1,5 @@
-\c async;
+-- \c
+-- async;
 
 ALTER TABLE sync_benchmarks 
 RENAME COLUMN num_threads TO num_cores;
