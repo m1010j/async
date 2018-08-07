@@ -22,6 +22,36 @@ main {
   justify-content: center;
 }
 
+.privacy-notice-container {
+  border: 0.05rem solid #42629d;
+  background-color: #0b2942;
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+#privacy-notice {
+  padding: 0.5rem;
+  text-align: justify;
+  line-height: 1;
+  color: #fff;
+}
+
+#agree-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 0.05rem solid #fff;
+  font-size: 1.3rem;
+  width: 15rem;
+  height: 2.7rem;
+  margin: 0.5rem;
+}
+
+#agree-button:hover {
+  font-weight: bold;
+}
+
 h1 {
   font-size: 2.5rem;
 }
@@ -39,7 +69,9 @@ h2,
 h3,
 .result,
 input,
-.subtitle {
+.subtitle,
+#privacy-notice,
+#agree-button {
   font-family: 'Arsenal', sans-serif;
 }
 
@@ -139,11 +171,16 @@ input[type='number']::-webkit-outer-spin-button {
   margin: 0;
 }
 
-input[type='submit'] {
+input[type='submit'],
+#agree-button {
   background-color: #011627;
   color: #fff;
-  border: 0.1rem solid #fff;
   cursor: pointer;
+}
+
+input[type='submit'] {
+  border: 0.1rem solid #fff;
+  width: 5rem;
 }
 
 input[type='submit']:hover {

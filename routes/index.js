@@ -13,6 +13,14 @@ router.get('/', csrfMiddleware, function(req, res) {
   res.render('index', {
     title: 'Explorations in Asynchronicity',
     csrf: req.csrfToken(),
+    agreedToPivacyNotice: req.cookies.agreed_to_privacy_notice,
+  });
+});
+router.get('/agree_to_privacy_notice', function(req, res) {
+  res.cookie('agreed_to_privacy_notice', true);
+  res.status(200).json({
+    status: 'success',
+    message: 'Successfully agreed to privacy notice',
   });
 });
 router.get('/api/sync_benchmarks', db.getAllSyncBenchmarks);
