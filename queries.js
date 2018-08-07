@@ -12,20 +12,24 @@ var options = {
 };
 
 var pgp = require('pg-promise')(options);
-var connectionString =
+
+var connectionConfig =
   process.env.DATABASE_URL ||
   'postgres://matthias:matthias@localhost:5432/async';
-var db = pgp(connectionString);
+var db = pgp(connectionConfig);
 
 function getAllBenchmarks(type) {
   return function(req, res, next) {
-    db.any(`SELECT * FROM ${type}_benchmarks`)
+    db.any('SELECT * FROM $1:name', `${type}_benchmarks`)
       .then(function(data) {
         res.status(200).json({
           status: 'success',
           data: data,
           message: 'Retrieved ALL benchmarks',
         });
+      })
+      .catch(function(err) {
+        return next(err);
       })
       .catch(function(err) {
         return next(err);
@@ -36,7 +40,10 @@ function getAllBenchmarks(type) {
 function getSingleBenchmark(type) {
   return function(req, res, next) {
     var benchmarkId = parseInt(req.params.id);
-    db.one(`SELECT * FROM ${type}_benchmarks WHERE id = $1`, benchmarkId)
+    db.one('SELECT * FROM $1:name WHERE id = $2', [
+      `${type}_benchmarks`,
+      benchmarkId,
+    ])
       .then(function(data) {
         res.status(200).json({
           status: 'success',
@@ -68,9 +75,10 @@ function createBenchmark(type) {
     properties.forEach(property => {
       req.body[property] = req.body[property] || null;
     });
+    req.body.type = `${type}_benchmarks`;
 
     db.none(
-      `INSERT INTO ${type}_benchmarks (browser_engine, browser_name, browser_platform, browser_version_1, browser_version_2, num_threads, n, duration)` +
+      'INSERT INTO ${type:name} (browser_engine, browser_name, browser_platform, browser_version_1, browser_version_2, num_threads, n, duration)' +
         'VALUES (${browser_engine}, ${browser_name}, ${browser_platform}, ${browser_version_1}, ${browser_version_2}, ${num_threads}, ${n}, ${duration})',
       req.body
     )
