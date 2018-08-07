@@ -21,20 +21,37 @@ var db = pgp(connectionConfig);
 
 function getAllBenchmarks(type) {
   return function(req, res, next) {
-    db.any('SELECT * FROM $1:name', `${type}_benchmarks`)
-      .then(function(data) {
-        res.status(200).json({
-          status: 'success',
-          data: data,
-          message: 'Retrieved ALL benchmarks',
+    if (req.query.avg === 'true') {
+      db.any(
+        'SELECT n, AVG(duration) FROM $1:name GROUP BY n ORDER BY n', `${type}_benchmarks`
+      )
+        .then(function(data) {
+          const structuredData = {};
+          data.forEach(function(item) {
+            structuredData[item.n] = item.avg;
+          });
+          res.status(200).json({
+            status: 'success',
+            data: structuredData,
+            message: 'Retrieved ALL benchmarks',
+          });
+        })
+        .catch(function(err) {
+          return next(err);
         });
-      })
-      .catch(function(err) {
-        return next(err);
-      })
-      .catch(function(err) {
-        return next(err);
-      });
+    } else {
+      db.any(`SELECT * FROM ${type}_benchmarks`)
+        .then(function(data) {
+          res.status(200).json({
+            status: 'success',
+            data: data,
+            message: 'Retrieved ALL benchmarks',
+          });
+        })
+        .catch(function(err) {
+          return next(err);
+        });
+    }
   };
 }
 
