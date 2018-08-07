@@ -12,7 +12,6 @@ export function post(type, n, duration) {
     browser_version_2: navigator.userAgent,
     browser_platform: navigator.platform,
     num_threads: navigator.hardwareConcurrency,
-    // _csrf: token,
   };
 
   return fetch(`/api/${type}_benchmarks`, {

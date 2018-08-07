@@ -61,14 +61,14 @@ function createBenchmark(type) {
   return function(req, res, next) {
     req.body.duration = parseInt(req.body.duration);
     req.body.n = parseInt(req.body.n);
-    req.body.num_threads = parseInt(req.body.num_threads);
+    req.body.num_cores = parseInt(req.body.num_cores);
     const properties = [
       'browser_engine',
       'browser_name',
       'browser_platform',
       'browser_version_1',
       'browser_version_2',
-      'num_threads',
+      'num_cores',
       'n',
       'duration',
     ];
@@ -78,8 +78,8 @@ function createBenchmark(type) {
     req.body.type = `${type}_benchmarks`;
 
     db.none(
-      'INSERT INTO ${type:name} (browser_engine, browser_name, browser_platform, browser_version_1, browser_version_2, num_threads, n, duration)' +
-        'VALUES (${browser_engine}, ${browser_name}, ${browser_platform}, ${browser_version_1}, ${browser_version_2}, ${num_threads}, ${n}, ${duration})',
+      'INSERT INTO ${type:name} (browser_engine, browser_name, browser_platform, browser_version_1, browser_version_2, num_cores, n, duration)' +
+        'VALUES (${browser_engine}, ${browser_name}, ${browser_platform}, ${browser_version_1}, ${browser_version_2}, ${num_cores}, ${n}, ${duration})',
       req.body
     )
       .then(function() {
