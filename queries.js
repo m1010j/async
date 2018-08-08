@@ -21,36 +21,77 @@ var db = pgp(connectionConfig);
 
 function getAllBenchmarks(type) {
   return function(req, res, next) {
-    if (req.query.avg === 'true') {
-      db.any(
-        'SELECT n, AVG(duration) FROM $1:name GROUP BY n ORDER BY n', `${type}_benchmarks`
-      )
-        .then(function(data) {
-          const structuredData = {};
-          data.forEach(function(item) {
-            structuredData[item.n] = item.avg;
-          });
-          res.status(200).json({
-            status: 'success',
-            data: structuredData,
-            message: 'Retrieved ALL benchmarks',
-          });
-        })
-        .catch(function(err) {
-          return next(err);
-        });
+    const isAvg = req.query.avg === 'true';
+    const browser = req.query.browser;
+    const os = req.query.os;
+    if (isAvg) {
+      if (browser) {
+        if (os) {
+          db.any(
+            `SELECT n, AVG(duration) FROM $1:name WHERE LOWER(browser) LIKE $2 
+              AND LOWER(os) LIKE $3 GROUP BY n ORDER BY n`,
+            [`${type}_benchmarks`, `${browser}%`, `${os}%`]
+          )
+            .then(avgSuccessCb(res))
+            .catch(errorCb);
+        } else {
+          db.any(
+            `SELECT n, AVG(duration) FROM $1:name WHERE LOWER(browser) LIKE $2 
+              GROUP BY n ORDER BY n`,
+            [`${type}_benchmarks`, `${browser}%`]
+          )
+            .then(avgSuccessCb(res))
+            .catch(errorCb);
+        }
+      } else {
+        if (os) {
+          db.any(
+            `SELECT n, AVG(duration) FROM $1:name WHERE LOWER(os) LIKE $2
+            GROUP BY n ORDER BY n`,
+            [`${type}_benchmarks`, `${os}%`]
+          )
+            .then(avgSuccessCb(res))
+            .catch(errorCb);
+        } else {
+          db.any(`SELECT n, AVG(duration) FROM $1:name GROUP BY n ORDER BY n`, [
+            `${type}_benchmarks`,
+          ])
+            .then(avgSuccessCb(res))
+            .catch(errorCb);
+        }
+      }
     } else {
-      db.any(`SELECT * FROM ${type}_benchmarks`)
-        .then(function(data) {
-          res.status(200).json({
-            status: 'success',
-            data: data,
-            message: 'Retrieved ALL benchmarks',
-          });
-        })
-        .catch(function(err) {
-          return next(err);
-        });
+      if (browser) {
+        if (os) {
+          db.any(
+            `SELECT * FROM $1:name WHERE LOWER(browser) LIKE $2 AND
+            LOWER(os) LIKE $3`,
+            [`${type}_benchmarks`, `${browser}%`, `${os}%`]
+          )
+            .then(successCb(res))
+            .catch(errorCb);
+        } else {
+          db.any('SELECT * FROM $1:name WHERE LOWER(browser) LIKE $2', [
+            `${type}_benchmarks`,
+            `${browser}%`,
+          ])
+            .then(successCb(res))
+            .catch(errorCb);
+        }
+      } else {
+        if (os) {
+          db.any('SELECT * FROM $1:name WHERE LOWER(os) LIKE $2', [
+            `${type}_benchmarks`,
+            `${os}%`,
+          ])
+            .then(successCb(res))
+            .catch(errorCb);
+        } else {
+          db.any('SELECT * FROM $1:name', `${type}_benchmarks`)
+            .then(successCb(res))
+            .catch(errorCb);
+        }
+      }
     }
   };
 }
@@ -80,11 +121,7 @@ function createBenchmark(type) {
     req.body.duration = parseInt(req.body.duration);
     req.body.n = parseInt(req.body.n);
     req.body.num_cores = parseInt(req.body.num_cores);
-    const properties = [
-      'num_cores',
-      'n',
-      'duration',
-    ];
+    const properties = ['num_cores', 'n', 'duration'];
     properties.forEach(property => {
       req.body[property] = req.body[property] || null;
     });
@@ -109,6 +146,34 @@ function createBenchmark(type) {
         return next(err);
       });
   };
+}
+
+function avgSuccessCb(res) {
+  return function(data) {
+    const structuredData = {};
+    data.forEach(function(item) {
+      structuredData[item.n] = item.avg;
+    });
+    res.status(200).json({
+      status: 'success',
+      data: structuredData,
+      message: 'Retrieved ALL benchmarks',
+    });
+  };
+}
+
+function successCb(res) {
+  return function(data) {
+    res.status(200).json({
+      status: 'success',
+      data: data,
+      message: 'Retrieved ALL benchmarks',
+    });
+  };
+}
+
+function errorCb(err) {
+  return next(err);
 }
 
 module.exports = {
