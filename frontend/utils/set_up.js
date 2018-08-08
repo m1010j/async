@@ -3,6 +3,8 @@ import startSync from '../click_handlers/sync.js';
 import appendCode from './append_code.js';
 import { hyphenize } from './convert_string.js';
 import { Chart } from 'chart.js';
+import merge from 'lodash/merge';
+import randomColor from 'randomcolor';
 
 export default function() {
   const agreeButton = document.getElementById('agree-button');
@@ -23,29 +25,7 @@ export default function() {
     type: 'line',
     data: {
       labels: [],
-      datasets: [
-        {
-          label: '# of Votes',
-          data: [],
-          backgroundColor: [
-            'rgba(255, 99, 132, 0)',
-            'rgba(54, 162, 235, 0.2)',
-            'rgba(255, 206, 86, 0.2)',
-            'rgba(75, 192, 192, 0.2)',
-            'rgba(153, 102, 255, 0.2)',
-            'rgba(255, 159, 64, 0.2)',
-          ],
-          borderColor: [
-            'rgba(255,99,132,1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(153, 102, 255, 1)',
-            'rgba(255, 159, 64, 1)',
-          ],
-          borderWidth: 1,
-        },
-      ],
+      datasets: [],
     },
     options: {
       scales: {
@@ -60,25 +40,20 @@ export default function() {
     },
   });
 
-  fetch('/api/sync_benchmarks?avg=true', {
-    method: 'GET',
-  })
-    .then(function(res) {
-      return res.json();
-    })
-    .then(function(res) {
-      const nums = Object.keys(res.data);
-      nums.forEach(function(num) {
-        chart.data.labels.push(num);
-      });
-      const avgs = nums.map(function(num) {
-        return res.data[num];
-      });
-      avgs.forEach(function(avg) {
-        chart.data.datasets[0].data.push(avg);
-      });
-      debugger;
-    });
+  const types = [
+    // 'sync',
+    // 'sync_busy',
+    // 'sync_memo',
+    'async',
+    // 'async_busy',
+    'async_memo',
+  ];
+  types.forEach(function(type) {
+    addData(type, 'min', chart);
+  });
+  // types.forEach(function(type) {
+  //   addData(type, 'avg', chart);
+  // });
 
   const main = document.getElementById('main');
 
@@ -110,4 +85,39 @@ export default function() {
   document
     .getElementsByTagName('head')[0]
     .removeChild(document.getElementById('types'));
+}
+
+function addData(type, mode, chart) {
+  const emptyDataset = {
+    label: '',
+    data: [],
+    backgroundColor: ['rgba(255, 255, 255, 0)'],
+    borderColor: ['rgba(255,99,132,1)'],
+    borderWidth: 2,
+  };
+
+  fetch(`/api/${type}_benchmarks?mode=${mode}`, {
+    method: 'GET',
+  })
+    .then(function(res) {
+      return res.json();
+    })
+    .then(function(res) {
+      const nums = Object.keys(res.data);
+      chart.data.labels = merge([], chart.data.labels, nums).sort(function(
+        a,
+        b
+      ) {
+        return parseInt(a) - parseInt(b);
+      });
+      const avgs = nums.map(function(num) {
+        return res.data[num];
+      });
+      const dataset = merge({}, emptyDataset);
+      dataset.borderColor = [randomColor()];
+      dataset.label = `${mode} time ${type.split('_').join(' ')}`;
+      dataset.data = avgs;
+      chart.data.datasets.push(dataset);
+      const test = chart.update();
+    });
 }

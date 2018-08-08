@@ -21,7 +21,8 @@ var db = pgp(connectionConfig);
 
 function getAllBenchmarks(type) {
   return function(req, res, next) {
-    const isAvg = req.query.avg === 'true';
+    const isAvg = req.query.mode === 'avg';
+    const isMin = req.query.mode === 'min';
     const browser = req.query.browser;
     const os = req.query.os;
     if (isAvg) {
@@ -57,6 +58,42 @@ function getAllBenchmarks(type) {
             `${type}_benchmarks`,
           ])
             .then(avgSuccessCb(res))
+            .catch(errorCb);
+        }
+      }
+    } else if (isMin) {
+      if (browser) {
+        if (os) {
+          db.any(
+            `SELECT n, MIN(duration) FROM $1:name WHERE LOWER(browser) LIKE $2 
+              AND LOWER(os) LIKE $3 GROUP BY n ORDER BY n`,
+            [`${type}_benchmarks`, `${browser}%`, `${os}%`]
+          )
+            .then(minSuccessCb(res))
+            .catch(errorCb);
+        } else {
+          db.any(
+            `SELECT n, MIN(duration) FROM $1:name WHERE LOWER(browser) LIKE $2 
+              GROUP BY n ORDER BY n`,
+            [`${type}_benchmarks`, `${browser}%`]
+          )
+            .then(minSuccessCb(res))
+            .catch(errorCb);
+        }
+      } else {
+        if (os) {
+          db.any(
+            `SELECT n, MIN(duration) FROM $1:name WHERE LOWER(os) LIKE $2
+            GROUP BY n ORDER BY n`,
+            [`${type}_benchmarks`, `${os}%`]
+          )
+            .then(minSuccessCb(res))
+            .catch(errorCb);
+        } else {
+          db.any(`SELECT n, MIN(duration) FROM $1:name GROUP BY n ORDER BY n`, [
+            `${type}_benchmarks`,
+          ])
+            .then(minSuccessCb(res))
             .catch(errorCb);
         }
       }
@@ -153,6 +190,20 @@ function avgSuccessCb(res) {
     const structuredData = {};
     data.forEach(function(item) {
       structuredData[item.n] = item.avg;
+    });
+    res.status(200).json({
+      status: 'success',
+      data: structuredData,
+      message: 'Retrieved ALL benchmarks',
+    });
+  };
+}
+
+function minSuccessCb(res) {
+  return function(data) {
+    const structuredData = {};
+    data.forEach(function(item) {
+      structuredData[item.n] = item.min;
     });
     res.status(200).json({
       status: 'success',
