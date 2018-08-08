@@ -85,4 +85,3 @@ CREATE INDEX sync_memo_benchmarks_num_cores ON sync_memo_benchmarks ( num_cores 
 CREATE INDEX async_benchmarks_num_cores ON async_benchmarks ( num_cores );
 CREATE INDEX async_busy_benchmarks_num_cores ON async_busy_benchmarks ( num_cores );
 CREATE INDEX async_memo_benchmarks_num_cores ON async_memo_benchmarks ( num_cores );
-
