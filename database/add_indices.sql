@@ -1,33 +1,27 @@
 CREATE INDEX sync_browser ON sync_benchmarks ( browser )
-WHERE browser LIKE 'Firefox%' AND browser NOT LIKE 'Firefox Mobile%';
+WHERE LOWER(browser) LIKE 'firefox%' AND LOWER(browser) NOT LIKE 'firefox mobile%';
 CREATE INDEX sync_browser ON sync_benchmarks ( browser )
-WHERE browser LIKE 'Firefox Mobile%';
+WHERE LOWER(browser) LIKE 'firefox mobile%';
 CREATE INDEX sync_browser ON sync_benchmarks ( browser )
-WHERE browser LIKE 'Chrome%' AND browser NOT LIKE 'Chrome Mobile%';
+WHERE LOWER(browser) LIKE 'chrome%' AND LOWER(browser) NOT LIKE 'chrome mobile%';
 CREATE INDEX sync_browser ON sync_benchmarks ( browser )
-WHERE browser LIKE 'Chrome Mobile%';
+WHERE LOWER(browser) LIKE 'chrome mobile%';
 CREATE INDEX sync_browser ON sync_benchmarks ( browser )
-WHERE browser LIKE 'Opera%' AND browser NOT LIKE 'Opera Mobile%';
+WHERE LOWER(browser) LIKE 'opera%' AND LOWER(browser) NOT LIKE 'opera mobile%';
 CREATE INDEX sync_browser ON sync_benchmarks ( browser )
-WHERE browser LIKE 'Opera Mobile%';
+WHERE LOWER(browser) LIKE 'opera mobile%';
 CREATE INDEX sync_browser ON sync_benchmarks ( browser )
-WHERE browser LIKE 'Samsung Mobile%';
+WHERE LOWER(browser) LIKE 'samsung mobile%';
 CREATE INDEX sync_browser ON sync_benchmarks ( browser )
-WHERE browser LIKE 'UC Browser%';
-<<<<<<< HEAD
+WHERE LOWER(browser) LIKE 'uc browser%';
 CREATE INDEX sync_browser ON sync_benchmarks ( browser )
-WHERE browser LIKE 'Edge%';
-=======
->>>>>>> Get started with chart.js
+WHERE LOWER(browser) LIKE 'edge%';
 
 CREATE INDEX sync_os ON sync_benchmarks ( os )
-WHERE os LIKE 'Android%';
+WHERE LOWER(os) LIKE 'android%';
 CREATE INDEX sync_os ON sync_benchmarks ( os )
-WHERE os LIKE 'Ubuntu%';
+WHERE LOWER(os) LIKE 'ubuntu%';
 CREATE INDEX sync_os ON sync_benchmarks ( os )
-WHERE os LIKE 'Linux%';
-<<<<<<< HEAD
+WHERE LOWER(os) LIKE 'linux%';
 CREATE INDEX sync_os ON sync_benchmarks ( os )
-WHERE os LIKE 'Windows%';
-=======
->>>>>>> Get started with chart.js
+WHERE LOWER(os) LIKE 'windows%';
