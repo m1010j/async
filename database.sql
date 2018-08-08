@@ -6,14 +6,24 @@ CREATE DATABASE async;
 
 \c async;
 
+DROP TABLE IF EXISTS sync_benchmarks
+CASCADE;
+DROP TABLE IF EXISTS sync_busy_benchmarks
+CASCADE;
+DROP TABLE IF EXISTS sync_memo_benchmarks
+CASCADE;
+DROP TABLE IF EXISTS async_benchmarks
+CASCADE;
+DROP TABLE IF EXISTS async_busy_benchmarks
+CASCADE;
+DROP TABLE IF EXISTS async_memo_benchmarks
+CASCADE;
+
 CREATE TABLE sync_benchmarks
 (
   ID SERIAL PRIMARY KEY,
-  browser_engine VARCHAR,
-  browser_name VARCHAR,
-  browser_platform VARCHAR,
-  browser_version_1 VARCHAR,
-  browser_version_2 VARCHAR,
+  browser VARCHAR,
+  os VARCHAR,
   num_cores INTEGER,
   n INTEGER,
   duration INTEGER
@@ -22,11 +32,8 @@ CREATE TABLE sync_benchmarks
 CREATE TABLE sync_busy_benchmarks
 (
   ID SERIAL PRIMARY KEY,
-  browser_engine VARCHAR,
-  browser_name VARCHAR,
-  browser_platform VARCHAR,
-  browser_version_1 VARCHAR,
-  browser_version_2 VARCHAR,
+  browser VARCHAR,
+  os VARCHAR,
   num_cores INTEGER,
   n INTEGER,
   duration INTEGER
@@ -35,11 +42,8 @@ CREATE TABLE sync_busy_benchmarks
 CREATE TABLE sync_memo_benchmarks
 (
   ID SERIAL PRIMARY KEY,
-  browser_engine VARCHAR,
-  browser_name VARCHAR,
-  browser_platform VARCHAR,
-  browser_version_1 VARCHAR,
-  browser_version_2 VARCHAR,
+  browser VARCHAR,
+  os VARCHAR,
   num_cores INTEGER,
   n INTEGER,
   duration INTEGER
@@ -48,11 +52,8 @@ CREATE TABLE sync_memo_benchmarks
 CREATE TABLE async_benchmarks
 (
   ID SERIAL PRIMARY KEY,
-  browser_engine VARCHAR,
-  browser_name VARCHAR,
-  browser_platform VARCHAR,
-  browser_version_1 VARCHAR,
-  browser_version_2 VARCHAR,
+  browser VARCHAR,
+  os VARCHAR,
   num_cores INTEGER,
   n INTEGER,
   duration INTEGER
@@ -61,11 +62,8 @@ CREATE TABLE async_benchmarks
 CREATE TABLE async_busy_benchmarks
 (
   ID SERIAL PRIMARY KEY,
-  browser_engine VARCHAR,
-  browser_name VARCHAR,
-  browser_platform VARCHAR,
-  browser_version_1 VARCHAR,
-  browser_version_2 VARCHAR,
+  browser VARCHAR,
+  os VARCHAR,
   num_cores INTEGER,
   n INTEGER,
   duration INTEGER
@@ -74,12 +72,17 @@ CREATE TABLE async_busy_benchmarks
 CREATE TABLE async_memo_benchmarks
 (
   ID SERIAL PRIMARY KEY,
-  browser_engine VARCHAR,
-  browser_name VARCHAR,
-  browser_platform VARCHAR,
-  browser_version_1 VARCHAR,
-  browser_version_2 VARCHAR,
+  browser VARCHAR,
+  os VARCHAR,
   num_cores INTEGER,
   n INTEGER,
   duration INTEGER
 );
+
+CREATE INDEX sync_benchmarks_num_cores ON sync_benchmarks ( num_cores );
+CREATE INDEX sync_busy_benchmarks_num_cores ON sync_busy_benchmarks ( num_cores );
+CREATE INDEX sync_memo_benchmarks_num_cores ON sync_memo_benchmarks ( num_cores );
+CREATE INDEX async_benchmarks_num_cores ON async_benchmarks ( num_cores );
+CREATE INDEX async_busy_benchmarks_num_cores ON async_busy_benchmarks ( num_cores );
+CREATE INDEX async_memo_benchmarks_num_cores ON async_memo_benchmarks ( num_cores );
+

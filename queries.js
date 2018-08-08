@@ -1,4 +1,5 @@
 var promise = require('bluebird');
+var useragent = require('useragent');
 
 var options = {
   // Initialization Options
@@ -63,11 +64,6 @@ function createBenchmark(type) {
     req.body.n = parseInt(req.body.n);
     req.body.num_cores = parseInt(req.body.num_cores);
     const properties = [
-      'browser_engine',
-      'browser_name',
-      'browser_platform',
-      'browser_version_1',
-      'browser_version_2',
       'num_cores',
       'n',
       'duration',
@@ -77,9 +73,13 @@ function createBenchmark(type) {
     });
     req.body.type = `${type}_benchmarks`;
 
+    const agent = useragent.parse(req.headers['user-agent']);
+    req.body.browser = agent.toAgent();
+    req.body.os = agent.os.toString();
+
     db.none(
-      'INSERT INTO ${type:name} (browser_engine, browser_name, browser_platform, browser_version_1, browser_version_2, num_cores, n, duration)' +
-        'VALUES (${browser_engine}, ${browser_name}, ${browser_platform}, ${browser_version_1}, ${browser_version_2}, ${num_cores}, ${n}, ${duration})',
+      'INSERT INTO ${type:name} (browser, os, num_cores, n, duration)' +
+        'VALUES (${browser}, ${os}, ${num_cores}, ${n}, ${duration})',
       req.body
     )
       .then(function() {
