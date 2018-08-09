@@ -137,7 +137,10 @@ function getAllBenchmarks(type) {
             .then(successCb(res))
             .catch(errorCb);
         } else {
-          db.any('SELECT * FROM $1:name WHERE n <= $2 ', `${type}_benchmarks`)
+          db.any('SELECT * FROM $1:name WHERE n <= $2 ', [
+            `${type}_benchmarks`,
+            maxN,
+          ])
             .then(successCb(res))
             .catch(errorCb);
         }
