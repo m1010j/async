@@ -86,6 +86,13 @@ CREATE INDEX async_benchmarks_num_cores ON async_benchmarks ( num_cores );
 CREATE INDEX async_busy_benchmarks_num_cores ON async_busy_benchmarks ( num_cores );
 CREATE INDEX async_memo_benchmarks_num_cores ON async_memo_benchmarks ( num_cores );
 
+CREATE INDEX sync_benchmarks_n ON sync_benchmarks ( n );
+CREATE INDEX sync_busy_benchmarks_n ON sync_busy_benchmarks ( n );
+CREATE INDEX sync_memo_benchmarks_n ON sync_memo_benchmarks ( n );
+CREATE INDEX async_benchmarks_n ON async_benchmarks ( n );
+CREATE INDEX async_busy_benchmarks_n ON async_busy_benchmarks ( n );
+CREATE INDEX async_memo_benchmarks_n ON async_memo_benchmarks ( n );
+
 CREATE INDEX sync_browser_firefox ON sync_benchmarks ( browser )
 WHERE LOWER(browser) LIKE 'firefox%' AND LOWER(browser) NOT LIKE 'firefox mobile%';
 CREATE INDEX sync_browser_firefox_mobile ON sync_benchmarks ( browser )
