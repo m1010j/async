@@ -97,6 +97,8 @@ CREATE INDEX sync_browser_firefox ON sync_benchmarks ( browser )
 WHERE LOWER(browser) LIKE 'firefox%' AND LOWER(browser) NOT LIKE 'firefox mobile%';
 CREATE INDEX sync_browser_firefox_mobile ON sync_benchmarks ( browser )
 WHERE LOWER(browser) LIKE 'firefox mobile%';
+CREATE INDEX sync_browser_firefox_mobile ON sync_benchmarks ( browser )
+WHERE LOWER(browser) LIKE 'chromium%';
 CREATE INDEX sync_browser_chrome ON sync_benchmarks ( browser )
 WHERE LOWER(browser) LIKE 'chrome%' AND LOWER(browser) NOT LIKE 'chrome mobile%';
 CREATE INDEX sync_browser_chrome_mobile ON sync_benchmarks ( browser )
@@ -120,6 +122,8 @@ CREATE INDEX sync_busy_browser_firefox ON sync_busy_benchmarks ( browser )
 WHERE LOWER(browser) LIKE 'firefox%' AND LOWER(browser) NOT LIKE 'firefox mobile%';
 CREATE INDEX sync_busy_browser_firefox_mobile ON sync_busy_benchmarks ( browser )
 WHERE LOWER(browser) LIKE 'firefox mobile%';
+CREATE INDEX sync_busy_browser_firefox_mobile ON sync_busy_benchmarks ( browser )
+WHERE LOWER(browser) LIKE 'chromium%';
 CREATE INDEX sync_busy_browser_chrome ON sync_busy_benchmarks ( browser )
 WHERE LOWER(browser) LIKE 'chrome%' AND LOWER(browser) NOT LIKE 'chrome mobile%';
 CREATE INDEX sync_busy_browser_chrome_mobile ON sync_busy_benchmarks ( browser )
@@ -143,6 +147,8 @@ CREATE INDEX sync_memo_browser_firefox ON sync_memo_benchmarks ( browser )
 WHERE LOWER(browser) LIKE 'firefox%' AND LOWER(browser) NOT LIKE 'firefox mobile%';
 CREATE INDEX sync_memo_browser_firefox_mobile ON sync_memo_benchmarks ( browser )
 WHERE LOWER(browser) LIKE 'firefox mobile%';
+CREATE INDEX sync_memo_browser_firefox_mobile ON sync_memo_benchmarks ( browser )
+WHERE LOWER(browser) LIKE 'chromium%';
 CREATE INDEX sync_memo_browser_chrome ON sync_memo_benchmarks ( browser )
 WHERE LOWER(browser) LIKE 'chrome%' AND LOWER(browser) NOT LIKE 'chrome mobile%';
 CREATE INDEX sync_memo_browser_chrome_mobile ON sync_memo_benchmarks ( browser )
@@ -166,6 +172,8 @@ CREATE INDEX async_browser_firefox ON async_benchmarks ( browser )
 WHERE LOWER(browser) LIKE 'firefox%' AND LOWER(browser) NOT LIKE 'firefox mobile%';
 CREATE INDEX async_browser_firefox_mobile ON async_benchmarks ( browser )
 WHERE LOWER(browser) LIKE 'firefox mobile%';
+CREATE INDEX async_browser_firefox_mobile ON async_benchmarks ( browser )
+WHERE LOWER(browser) LIKE 'chromium%';
 CREATE INDEX async_browser_chrome ON async_benchmarks ( browser )
 WHERE LOWER(browser) LIKE 'chrome%' AND LOWER(browser) NOT LIKE 'chrome mobile%';
 CREATE INDEX async_browser_chrome_mobile ON async_benchmarks ( browser )
@@ -189,6 +197,8 @@ CREATE INDEX async_busy_browser_firefox ON async_busy_benchmarks ( browser )
 WHERE LOWER(browser) LIKE 'firefox%' AND LOWER(browser) NOT LIKE 'firefox mobile%';
 CREATE INDEX async_busy_browser_firefox_mobile ON async_busy_benchmarks ( browser )
 WHERE LOWER(browser) LIKE 'firefox mobile%';
+CREATE INDEX async_busy_browser_firefox_mobile ON async_busy_benchmarks ( browser )
+WHERE LOWER(browser) LIKE 'chromium%';
 CREATE INDEX async_busy_browser_chrome ON async_busy_benchmarks ( browser )
 WHERE LOWER(browser) LIKE 'chrome%' AND LOWER(browser) NOT LIKE 'chrome mobile%';
 CREATE INDEX async_busy_browser_chrome_mobile ON async_busy_benchmarks ( browser )
@@ -212,6 +222,8 @@ CREATE INDEX async_memo_browser_firefox ON async_memo_benchmarks ( browser )
 WHERE LOWER(browser) LIKE 'firefox%' AND LOWER(browser) NOT LIKE 'firefox mobile%';
 CREATE INDEX async_memo_browser_firefox_mobile ON async_memo_benchmarks ( browser )
 WHERE LOWER(browser) LIKE 'firefox mobile%';
+CREATE INDEX async_memo_browser_firefox_mobile ON async_memo_benchmarks ( browser )
+WHERE LOWER(browser) LIKE 'chromium%';
 CREATE INDEX async_memo_browser_chrome ON async_memo_benchmarks ( browser )
 WHERE LOWER(browser) LIKE 'chrome%' AND LOWER(browser) NOT LIKE 'chrome mobile%';
 CREATE INDEX async_memo_browser_chrome_mobile ON async_memo_benchmarks ( browser )
