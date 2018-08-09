@@ -21,25 +21,26 @@ var db = pgp(connectionConfig);
 
 function getAllBenchmarks(type) {
   return function(req, res, next) {
-    const isAvg = req.query.mode === 'avg';
-    const isMin = req.query.mode === 'min';
+    const isAvgMode = req.query.mode === 'avg';
+    const isMinMode = req.query.mode === 'min';
+    const maxN = parseInt(req.query.max_n) || 45;
     const browser = req.query.browser;
     const os = req.query.os;
-    if (isAvg) {
+    if (isAvgMode) {
       if (browser) {
         if (os) {
           db.any(
             `SELECT n, AVG(duration) FROM $1:name WHERE LOWER(browser) LIKE $2 
-              AND LOWER(os) LIKE $3 GROUP BY n ORDER BY n`,
-            [`${type}_benchmarks`, `${browser}%`, `${os}%`]
+              AND LOWER(os) LIKE $3 AND n <= $4 GROUP BY n ORDER BY n`,
+            [`${type}_benchmarks`, `${browser}%`, `${os}%`, maxN]
           )
             .then(avgSuccessCb(res))
             .catch(errorCb);
         } else {
           db.any(
             `SELECT n, AVG(duration) FROM $1:name WHERE LOWER(browser) LIKE $2 
-              GROUP BY n ORDER BY n`,
-            [`${type}_benchmarks`, `${browser}%`]
+               AND n <= $3 GROUP BY n ORDER BY n`,
+            [`${type}_benchmarks`, `${browser}%`, maxN]
           )
             .then(avgSuccessCb(res))
             .catch(errorCb);
@@ -48,34 +49,36 @@ function getAllBenchmarks(type) {
         if (os) {
           db.any(
             `SELECT n, AVG(duration) FROM $1:name WHERE LOWER(os) LIKE $2
-            GROUP BY n ORDER BY n`,
-            [`${type}_benchmarks`, `${os}%`]
+             AND n <= $3 GROUP BY n ORDER BY n`,
+            [`${type}_benchmarks`, `${os}%`, maxN]
           )
             .then(avgSuccessCb(res))
             .catch(errorCb);
         } else {
-          db.any(`SELECT n, AVG(duration) FROM $1:name GROUP BY n ORDER BY n`, [
-            `${type}_benchmarks`,
-          ])
+          db.any(
+            `SELECT n, AVG(duration) FROM $1:name WHERE n <= $2  
+            GROUP BY n ORDER BY n`,
+            [`${type}_benchmarks`, maxN]
+          )
             .then(avgSuccessCb(res))
             .catch(errorCb);
         }
       }
-    } else if (isMin) {
+    } else if (isMinMode) {
       if (browser) {
         if (os) {
           db.any(
             `SELECT n, MIN(duration) FROM $1:name WHERE LOWER(browser) LIKE $2 
-              AND LOWER(os) LIKE $3 GROUP BY n ORDER BY n`,
-            [`${type}_benchmarks`, `${browser}%`, `${os}%`]
+              AND LOWER(os) LIKE $3 AND n <= $4 GROUP BY n ORDER BY n`,
+            [`${type}_benchmarks`, `${browser}%`, `${os}%`, maxN]
           )
             .then(minSuccessCb(res))
             .catch(errorCb);
         } else {
           db.any(
             `SELECT n, MIN(duration) FROM $1:name WHERE LOWER(browser) LIKE $2 
-              GROUP BY n ORDER BY n`,
-            [`${type}_benchmarks`, `${browser}%`]
+              AND n <= $3 GROUP BY n ORDER BY n`,
+            [`${type}_benchmarks`, `${browser}%`, maxN]
           )
             .then(minSuccessCb(res))
             .catch(errorCb);
@@ -84,15 +87,17 @@ function getAllBenchmarks(type) {
         if (os) {
           db.any(
             `SELECT n, MIN(duration) FROM $1:name WHERE LOWER(os) LIKE $2
-            GROUP BY n ORDER BY n`,
-            [`${type}_benchmarks`, `${os}%`]
+              AND n <= $3 GROUP BY n ORDER BY n`,
+            [`${type}_benchmarks`, `${os}%`, maxN]
           )
             .then(minSuccessCb(res))
             .catch(errorCb);
         } else {
-          db.any(`SELECT n, MIN(duration) FROM $1:name GROUP BY n ORDER BY n`, [
-            `${type}_benchmarks`,
-          ])
+          db.any(
+            `SELECT n, MIN(duration) FROM $1:name WHERE n <= $2
+              GROUP BY n ORDER BY n`,
+            [`${type}_benchmarks`, maxN]
+          )
             .then(minSuccessCb(res))
             .catch(errorCb);
         }
@@ -102,29 +107,31 @@ function getAllBenchmarks(type) {
         if (os) {
           db.any(
             `SELECT * FROM $1:name WHERE LOWER(browser) LIKE $2 AND
-            LOWER(os) LIKE $3`,
-            [`${type}_benchmarks`, `${browser}%`, `${os}%`]
+            LOWER(os) LIKE $3 AND n <= $4 `,
+            [`${type}_benchmarks`, `${browser}%`, `${os}%`, maxN]
           )
             .then(successCb(res))
             .catch(errorCb);
         } else {
-          db.any('SELECT * FROM $1:name WHERE LOWER(browser) LIKE $2', [
-            `${type}_benchmarks`,
-            `${browser}%`,
-          ])
+          db.any(
+            `SELECT * FROM $1:name WHERE LOWER(browser) LIKE $2
+            AND n <= $3`,
+            [`${type}_benchmarks`, `${browser}%`, maxN]
+          )
             .then(successCb(res))
             .catch(errorCb);
         }
       } else {
         if (os) {
-          db.any('SELECT * FROM $1:name WHERE LOWER(os) LIKE $2', [
+          db.any('SELECT * FROM $1:name WHERE LOWER(os) LIKE $2 AND n <= $3', [
             `${type}_benchmarks`,
             `${os}%`,
+            maxN,
           ])
             .then(successCb(res))
             .catch(errorCb);
         } else {
-          db.any('SELECT * FROM $1:name', `${type}_benchmarks`)
+          db.any('SELECT * FROM $1:name WHERE n <= $2 ', `${type}_benchmarks`)
             .then(successCb(res))
             .catch(errorCb);
         }
