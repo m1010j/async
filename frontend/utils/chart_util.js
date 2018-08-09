@@ -2,11 +2,35 @@ import merge from 'lodash/merge';
 import randomColor from 'randomcolor';
 import { camelize, snakeCaseize } from './convert_string.js';
 
-export function addData(types, options, chart) {
+export function addData(types, browsers, options, chart) {
   chart.types = merge([], chart.types, types);
-  if (types.length) {
-    const type = types.pop();
-    const { mode, browser, os, maxN } = options;
+  browsers.forEach(function(browser) {
+    if (!chart.browsers.includes(browser)) {
+      chart.browsers.push(browser);
+    }
+  });
+  if (chart.browsers.length > 1) {
+    const allIdx = chart.browsers.indexOf('all');
+    if (allIdx !== -1) {
+      chart.browsers.splice(allIdx, 1);
+    }
+  }
+  const typesAndBrowsers = [];
+  types.forEach(function(type) {
+    browsers.forEach(function(browser) {
+      typesAndBrowsers.push([type, browser]);
+    });
+  });
+  _addData(typesAndBrowsers, options, chart);
+}
+
+function _addData(typesAndBrowsers, options, chart) {
+  if (typesAndBrowsers.length) {
+    let [type, browser] = typesAndBrowsers.pop();
+    if (browser === 'all') {
+      browser = 'undefined';
+    }
+    const { mode, os, maxN } = options;
     const emptyDataset = {
       label: '',
       data: [],
@@ -41,24 +65,28 @@ export function addData(types, options, chart) {
         const dataset = merge({}, emptyDataset);
         dataset.resData = res.data;
         dataset.borderColor = [randomColor()];
-        dataset.label = `${mode} time ${camelize(type)}`;
+        let browserLabel = browser;
+        if (browserLabel === 'undefined') {
+          browserLabel = 'all browsers';
+        }
+        dataset.label = `${browserLabel} ${mode} time ${camelize(type)}`;
         dataset.data = newData;
         chart.data.datasets.push(dataset);
         chart.update();
       })
       .then(function() {
-        addData(types, options, chart);
+        _addData(typesAndBrowsers, options, chart);
       });
   }
 }
 
-export function removeData(type, chart) {
+export function removeDataForType(type, chart) {
   const datasets = chart.data.datasets;
   for (let i = 0; i < datasets.length; i++) {
     const dataset = datasets[i];
-    if (dataset.label.split(' ')[2] === type) {
+    const datasetLabelArr = dataset.label.split(' ');
+    if (datasetLabelArr[datasetLabelArr.length - 1] === type) {
       datasets.splice(i, 1);
-      i = datasets.length;
     }
   }
   const typeIdx = chart.types.indexOf(snakeCaseize(type));
@@ -68,14 +96,42 @@ export function removeData(type, chart) {
   chart.update();
 }
 
-function mapValues(data, nums) {
-  return nums.map(function(num) {
-    return data[num];
+export function removeDataForBrowsers(browsers, chart) {
+  const datasets = chart.data.datasets;
+  browsers.forEach(function(browser) {
+    for (let i = 0; i < datasets.length; i++) {
+      const dataset = datasets[i];
+      const datasetLabelArr = dataset.label.split(' ');
+      const browserArr = browser.split(' ');
+      if (datasetLabelArr.slice(0, browserArr.length).join(' ') === browser) {
+        datasets[i] = null;
+      }
+    }
+    chart.data.datasets = chart.data.datasets.filter(function(dataset) {
+      if (dataset) return dataset;
+    });
+
+    const browserIdx = chart.browsers.indexOf(browser);
+    if (browserIdx !== -1) {
+      chart.browsers.splice(browserIdx, 1);
+    }
   });
+  chart.update();
 }
 
 export function clearData(chart) {
   chart.data.labels = [];
   chart.data.datasets = [];
   chart.update();
+}
+
+export function updateChart(chart) {
+  clearData(chart);
+  addData(chart.types, chart.browsers, chart.options, chart);
+}
+
+function mapValues(data, nums) {
+  return nums.map(function(num) {
+    return data[num];
+  });
 }

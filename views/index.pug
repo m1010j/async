@@ -24,7 +24,7 @@ html
         span#agree-button Agree
     canvas#chart
     each type, idx in types
-      input(type='checkbox', id=hyphenizedTypes[idx] + '-checkbox', name='type', checked=true, value=hyphenizedTypes[idx])
+      input(type='checkbox', id=hyphenizedTypes[idx] + '-checkbox', name='type', value=hyphenizedTypes[idx])
       label(for=hyphenizedTypes[idx] + '-checkbox')= type
     input#slider(type='range', min='1', max='100', value='45')
     span#slider-span 45
@@ -33,6 +33,40 @@ html
       label(for='avg-radio') Average time
       input(type='radio', id='min-radio', name='min-or-min', value='min')
       label(for='min-radio') Minimum time
+    input(type='checkbox', id='all-browsers-checkbox', name='browser', value='all-browsers', checked=true)
+    label(for='all-browsers-checkbox') All browsers
+    input(type='checkbox', id='firefox-checkbox', name='browser', value='firefox')
+    label(for='firefox-checkbox') Firefox
+    input(type='checkbox', id='chromium-checkbox', name='browser', value='chromium')
+    label(for='chromium-checkbox') Chromium
+    input(type='checkbox', id='chrome-checkbox', name='browser', value='chrome')
+    label(for='chrome-checkbox') Chrome
+    input(type='checkbox', id='opera-checkbox', name='browser', value='opera')
+    label(for='opera-checkbox') Opera
+    input(type='checkbox', id='safari-checkbox', name='browser', value='safari')
+    label(for='safari-checkbox') Safari
+    input(type='checkbox', id='edge-checkbox', name='browser', value='edge')
+    label(for='edge-checkbox') Edge
+    input(type='checkbox', id='firefox-mobile-checkbox', name='browser', value='firefox-mobile')
+    label(for='firefox-mobile-checkbox') Firefox Mobile
+    input(type='checkbox', id='chrome-mobile-checkbox', name='browser', value='chrome-mobile')
+    label(for='chrome-mobile-checkbox') Chrome Mobile
+    input(type='checkbox', id='opera-mobile-checkbox', name='browser', value='opera-mobile')
+    label(for='opera-mobile-checkbox') Opera Mobile
+    input(type='checkbox', id='mobile-safari-checkbox', name='browser', value='mobile-safari')
+    label(for='mobile-safari-checkbox') Mobile Safari
+    input(type='checkbox', id='uc-browser-checkbox', name='browser', value='uc-browser')
+    label(for='uc-browser-checkbox') UC Browser
+    input(type='checkbox', id='samsung-mobile-checkbox', name='browser', value='samsung-mobile')
+    label(for='samsung-mobile-checkbox') Samsung Mobile
+    select#os-select
+      option(value='undefined' selected=true) All operating systems
+      option(value='Mac OS') macOS
+      option(value='Windows') Windows
+      option(value='Linux') Linux
+      option(value='Ubuntu') Ubuntu
+      option(value='Android') Android
+      option(value='iOS') iOS
     h1= title
     div.subtitle
       span by

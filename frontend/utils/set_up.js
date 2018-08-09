@@ -3,7 +3,13 @@ import startSync from '../click_handlers/sync.js';
 import appendCode from './append_code.js';
 import { hyphenize, snakeCaseize } from './convert_string.js';
 import { Chart } from 'chart.js';
-import { addData, removeData, clearData } from './chart_util.js';
+import {
+  addData,
+  removeDataForType,
+  removeDataForBrowsers,
+  clearData,
+  updateChart,
+} from './chart_util.js';
 
 export default function() {
   const agreeButton = document.getElementById('agree-button');
@@ -39,55 +45,113 @@ export default function() {
     },
   });
 
-  chart.types = window.types.map(function(camelType) {
-    return snakeCaseize(camelType);
+  chart.types = window.types.filter(function(camelType) {
+    if (['sync', 'async'].includes(camelType)) {
+      return snakeCaseize(camelType);
+    }
   });
 
   chart.options = {
     mode: 'avg',
     maxN: 45,
   };
-  addData(chart.types, chart.options, chart);
+
+  chart.browsers = ['all'];
+
+  addData(chart.types, chart.browsers, chart.options, chart);
 
   const main = document.getElementById('main');
+
+  const slider = document.getElementById('slider');
+  slider.oninput = function() {
+    const value = slider.value;
+    const sliderSpan = document.getElementById('slider-span');
+    sliderSpan.innerText = value;
+  };
+  slider.onchange = function() {
+    const value = slider.value;
+    chart.options.maxN = parseInt(value);
+    clearData(chart);
+    updateChart(chart);
+  };
+
+  ['avg', 'min'].forEach(function(mode) {
+    const radio = document.getElementById(`${mode}-radio`);
+    const otherMode = mode === 'avg' ? 'min' : 'avg';
+    const otherRadio = document.getElementById(`${otherMode}-radio`);
+    radio.onclick = function() {
+      chart.options.mode = mode;
+      otherRadio.checked = false;
+      updateChart(chart);
+    };
+  });
+
+  const allBrowsersCheckbox = document.getElementById('all-browsers-checkbox');
+  const otherCheckboxes = [
+    'firefox',
+    'chromium',
+    'chrome',
+    'opera',
+    'safari',
+    'edge',
+    'firefox-mobile',
+    'chrome-mobile',
+    'opera-mobile',
+    'mobile-safari',
+    'uc-browser',
+    'samsung-mobile',
+  ].map(function(browserStr) {
+    return document.getElementById(`${browserStr}-checkbox`);
+  });
+  allBrowsersCheckbox.onchange = function() {
+    if (allBrowsersCheckbox.checked) {
+      otherCheckboxes.forEach(function(checkbox) {
+        checkbox.checked = false;
+      });
+      chart.browsers = ['all'];
+      addData(chart.types, chart.browsers, chart.options, chart);
+    } else {
+      removeDataForBrowsers(['all'], chart);
+    }
+    chart.options.browser = this.value.toLowerCase();
+    updateChart(chart);
+  };
+  otherCheckboxes.forEach(function(checkbox) {
+    checkbox.onchange = function() {
+      const checkboxIdArr = checkbox.id.split('-');
+      checkboxIdArr.pop();
+      const browserStr = checkboxIdArr.join('-');
+      if (checkbox.checked) {
+        allBrowsersCheckbox.checked = false;
+        removeDataForBrowsers(['all'], chart);
+        addData(chart.types, [browserStr], chart.options, chart);
+      } else {
+        removeDataForBrowsers([browserStr], chart);
+      }
+    };
+  });
+
+  const osSelect = document.getElementById('os-select');
+  osSelect.onchange = function(e) {
+    chart.options.os = this.value.toLowerCase();
+    updateChart(chart);
+  };
 
   window.types.forEach(function(type) {
     const hyphenizedType = hyphenize(type);
     const snakeCasedType = snakeCaseize(type);
 
     const typeCheckbox = document.getElementById(`${hyphenizedType}-checkbox`);
+    if (['sync', 'async'].includes(type)) {
+      typeCheckbox.checked = true;
+    }
     typeCheckbox.onclick = function() {
-      if (typeCheckbox.checked) {
-        addData([snakeCasedType], chart.options, chart);
+      if (this.checked) {
+        addData([snakeCasedType], chart.browsers, chart.options, chart);
       } else {
-        removeData(type, chart);
+        removeDataForType(type, chart);
       }
     };
-
-    const slider = document.getElementById('slider');
-    slider.oninput = function() {
-      const value = slider.value;
-      const sliderSpan = document.getElementById('slider-span');
-      sliderSpan.innerText = value;
-    };
-    slider.onchange = function() {
-      const value = slider.value;
-      chart.options.maxN = parseInt(value);
-      clearData(chart);
-      addData(chart.types, chart.options, chart);
-    };
-
-    ['avg', 'min'].forEach(function(mode) {
-      const radio = document.getElementById(`${mode}-radio`);
-      const otherMode = mode === 'avg' ? 'min' : 'avg';
-      const otherRadio = document.getElementById(`${otherMode}-radio`);
-      radio.onclick = function() {
-        chart.options.mode = mode;
-        otherRadio.checked = false;
-        clearData(chart);
-        addData(chart.types, chart.options, chart);
-      };
-    });
 
     const source = document.getElementById(`${hyphenizedType}-source`);
     appendCode(type, source);
