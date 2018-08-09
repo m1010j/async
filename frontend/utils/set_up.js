@@ -45,8 +45,6 @@ export default function() {
 
   chart.options = {
     mode: 'avg',
-    browser: 'safari',
-    os: 'mac os x',
     maxN: 45,
   };
   addData(chart.types, chart.options, chart);
@@ -78,6 +76,18 @@ export default function() {
       clearData(chart);
       addData(chart.types, chart.options, chart);
     };
+
+    ['avg', 'min'].forEach(function(mode) {
+      const radio = document.getElementById(`${mode}-radio`);
+      const otherMode = mode === 'avg' ? 'min' : 'avg';
+      const otherRadio = document.getElementById(`${otherMode}-radio`);
+      radio.onclick = function() {
+        chart.options.mode = mode;
+        otherRadio.checked = false;
+        clearData(chart);
+        addData(chart.types, chart.options, chart);
+      };
+    });
 
     const source = document.getElementById(`${hyphenizedType}-source`);
     appendCode(type, source);
