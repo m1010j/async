@@ -1,9 +1,9 @@
 import startAsync from '../click_handlers/async.js';
 import startSync from '../click_handlers/sync.js';
 import appendCode from './append_code.js';
-import { hyphenize } from './convert_string.js';
+import { hyphenize, snakeCaseize } from './convert_string.js';
 import { Chart } from 'chart.js';
-import { addData } from './chart_util.js';
+import { addData, removeData, clearData } from './chart_util.js';
 
 export default function() {
   const agreeButton = document.getElementById('agree-button');
@@ -39,26 +39,45 @@ export default function() {
     },
   });
 
-  const types = [
-    'async_memo',
-    'async_busy',
-    'async',
-    'sync_memo',
-    'sync_busy',
-    'sync',
-  ];
-  const options = {
+  chart.types = window.types.map(function(camelType) {
+    return snakeCaseize(camelType);
+  });
+
+  chart.options = {
     mode: 'avg',
     browser: 'safari',
     os: 'mac os x',
-    maxN: 60,
+    maxN: 45,
   };
-  addData(types, options, chart);
+  addData(chart.types, chart.options, chart);
 
   const main = document.getElementById('main');
 
   window.types.forEach(function(type) {
     const hyphenizedType = hyphenize(type);
+    const snakeCasedType = snakeCaseize(type);
+
+    const typeCheckbox = document.getElementById(`${hyphenizedType}-checkbox`);
+    typeCheckbox.onclick = function() {
+      if (typeCheckbox.checked) {
+        addData([snakeCasedType], chart.options, chart);
+      } else {
+        removeData(type, chart);
+      }
+    };
+
+    const slider = document.getElementById('slider');
+    slider.oninput = function() {
+      const value = slider.value;
+      const sliderSpan = document.getElementById('slider-span');
+      sliderSpan.innerText = value;
+    };
+    slider.onchange = function() {
+      const value = slider.value;
+      chart.options.maxN = parseInt(value);
+      clearData(chart);
+      addData(chart.types, chart.options, chart);
+    };
 
     const source = document.getElementById(`${hyphenizedType}-source`);
     appendCode(type, source);
@@ -80,9 +99,4 @@ export default function() {
       });
     });
   });
-
-  window.types = null;
-  document
-    .getElementsByTagName('head')[0]
-    .removeChild(document.getElementById('types'));
 }

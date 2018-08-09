@@ -1,7 +1,9 @@
 import merge from 'lodash/merge';
 import randomColor from 'randomcolor';
+import { camelize, snakeCaseize } from './convert_string.js';
 
 export function addData(types, options, chart) {
+  chart.types = merge([], chart.types, types);
   if (types.length) {
     const type = types.pop();
     const { mode, browser, os, maxN } = options;
@@ -39,7 +41,7 @@ export function addData(types, options, chart) {
         const dataset = merge({}, emptyDataset);
         dataset.resData = res.data;
         dataset.borderColor = [randomColor()];
-        dataset.label = `${mode} time ${type.split('_').join(' ')}`;
+        dataset.label = `${mode} time ${camelize(type)}`;
         dataset.data = newData;
         chart.data.datasets.push(dataset);
         chart.update();
@@ -56,14 +58,24 @@ export function removeData(type, chart) {
     const dataset = datasets[i];
     if (dataset.label.split(' ')[2] === type) {
       datasets.splice(i, 1);
-      chart.update();
-      return;
+      i = datasets.length;
     }
   }
+  const typeIdx = chart.types.indexOf(snakeCaseize(type));
+  if (typeIdx !== -1) {
+    chart.types.splice(typeIdx, 1);
+  }
+  chart.update();
 }
 
 function mapValues(data, nums) {
   return nums.map(function(num) {
     return data[num];
   });
+}
+
+export function clearData(chart) {
+  chart.data.labels = [];
+  chart.data.datasets = [];
+  chart.update();
 }
