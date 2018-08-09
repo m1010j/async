@@ -3,8 +3,7 @@ import startSync from '../click_handlers/sync.js';
 import appendCode from './append_code.js';
 import { hyphenize } from './convert_string.js';
 import { Chart } from 'chart.js';
-import merge from 'lodash/merge';
-import randomColor from 'randomcolor';
+import { addData } from './chart_util.js';
 
 export default function() {
   const agreeButton = document.getElementById('agree-button');
@@ -41,19 +40,20 @@ export default function() {
   });
 
   const types = [
-    // 'sync',
-    // 'sync_busy',
-    // 'sync_memo',
-    'async',
-    // 'async_busy',
     'async_memo',
+    'async_busy',
+    'async',
+    'sync_memo',
+    'sync_busy',
+    'sync',
   ];
-  types.forEach(function(type) {
-    addData(type, 'min', chart);
-  });
-  // types.forEach(function(type) {
-  //   addData(type, 'avg', chart);
-  // });
+  const options = {
+    mode: 'avg',
+    browser: 'safari',
+    os: 'mac os x',
+    maxN: 60,
+  };
+  addData(types, options, chart);
 
   const main = document.getElementById('main');
 
@@ -85,39 +85,4 @@ export default function() {
   document
     .getElementsByTagName('head')[0]
     .removeChild(document.getElementById('types'));
-}
-
-function addData(type, mode, chart) {
-  const emptyDataset = {
-    label: '',
-    data: [],
-    backgroundColor: ['rgba(255, 255, 255, 0)'],
-    borderColor: ['rgba(255,99,132,1)'],
-    borderWidth: 2,
-  };
-
-  fetch(`/api/${type}_benchmarks?mode=${mode}`, {
-    method: 'GET',
-  })
-    .then(function(res) {
-      return res.json();
-    })
-    .then(function(res) {
-      const nums = Object.keys(res.data);
-      chart.data.labels = merge([], chart.data.labels, nums).sort(function(
-        a,
-        b
-      ) {
-        return parseInt(a) - parseInt(b);
-      });
-      const avgs = nums.map(function(num) {
-        return res.data[num];
-      });
-      const dataset = merge({}, emptyDataset);
-      dataset.borderColor = [randomColor()];
-      dataset.label = `${mode} time ${type.split('_').join(' ')}`;
-      dataset.data = avgs;
-      chart.data.datasets.push(dataset);
-      const test = chart.update();
-    });
 }

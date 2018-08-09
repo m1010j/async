@@ -24,8 +24,14 @@ function getAllBenchmarks(type) {
     const isAvgMode = req.query.mode === 'avg';
     const isMinMode = req.query.mode === 'min';
     const maxN = parseInt(req.query.max_n) || 45;
-    const browser = req.query.browser;
-    const os = req.query.os;
+    let browser;
+    if (req.query.browser !== 'undefined') {
+      browser = req.query.browser;
+    }
+    let os;
+    if (req.query.os !== 'undefined') {
+      os = req.query.os;
+    }
     if (isAvgMode) {
       if (browser) {
         if (os) {
