@@ -120,7 +120,7 @@ export default function() {
     checkbox.onchange = function() {
       const checkboxIdArr = checkbox.id.split('-');
       checkboxIdArr.pop();
-      const browserStr = checkboxIdArr.join('-');
+      const browserStr = checkboxIdArr.join(' ');
       if (checkbox.checked) {
         allBrowsersCheckbox.checked = false;
         removeDataForBrowsers(['all'], chart);
