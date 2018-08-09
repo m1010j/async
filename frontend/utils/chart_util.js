@@ -3,7 +3,13 @@ import randomColor from 'randomcolor';
 import { camelize, snakeCaseize } from './convert_string.js';
 
 export function addData(types, browsers, options, chart) {
-  chart.types = merge([], chart.types, types);
+  const newTypes = chart.types.slice();
+  types.forEach(function(type) {
+    if (!newTypes.includes(type)) {
+      newTypes.push(type);
+    }
+  });
+  chart.types = newTypes;
   browsers.forEach(function(browser) {
     if (!chart.browsers.includes(browser)) {
       chart.browsers.push(browser);
@@ -87,6 +93,7 @@ export function removeDataForType(type, chart) {
     const datasetLabelArr = dataset.label.split(' ');
     if (datasetLabelArr[datasetLabelArr.length - 1] === type) {
       datasets.splice(i, 1);
+      i--;
     }
   }
   const typeIdx = chart.types.indexOf(snakeCaseize(type));
@@ -104,12 +111,13 @@ export function removeDataForBrowsers(browsers, chart) {
       const datasetLabelArr = dataset.label.split(' ');
       const browserArr = browser.split(' ');
       if (datasetLabelArr.slice(0, browserArr.length).join(' ') === browser) {
-        datasets[i] = null;
+        datasets.splice(i, 1);
+        i--;
       }
     }
-    chart.data.datasets = chart.data.datasets.filter(function(dataset) {
-      if (dataset) return dataset;
-    });
+    // chart.data.datasets = chart.data.datasets.filter(function(dataset) {
+    //   if (dataset) return dataset;
+    // });
 
     const browserIdx = chart.browsers.indexOf(browser);
     if (browserIdx !== -1) {
