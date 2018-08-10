@@ -38,12 +38,35 @@ function getAllBenchmarks(type) {
     if (req.query.os !== 'undefined') {
       os = req.query.os;
     }
+    let numCores;
+    if (req.query.num_cores !== 'undefined') {
+      numCores = req.query.num_cores;
+    }
     if (isAvgMode) {
       if (browser) {
         if (browser === 'chromium based') {
           if (os) {
-            db.any(
-              `SELECT
+            console.log('NUM CORES', numCores);
+            if (numCores) {
+              db.any(
+                `SELECT
+                n, AVG(duration)
+              FROM $1:name
+              WHERE (
+                ${chromiumBasedSqlStr}
+                )
+                AND LOWER(os) LIKE $2
+                AND n <= $3
+                AND num_cores = $4
+              GROUP BY n
+              ORDER BY n`,
+                [`${type}_benchmarks`, `${os}%`, maxN, numCores]
+              )
+                .then(avgSuccessCb(res))
+                .catch(errorCb);
+            } else {
+              db.any(
+                `SELECT
                 n, AVG(duration)
               FROM $1:name
               WHERE (
@@ -53,13 +76,31 @@ function getAllBenchmarks(type) {
                 AND n <= $3
               GROUP BY n
               ORDER BY n`,
-              [`${type}_benchmarks`, `${os}%`, maxN]
-            )
-              .then(avgSuccessCb(res))
-              .catch(errorCb);
+                [`${type}_benchmarks`, `${os}%`, maxN]
+              )
+                .then(avgSuccessCb(res))
+                .catch(errorCb);
+            }
           } else {
-            db.any(
-              `SELECT
+            if (numCores) {
+              db.any(
+                `SELECT
+                n, AVG(duration)
+              FROM $1:name
+              WHERE (
+                ${chromiumBasedSqlStr}
+                )
+                AND n <= $2 
+                and num_cores = $3
+              GROUP BY n
+              ORDER BY n`,
+                [`${type}_benchmarks`, maxN, numCores]
+              )
+                .then(avgSuccessCb(res))
+                .catch(errorCb);
+            } else {
+              db.any(
+                `SELECT
                 n, AVG(duration)
               FROM $1:name
               WHERE (
@@ -68,15 +109,32 @@ function getAllBenchmarks(type) {
                 AND n <= $2 
               GROUP BY n
               ORDER BY n`,
-              [`${type}_benchmarks`, maxN]
-            )
-              .then(avgSuccessCb(res))
-              .catch(errorCb);
+                [`${type}_benchmarks`, maxN]
+              )
+                .then(avgSuccessCb(res))
+                .catch(errorCb);
+            }
           }
         } else if (browser === 'firefox based') {
           if (os) {
-            db.any(
-              `SELECT
+            if (numCores) {
+              db.any(
+                `SELECT
+                n, AVG(duration)
+              FROM $1:name
+              WHERE LOWER(browser) LIKE 'firefox%' 
+                AND LOWER(os) LIKE $2
+                AND n <= $3
+                AND num_cores = $4
+              GROUP BY n
+              ORDER BY n`,
+                [`${type}_benchmarks`, `${os}%`, maxN, numCores]
+              )
+                .then(avgSuccessCb(res))
+                .catch(errorCb);
+            } else {
+              db.any(
+                `SELECT
                 n, AVG(duration)
               FROM $1:name
               WHERE LOWER(browser) LIKE 'firefox%' 
@@ -84,28 +142,63 @@ function getAllBenchmarks(type) {
                 AND n <= $3
               GROUP BY n
               ORDER BY n`,
-              [`${type}_benchmarks`, `${os}%`, maxN]
-            )
-              .then(avgSuccessCb(res))
-              .catch(errorCb);
+                [`${type}_benchmarks`, `${os}%`, maxN]
+              )
+                .then(avgSuccessCb(res))
+                .catch(errorCb);
+            }
           } else {
-            db.any(
-              `SELECT
+            if (numCores) {
+              db.any(
+                `SELECT
+                n, AVG(duration)
+              FROM 
+                $1:name 
+              WHERE LOWER(browser) LIKE 'firefox%'
+                AND n <= $2
+                AND num_cores = $3
+              GROUP BY n
+              ORDER BY n`,
+                [`${type}_benchmarks`, maxN, numCores]
+              )
+                .then(avgSuccessCb(res))
+                .catch(errorCb);
+            } else {
+              db.any(
+                `SELECT
                 n, AVG(duration)
               FROM 
                 $1:name 
               WHERE LOWER(browser) LIKE 'firefox%' AND n <= $2
               GROUP BY n
               ORDER BY n`,
-              [`${type}_benchmarks`, maxN]
-            )
-              .then(avgSuccessCb(res))
-              .catch(errorCb);
+                [`${type}_benchmarks`, maxN]
+              )
+                .then(avgSuccessCb(res))
+                .catch(errorCb);
+            }
           }
         } else if (browser === 'firefox') {
           if (os) {
-            db.any(
-              `SELECT
+            if (numCores) {
+              db.any(
+                `SELECT
+                n, AVG(duration)
+              FROM $1:name
+              WHERE LOWER(browser) LIKE 'firefox%'
+                AND NOT LOWER(browser) LIKE 'firefox mobile%'
+                AND LOWER(os) LIKE $2
+                AND n <= $3
+                AND num_cores = $4
+              GROUP BY n
+              ORDER BY n`,
+                [`${type}_benchmarks`, `${os}%`, maxN, numCores]
+              )
+                .then(avgSuccessCb(res))
+                .catch(errorCb);
+            } else {
+              db.any(
+                `SELECT
                 n, AVG(duration)
               FROM $1:name
               WHERE LOWER(browser) LIKE 'firefox%'
@@ -114,13 +207,31 @@ function getAllBenchmarks(type) {
                 AND n <= $3
               GROUP BY n
               ORDER BY n`,
-              [`${type}_benchmarks`, `${os}%`, maxN]
-            )
-              .then(avgSuccessCb(res))
-              .catch(errorCb);
+                [`${type}_benchmarks`, `${os}%`, maxN]
+              )
+                .then(avgSuccessCb(res))
+                .catch(errorCb);
+            }
           } else {
-            db.any(
-              `SELECT
+            if (numCores) {
+              db.any(
+                `SELECT
+                n, AVG(duration)
+              FROM 
+                $1:name 
+              WHERE LOWER(browser) LIKE 'firefox%'
+                AND NOT LOWER(browser) LIKE 'firefox mobile%'
+                AND n <= $2
+                AND num_cores = $3
+              GROUP BY n
+              ORDER BY n`,
+                [`${type}_benchmarks`, maxN, numCores]
+              )
+                .then(avgSuccessCb(res))
+                .catch(errorCb);
+            } else {
+              db.any(
+                `SELECT
                 n, AVG(duration)
               FROM 
                 $1:name 
@@ -129,15 +240,33 @@ function getAllBenchmarks(type) {
                 AND n <= $2
               GROUP BY n
               ORDER BY n`,
-              [`${type}_benchmarks`, maxN]
-            )
-              .then(avgSuccessCb(res))
-              .catch(errorCb);
+                [`${type}_benchmarks`, maxN]
+              )
+                .then(avgSuccessCb(res))
+                .catch(errorCb);
+            }
           }
         } else if (browser === 'chrome') {
           if (os) {
-            db.any(
-              `SELECT
+            if (numCores) {
+              db.any(
+                `SELECT
+                n, AVG(duration)
+              FROM $1:name
+              WHERE LOWER(browser) LIKE 'chrome%'
+                AND NOT LOWER(browser) LIKE 'chrome mobile%'
+                AND LOWER(os) LIKE $2
+                AND n <= $3
+                AND num_cores = $4
+              GROUP BY n
+              ORDER BY n`,
+                [`${type}_benchmarks`, `${os}%`, maxN, numCores]
+              )
+                .then(avgSuccessCb(res))
+                .catch(errorCb);
+            } else {
+              db.any(
+                `SELECT
                 n, AVG(duration)
               FROM $1:name
               WHERE LOWER(browser) LIKE 'chrome%'
@@ -146,13 +275,31 @@ function getAllBenchmarks(type) {
                 AND n <= $3
               GROUP BY n
               ORDER BY n`,
-              [`${type}_benchmarks`, `${os}%`, maxN]
-            )
-              .then(avgSuccessCb(res))
-              .catch(errorCb);
+                [`${type}_benchmarks`, `${os}%`, maxN]
+              )
+                .then(avgSuccessCb(res))
+                .catch(errorCb);
+            }
           } else {
-            db.any(
-              `SELECT
+            if (numCores) {
+              db.any(
+                `SELECT
+                n, AVG(duration)
+              FROM 
+                $1:name 
+              WHERE LOWER(browser) LIKE 'chrome%'
+                AND NOT LOWER(browser) LIKE 'chrome mobile%'
+                AND n <= $2
+                AND num_cores = $3
+              GROUP BY n
+              ORDER BY n`,
+                [`${type}_benchmarks`, maxN, numCores]
+              )
+                .then(avgSuccessCb(res))
+                .catch(errorCb);
+            } else {
+              db.any(
+                `SELECT
                 n, AVG(duration)
               FROM 
                 $1:name 
@@ -161,27 +308,31 @@ function getAllBenchmarks(type) {
                 AND n <= $2
               GROUP BY n
               ORDER BY n`,
-              [`${type}_benchmarks`, maxN]
-            )
-              .then(avgSuccessCb(res))
-              .catch(errorCb);
+                [`${type}_benchmarks`, maxN]
+              )
+                .then(avgSuccessCb(res))
+                .catch(errorCb);
+            }
           }
         } else if (browser === 'opera') {
           if (os) {
-            db.any(
-              `SELECT
+            if (numCores) {
+              db.any(
+                `SELECT
                 n, AVG(duration)
               FROM $1:name
               WHERE LOWER(browser) LIKE 'opera%'
                 AND NOT LOWER(browser) LIKE 'opera mobile%'
                 AND LOWER(os) LIKE $2
                 AND n <= $3
+                AND num_cores = $4
               GROUP BY n
               ORDER BY n`,
-              [`${type}_benchmarks`, `${os}%`, maxN]
-            )
-              .then(avgSuccessCb(res))
-              .catch(errorCb);
+                [`${type}_benchmarks`, `${os}%`, maxN, numCores]
+              )
+                .then(avgSuccessCb(res))
+                .catch(errorCb);
+            }
           } else {
             db.any(
               `SELECT
@@ -200,8 +351,24 @@ function getAllBenchmarks(type) {
           }
         } else {
           if (os) {
-            db.any(
-              `SELECT
+            if (numCores) {
+              db.any(
+                `SELECT
+                n, AVG(duration)
+              FROM $1:name
+              WHERE LOWER(browser) LIKE $2
+                AND LOWER(os) LIKE $3
+                AND n <= $4
+                AND num_cores = $5
+              GROUP BY n
+              ORDER BY n`,
+                [`${type}_benchmarks`, `${browser}%`, `${os}%`, maxN, numCores]
+              )
+                .then(avgSuccessCb(res))
+                .catch(errorCb);
+            } else {
+              db.any(
+                `SELECT
                 n, AVG(duration)
               FROM $1:name
               WHERE LOWER(browser) LIKE $2
@@ -209,57 +376,118 @@ function getAllBenchmarks(type) {
                 AND n <= $4
               GROUP BY n
               ORDER BY n`,
-              [`${type}_benchmarks`, `${browser}%`, `${os}%`, maxN]
+                [`${type}_benchmarks`, `${browser}%`, `${os}%`, maxN]
+              )
+                .then(avgSuccessCb(res))
+                .catch(errorCb);
+            }
+          } else {
+            if (numCores) {
+              db.any(
+                `SELECT
+                n, AVG(duration)
+              FROM $1:name
+              WHERE LOWER(browser) LIKE $2 AND n <= $3 AND num_cores = $4
+              GROUP BY n
+              ORDER BY n`,
+                [`${type}_benchmarks`, `${browser}%`, maxN, numCores]
+              )
+                .then(avgSuccessCb(res))
+                .catch(errorCb);
+            } else {
+              db.any(
+                `SELECT
+                n, AVG(duration)
+              FROM $1:name
+              WHERE LOWER(browser) LIKE $2 AND n <= $3
+              GROUP BY n
+              ORDER BY n`,
+                [`${type}_benchmarks`, `${browser}%`, maxN]
+              )
+                .then(avgSuccessCb(res))
+                .catch(errorCb);
+            }
+          }
+        }
+      } else {
+        if (os) {
+          if (numCores) {
+            db.any(
+              `SELECT
+              n, AVG(duration)
+            FROM $1:name
+            WHERE LOWER(os) LIKE $2 AND n <= $3 AND num_cores = $4
+            GROUP BY n
+            ORDER BY n`,
+              [`${type}_benchmarks`, `${os}%`, maxN, numCores]
             )
               .then(avgSuccessCb(res))
               .catch(errorCb);
           } else {
             db.any(
               `SELECT
-                n, AVG(duration)
-              FROM $1:name
-              WHERE LOWER(browser) LIKE $2 AND n <= $3
-              GROUP BY n
-              ORDER BY n`,
-              [`${type}_benchmarks`, `${browser}%`, maxN]
-            )
-              .then(avgSuccessCb(res))
-              .catch(errorCb);
-          }
-        }
-      } else {
-        if (os) {
-          db.any(
-            `SELECT
               n, AVG(duration)
             FROM $1:name
             WHERE LOWER(os) LIKE $2 AND n <= $3
             GROUP BY n
             ORDER BY n`,
-            [`${type}_benchmarks`, `${os}%`, maxN]
-          )
-            .then(avgSuccessCb(res))
-            .catch(errorCb);
+              [`${type}_benchmarks`, `${os}%`, maxN]
+            )
+              .then(avgSuccessCb(res))
+              .catch(errorCb);
+          }
         } else {
-          db.any(
-            `SELECT
+          if (numCores) {
+            db.any(
+              `SELECT
+              n, AVG(duration)
+            FROM $1:name
+            WHERE n <= $2 AND num_cores = $3
+            GROUP BY n
+            ORDER BY n`,
+              [`${type}_benchmarks`, maxN, numCores]
+            )
+              .then(avgSuccessCb(res))
+              .catch(errorCb);
+          } else {
+            db.any(
+              `SELECT
               n, AVG(duration)
             FROM $1:name
             WHERE n <= $2  
             GROUP BY n
             ORDER BY n`,
-            [`${type}_benchmarks`, maxN]
-          )
-            .then(avgSuccessCb(res))
-            .catch(errorCb);
+              [`${type}_benchmarks`, maxN]
+            )
+              .then(avgSuccessCb(res))
+              .catch(errorCb);
+          }
         }
       }
     } else if (isMinMode) {
       if (browser) {
         if (browser === 'chromium based') {
           if (os) {
-            db.any(
-              `SELECT
+            if (numCores) {
+              db.any(
+                `SELECT
+              n, MIN(duration)
+            FROM $1:name
+            WHERE (
+              ${chromiumBasedSqlStr}
+              )
+              AND LOWER(os) LIKE $2
+              AND n <= $3
+              AND num_cores = $4
+            GROUP BY n
+            ORDER BY n`,
+                [`${type}_benchmarks`, `${os}%`, maxN, numCores]
+              )
+                .then(minSuccessCb(res))
+                .catch(errorCb);
+            } else {
+              db.any(
+                `SELECT
               n, MIN(duration)
             FROM $1:name
             WHERE (
@@ -269,13 +497,31 @@ function getAllBenchmarks(type) {
               AND n <= $3
             GROUP BY n
             ORDER BY n`,
-              [`${type}_benchmarks`, `${os}%`, maxN]
-            )
-              .then(minSuccessCb(res))
-              .catch(errorCb);
+                [`${type}_benchmarks`, `${os}%`, maxN]
+              )
+                .then(minSuccessCb(res))
+                .catch(errorCb);
+            }
           } else {
-            db.any(
-              `SELECT
+            if (numCores) {
+              db.any(
+                `SELECT
+                n, MIN(duration)
+              FROM $1:name
+              WHERE (
+                ${chromiumBasedSqlStr}
+                )
+                AND n <= $2
+                AND num_cores = $3
+              GROUP BY n
+              ORDER BY n`,
+                [`${type}_benchmarks`, maxN, numCores]
+              )
+                .then(minSuccessCb(res))
+                .catch(errorCb);
+            } else {
+              db.any(
+                `SELECT
                 n, MIN(duration)
               FROM $1:name
               WHERE (
@@ -284,15 +530,32 @@ function getAllBenchmarks(type) {
                 AND n <= $2
               GROUP BY n
               ORDER BY n`,
-              [`${type}_benchmarks`, maxN]
-            )
-              .then(minSuccessCb(res))
-              .catch(errorCb);
+                [`${type}_benchmarks`, maxN]
+              )
+                .then(minSuccessCb(res))
+                .catch(errorCb);
+            }
           }
         } else if (browser === 'firefox based') {
           if (os) {
-            db.any(
-              `SELECT
+            if (numCores) {
+              db.any(
+                `SELECT
+              n, MIN(duration)
+            FROM $1:name
+            WHERE LOWER(browser) LIKE 'firefox%'
+              AND LOWER(os) LIKE $2
+              AND n <= $3
+              AND num_cores = $4
+            GROUP BY n
+            ORDER BY n`,
+                [`${type}_benchmarks`, `${os}%`, maxN, numCores]
+              )
+                .then(minSuccessCb(res))
+                .catch(errorCb);
+            } else {
+              db.any(
+                `SELECT
               n, MIN(duration)
             FROM $1:name
             WHERE LOWER(browser) LIKE 'firefox%'
@@ -300,27 +563,59 @@ function getAllBenchmarks(type) {
               AND n <= $3
             GROUP BY n
             ORDER BY n`,
-              [`${type}_benchmarks`, `${os}%`, maxN]
-            )
-              .then(minSuccessCb(res))
-              .catch(errorCb);
+                [`${type}_benchmarks`, `${os}%`, maxN]
+              )
+                .then(minSuccessCb(res))
+                .catch(errorCb);
+            }
           } else {
-            db.any(
-              `SELECT
+            if (numCores) {
+              db.any(
+                `SELECT
+              n, MIN(duration)
+            FROM $1:name
+            WHERE LOWER(browser) LIKE 'firefox%' AND n <= $2 AND num_cores = $3
+            GROUP BY n
+            ORDER BY n`,
+                [`${type}_benchmarks`, maxN, numCores]
+              )
+                .then(minSuccessCb(res))
+                .catch(errorCb);
+            } else {
+              db.any(
+                `SELECT
               n, MIN(duration)
             FROM $1:name
             WHERE LOWER(browser) LIKE 'firefox%' AND n <= $2
             GROUP BY n
             ORDER BY n`,
-              [`${type}_benchmarks`, maxN]
-            )
-              .then(minSuccessCb(res))
-              .catch(errorCb);
+                [`${type}_benchmarks`, maxN]
+              )
+                .then(minSuccessCb(res))
+                .catch(errorCb);
+            }
           }
         } else if (browser === 'chrome') {
           if (os) {
-            db.any(
-              `SELECT
+            if (numCores) {
+              db.any(
+                `SELECT
+              n, MIN(duration)
+            FROM $1:name
+            WHERE LOWER(browser) LIKE 'chrome%'
+              AND NOT WHERE LOWER(browse) LIKE 'chrome mobile%'
+              AND LOWER(os) LIKE $2
+              AND n <= $3
+              AND num_cores = $4
+            GROUP BY n
+            ORDER BY n`,
+                [`${type}_benchmarks`, `${os}%`, maxN, numCores]
+              )
+                .then(minSuccessCb(res))
+                .catch(errorCb);
+            } else {
+              db.any(
+                `SELECT
               n, MIN(duration)
             FROM $1:name
             WHERE LOWER(browser) LIKE 'chrome%'
@@ -329,13 +624,30 @@ function getAllBenchmarks(type) {
               AND n <= $3
             GROUP BY n
             ORDER BY n`,
-              [`${type}_benchmarks`, `${os}%`, maxN]
-            )
-              .then(minSuccessCb(res))
-              .catch(errorCb);
+                [`${type}_benchmarks`, `${os}%`, maxN]
+              )
+                .then(minSuccessCb(res))
+                .catch(errorCb);
+            }
           } else {
-            db.any(
-              `SELECT
+            if (numCores) {
+              db.any(
+                `SELECT
+              n, MIN(duration)
+            FROM $1:name
+            WHERE LOWER(browser) LIKE 'chrome%'
+              AND NOT WHERE LOWER(browse) LIKE 'chrome mobile%'
+              AND n <= $2
+              AND num_cores = $3
+            GROUP BY n
+            ORDER BY n`,
+                [`${type}_benchmarks`, maxN, numCores]
+              )
+                .then(minSuccessCb(res))
+                .catch(errorCb);
+            } else {
+              db.any(
+                `SELECT
               n, MIN(duration)
             FROM $1:name
             WHERE LOWER(browser) LIKE 'chrome%'
@@ -343,15 +655,33 @@ function getAllBenchmarks(type) {
               AND n <= $2
             GROUP BY n
             ORDER BY n`,
-              [`${type}_benchmarks`, maxN]
-            )
-              .then(minSuccessCb(res))
-              .catch(errorCb);
+                [`${type}_benchmarks`, maxN]
+              )
+                .then(minSuccessCb(res))
+                .catch(errorCb);
+            }
           }
         } else if (browser === 'firefox') {
           if (os) {
-            db.any(
-              `SELECT
+            if (numCores) {
+              db.any(
+                `SELECT
+              n, MIN(duration)
+            FROM $1:name
+            WHERE LOWER(browser) LIKE 'firefox%'
+              AND NOT WHERE LOWER(browse) LIKE 'firefox mobile%'
+              AND LOWER(os) LIKE $2
+              AND n <= $3
+              AND num_cores = $4
+            GROUP BY n
+            ORDER BY n`,
+                [`${type}_benchmarks`, `${os}%`, maxN, numCores]
+              )
+                .then(minSuccessCb(res))
+                .catch(errorCb);
+            } else {
+              db.any(
+                `SELECT
               n, MIN(duration)
             FROM $1:name
             WHERE LOWER(browser) LIKE 'firefox%'
@@ -360,13 +690,30 @@ function getAllBenchmarks(type) {
               AND n <= $3
             GROUP BY n
             ORDER BY n`,
-              [`${type}_benchmarks`, `${os}%`, maxN]
-            )
-              .then(minSuccessCb(res))
-              .catch(errorCb);
+                [`${type}_benchmarks`, `${os}%`, maxN]
+              )
+                .then(minSuccessCb(res))
+                .catch(errorCb);
+            }
           } else {
-            db.any(
-              `SELECT
+            if (numCores) {
+              db.any(
+                `SELECT
+              n, MIN(duration)
+            FROM $1:name
+            WHERE LOWER(browser) LIKE 'firefox%'
+              AND NOT WHERE LOWER(browse) LIKE 'firefox mobile%'
+              AND n <= $2
+              AND num_cores = $3
+            GROUP BY n
+            ORDER BY n`,
+                [`${type}_benchmarks`, maxN, numCores]
+              )
+                .then(minSuccessCb(res))
+                .catch(errorCb);
+            } else {
+              db.any(
+                `SELECT
               n, MIN(duration)
             FROM $1:name
             WHERE LOWER(browser) LIKE 'firefox%'
@@ -374,21 +721,83 @@ function getAllBenchmarks(type) {
               AND n <= $2
             GROUP BY n
             ORDER BY n`,
-              [`${type}_benchmarks`, maxN]
-            )
-              .then(minSuccessCb(res))
-              .catch(errorCb);
+                [`${type}_benchmarks`, maxN]
+              )
+                .then(minSuccessCb(res))
+                .catch(errorCb);
+            }
           }
         } else {
           if (os) {
-            db.any(
-              `SELECT
+            if (numCores) {
+              db.any(
+                `SELECT
+              n, MIN(duration)
+            FROM $1:name
+            WHERE LOWER(browser) LIKE $2
+              AND LOWER(os) LIKE $3
+              AND n <= $4
+              AND num_cores = $5
+            GROUP BY n
+            ORDER BY n`,
+                [`${type}_benchmarks`, `${browser}%`, `${os}%`, maxN, numCores]
+              )
+                .then(minSuccessCb(res))
+                .catch(errorCb);
+            } else {
+              db.any(
+                `SELECT
               n, MIN(duration)
             FROM $1:name
             WHERE LOWER(browser) LIKE $2 AND LOWER(os) LIKE $3 AND n <= $4
             GROUP BY n
             ORDER BY n`,
-              [`${type}_benchmarks`, `${browser}%`, `${os}%`, maxN]
+                [`${type}_benchmarks`, `${browser}%`, `${os}%`, maxN]
+              )
+                .then(minSuccessCb(res))
+                .catch(errorCb);
+            }
+          } else {
+            if (numCores) {
+              db.any(
+                `SELECT
+              n, MIN(duration)
+            FROM $1:name
+            WHERE LOWER(browser) LIKE $2
+              AND n <= $3
+              AND num_cores = $4
+            GROUP BY n
+            ORDER BY n`,
+                [`${type}_benchmarks`, `${browser}%`, maxN, numCores]
+              )
+                .then(minSuccessCb(res))
+                .catch(errorCb);
+            } else {
+              db.any(
+                `SELECT
+              n, MIN(duration)
+            FROM $1:name
+            WHERE LOWER(browser) LIKE $2 AND n <= $3
+            GROUP BY n
+            ORDER BY n`,
+                [`${type}_benchmarks`, `${browser}%`, maxN]
+              )
+                .then(minSuccessCb(res))
+                .catch(errorCb);
+            }
+          }
+        }
+      } else {
+        if (os) {
+          if (numCores) {
+            db.any(
+              `SELECT
+              n, MIN(duration)
+            FROM $1:name
+            WHERE LOWER(os) LIKE $2 AND n <= $3 AND num_cores = $4
+            GROUP BY n
+            ORDER BY n`,
+              [`${type}_benchmarks`, `${os}%`, maxN, numCores]
             )
               .then(minSuccessCb(res))
               .catch(errorCb);
@@ -397,48 +806,64 @@ function getAllBenchmarks(type) {
               `SELECT
               n, MIN(duration)
             FROM $1:name
-            WHERE LOWER(browser) LIKE $2 AND n <= $3
+            WHERE LOWER(os) LIKE $2 AND n <= $3
             GROUP BY n
             ORDER BY n`,
-              [`${type}_benchmarks`, `${browser}%`, maxN]
+              [`${type}_benchmarks`, `${os}%`, maxN]
             )
               .then(minSuccessCb(res))
               .catch(errorCb);
           }
-        }
-      } else {
-        if (os) {
-          db.any(
-            `SELECT
+        } else {
+          if (numCores) {
+            db.any(
+              `SELECT
               n, MIN(duration)
             FROM $1:name
-            WHERE LOWER(os) LIKE $2 AND n <= $3
+            WHERE n <= $2 AND num_cores = $3
             GROUP BY n
             ORDER BY n`,
-            [`${type}_benchmarks`, `${os}%`, maxN]
-          )
-            .then(minSuccessCb(res))
-            .catch(errorCb);
-        } else {
-          db.any(
-            `SELECT
+              [`${type}_benchmarks`, maxN, numCores]
+            )
+              .then(minSuccessCb(res))
+              .catch(errorCb);
+          } else {
+            db.any(
+              `SELECT
               n, MIN(duration)
             FROM $1:name
             WHERE n <= $2
             GROUP BY n
             ORDER BY n`,
-            [`${type}_benchmarks`, maxN]
-          )
-            .then(minSuccessCb(res))
-            .catch(errorCb);
+              [`${type}_benchmarks`, maxN]
+            )
+              .then(minSuccessCb(res))
+              .catch(errorCb);
+          }
         }
       }
     } else {
       if (browser) {
         if (browser === 'chromium based') {
           if (os) {
-            db.any(
-              `SELECT
+            if (numCores) {
+              db.any(
+                `SELECT
+                *
+              FROM $1:name
+              WHERE (
+                ${chromiumBasedSqlStr}
+                )
+                AND LOWER(os) LIKE $2
+                AND n <= $3
+                AND num_cores = $4`,
+                [`${type}_benchmarks`, `${os}%`, maxN, numCores]
+              )
+                .then(successCb(res))
+                .catch(errorCb);
+            } else {
+              db.any(
+                `SELECT
                 *
               FROM $1:name
               WHERE (
@@ -446,146 +871,311 @@ function getAllBenchmarks(type) {
                 )
                 AND LOWER(os) LIKE $2
                 AND n <= $3`,
-              [`${type}_benchmarks`, `${os}%`, maxN]
-            )
-              .then(successCb(res))
-              .catch(errorCb);
+                [`${type}_benchmarks`, `${os}%`, maxN]
+              )
+                .then(successCb(res))
+                .catch(errorCb);
+            }
           } else {
-            db.any(
-              `SELECT
+            if (numCores) {
+              db.any(
+                `SELECT
+                *
+              FROM $1:name
+              WHERE (
+                ${chromiumBasedSqlStr}
+                )
+                AND n <= $2
+                AND num_cores = $3`,
+                [`${type}_benchmarks`, maxN, numCores]
+              )
+                .then(successCb(res))
+                .catch(errorCb);
+            } else {
+              db.any(
+                `SELECT
                 *
               FROM $1:name
               WHERE (
                 ${chromiumBasedSqlStr}
                 )
                 AND n <= $2`,
-              [`${type}_benchmarks`, maxN]
-            )
-              .then(successCb(res))
-              .catch(errorCb);
+                [`${type}_benchmarks`, maxN]
+              )
+                .then(successCb(res))
+                .catch(errorCb);
+            }
           }
         } else if (browser === 'firefox based') {
           if (os) {
-            db.any(
-              `SELECT
+            if (numCores) {
+              db.any(
+                `SELECT
+                *
+              FROM $1:name
+              WHERE LOWER(browser) LIKE 'firefox%'
+                AND LOWER(os) LIKE $2
+                AND n <= $3
+                AND num_cores = $4`,
+                [`${type}_benchmarks`, `${os}%`, maxN, numCores]
+              )
+                .then(successCb(res))
+                .catch(errorCb);
+            } else {
+              db.any(
+                `SELECT
                 *
               FROM $1:name
               WHERE LOWER(browser) LIKE 'firefox%'
                 AND LOWER(os) LIKE $2
                 AND n <= $3`,
-              [`${type}_benchmarks`, `${os}%`, maxN]
-            )
-              .then(successCb(res))
-              .catch(errorCb);
+                [`${type}_benchmarks`, `${os}%`, maxN]
+              )
+                .then(successCb(res))
+                .catch(errorCb);
+            }
           } else {
-            db.any(
-              `SELECT
+            if (numCores) {
+              db.any(
+                `SELECT
+                *
+              FROM $1:name
+              WHERE LOWER(browser) LIKE 'firefox%'
+                AND n <= $2
+                AND num_cores = $3`,
+                [`${type}_benchmarks`, maxN, numCores]
+              )
+                .then(successCb(res))
+                .catch(errorCb);
+            } else {
+              db.any(
+                `SELECT
                 *
               FROM $1:name
               WHERE LOWER(browser) LIKE 'firefox%' AND n <= $2`,
-              [`${type}_benchmarks`, maxN]
-            )
-              .then(successCb(res))
-              .catch(errorCb);
+                [`${type}_benchmarks`, maxN]
+              )
+                .then(successCb(res))
+                .catch(errorCb);
+            }
           }
         } else if (browser === 'chrome') {
           if (os) {
-            db.any(
-              `SELECT
+            if (numCores) {
+              db.any(
+                `SELECT
+                *
+              FROM $1:name
+              WHERE LOWER(browser) LIKE 'chrome%'
+                AND NOT LOWER(browser) LIKE 'chrome mobile%'
+                AND LOWER(os) LIKE $2
+                AND n <= $3
+                AND num_cores = $4`,
+                [`${type}_benchmarks`, `${os}%`, maxN, numCores]
+              )
+                .then(successCb(res))
+                .catch(errorCb);
+            } else {
+              db.any(
+                `SELECT
                 *
               FROM $1:name
               WHERE LOWER(browser) LIKE 'chrome%'
                 AND NOT LOWER(browser) LIKE 'chrome mobile%'
                 AND LOWER(os) LIKE $2
                 AND n <= $3`,
-              [`${type}_benchmarks`, `${os}%`, maxN]
-            )
-              .then(successCb(res))
-              .catch(errorCb);
+                [`${type}_benchmarks`, `${os}%`, maxN]
+              )
+                .then(successCb(res))
+                .catch(errorCb);
+            }
           } else {
-            db.any(
-              `SELECT
+            if (numCores) {
+              db.any(
+                `SELECT
+                *
+              FROM $1:name
+              WHERE LOWER(browser) LIKE 'chrome%'
+                AND NOT LOWER(browser) LIKE 'chrome mobile%'
+                AND n <= $2
+                AND num_cores = $3`,
+                [`${type}_benchmarks`, maxN, numCores]
+              )
+                .then(successCb(res))
+                .catch(errorCb);
+            } else {
+              db.any(
+                `SELECT
                 *
               FROM $1:name
               WHERE LOWER(browser) LIKE 'chrome%'
                 AND NOT LOWER(browser) LIKE 'chrome mobile%'
                 AND n <= $2`,
-              [`${type}_benchmarks`, maxN]
-            )
-              .then(successCb(res))
-              .catch(errorCb);
+                [`${type}_benchmarks`, maxN]
+              )
+                .then(successCb(res))
+                .catch(errorCb);
+            }
           }
         } else if (browser === 'firefox') {
           if (os) {
-            db.any(
-              `SELECT
+            if (numCores) {
+              db.any(
+                `SELECT
+                *
+              FROM $1:name
+              WHERE LOWER(browser) LIKE 'firefox%'
+                AND NOT LOWER(browser) LIKE 'firefox mobile%'
+                AND LOWER(os) LIKE $2
+                AND n <= $3
+                AND num_cores = $4`,
+                [`${type}_benchmarks`, `${os}%`, maxN, numCores]
+              )
+                .then(successCb(res))
+                .catch(errorCb);
+            } else {
+              db.any(
+                `SELECT
                 *
               FROM $1:name
               WHERE LOWER(browser) LIKE 'firefox%'
                 AND NOT LOWER(browser) LIKE 'firefox mobile%'
                 AND LOWER(os) LIKE $2
                 AND n <= $3`,
-              [`${type}_benchmarks`, `${os}%`, maxN]
-            )
-              .then(successCb(res))
-              .catch(errorCb);
+                [`${type}_benchmarks`, `${os}%`, maxN]
+              )
+                .then(successCb(res))
+                .catch(errorCb);
+            }
           } else {
-            db.any(
-              `SELECT
+            if (numCores) {
+              db.any(
+                `SELECT
+                *
+              FROM $1:name
+              WHERE LOWER(browser) LIKE 'firefox%'
+                AND NOT LOWER(browser) LIKE 'firefox mobile%'
+                AND n <= $2
+                AND num_cores = $3`,
+                [`${type}_benchmarks`, maxN, numCores]
+              )
+                .then(successCb(res))
+                .catch(errorCb);
+            } else {
+              db.any(
+                `SELECT
                 *
               FROM $1:name
               WHERE LOWER(browser) LIKE 'firefox%'
                 AND NOT LOWER(browser) LIKE 'firefox mobile%'
                 AND n <= $2`,
-              [`${type}_benchmarks`, maxN]
-            )
-              .then(successCb(res))
-              .catch(errorCb);
+                [`${type}_benchmarks`, maxN]
+              )
+                .then(successCb(res))
+                .catch(errorCb);
+            }
           }
         } else {
           if (os) {
-            db.any(
-              `SELECT
+            if (numCores) {
+              db.any(
+                `SELECT
+                *
+              FROM $1:name
+              WHERE LOWER(browser) LIKE $2 AND LOWER(os) LIKE $3
+              AND n <= $4
+              AND num_cores = $5`,
+                [
+                  `${type}_benchmarks`,
+                  `${browser}%`,
+                  `${os}%`,
+                  maxN,
+                  ,
+                  numCores,
+                ]
+              )
+                .then(successCb(res))
+                .catch(errorCb);
+            } else {
+              db.any(
+                `SELECT
                 *
               FROM $1:name
               WHERE LOWER(browser) LIKE $2 AND LOWER(os) LIKE $3 AND n <= $4 `,
-              [`${type}_benchmarks`, `${browser}%`, `${os}%`, maxN]
-            )
-              .then(successCb(res))
-              .catch(errorCb);
+                [`${type}_benchmarks`, `${browser}%`, `${os}%`, maxN]
+              )
+                .then(successCb(res))
+                .catch(errorCb);
+            }
           } else {
-            db.any(
-              `SELECT
+            if (numCores) {
+              db.any(
+                `SELECT
+                *
+              FROM $1:name
+              WHERE LOWER(browser) LIKE $2 AND n <= $3 AND num_cores = $4`,
+                [`${type}_benchmarks`, `${browser}%`, maxN, numCores]
+              )
+                .then(successCb(res))
+                .catch(errorCb);
+            } else {
+              db.any(
+                `SELECT
                 *
               FROM $1:name
               WHERE LOWER(browser) LIKE $2 AND n <= $3`,
-              [`${type}_benchmarks`, `${browser}%`, maxN]
-            )
-              .then(successCb(res))
-              .catch(errorCb);
+                [`${type}_benchmarks`, `${browser}%`, maxN]
+              )
+                .then(successCb(res))
+                .catch(errorCb);
+            }
           }
         }
       } else {
         if (os) {
-          db.any(
-            `SELECT
+          if (numCores) {
+            db.any(
+              `SELECT
+              *
+            FROM $1:name
+            WHERE LOWER(os) LIKE $2 AND n <= $3 AND num_cores = $4`,
+              [`${type}_benchmarks`, `${os}%`, maxN, numCores]
+            )
+              .then(successCb(res))
+              .catch(errorCb);
+          } else {
+            db.any(
+              `SELECT
               *
             FROM $1:name
             WHERE LOWER(os) LIKE $2 AND n <= $3`,
-            [`${type}_benchmarks`, `${os}%`, maxN]
-          )
-            .then(successCb(res))
-            .catch(errorCb);
+              [`${type}_benchmarks`, `${os}%`, maxN]
+            )
+              .then(successCb(res))
+              .catch(errorCb);
+          }
         } else {
-          db.any(
-            `SELECT
+          if (numCores) {
+            db.any(
+              `SELECT
+              *
+            FROM $1:name
+            WHERE n <= $2 AND num_cores = $3`,
+              [`${type}_benchmarks`, maxN, numCores]
+            )
+              .then(successCb(res))
+              .catch(errorCb);
+          } else {
+            db.any(
+              `SELECT
               *
             FROM $1:name
             WHERE n <= $2`,
-            [`${type}_benchmarks`, maxN]
-          )
-            .then(successCb(res))
-            .catch(errorCb);
+              [`${type}_benchmarks`, maxN]
+            )
+              .then(successCb(res))
+              .catch(errorCb);
+          }
         }
       }
     }
