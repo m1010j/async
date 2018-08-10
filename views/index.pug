@@ -30,10 +30,12 @@ html
     input#slider(type='range', min='1', max='100', value='45')
     span#slider-span 45
     form
-      input(type='radio', id='avg-radio', name='avg-or-min', checked=true, value='avg')
-      label(for='avg-radio') Average time
-      input(type='radio', id='min-radio', name='min-or-min', value='min')
-      label(for='min-radio') Minimum time
+      label.radio-label(for='avg-radio') Average time
+        input(type='radio', id='avg-radio', name='avg-or-min', checked=true, value='avg')
+        span.radio-span
+      label.radio-label(for='min-radio') Minimum time
+        input(type='radio', id='min-radio', name='min-or-min', value='min')
+        span.radio-span
     label.checkbox-label(for='all-browsers-checkbox') All browsers
       input.checkbox(type='checkbox', id='all-browsers-checkbox', name='browser', value='all-browsers', checked=true)
       span.checkmark

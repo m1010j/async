@@ -398,6 +398,70 @@ code {
   transform: rotate(45deg);
 }
 
+/* The container */
+.radio-label {
+  display: block;
+  position: relative;
+  padding-left: 1rem;
+  margin-bottom: 0.1rem;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default radio button */
+.radio-label input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Create a custom radio button */
+.radio-span {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 1rem;
+  width: 1rem;
+  background-color: #eee;
+  border-radius: 50%;
+}
+
+/* On mouse-over, add a grey background color */
+.radio-label:hover input ~ .radio-span {
+  background-color: #ccc;
+}
+
+/* When the radio button is checked, add a blue background */
+.radio-label input:checked ~ .radio-span {
+  background-color: #ff635d;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.radio-span:after {
+  content: '';
+  position: absolute;
+  display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.radio-label input:checked ~ .radio-span:after {
+  display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.radio-label .radio-span:after {
+  top: 0.32rem;
+  left: 0.32rem;
+  width: 0.36rem;
+  height: 0.36rem;
+  border-radius: 50%;
+  background: white;
+}
+
 @media (orientation: portrait) {
   html {
     font-size: 1.8em;
