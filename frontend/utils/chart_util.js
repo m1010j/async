@@ -30,7 +30,7 @@ function _addData(typesAndBrowsers, options, chart) {
     if (browser === 'all-browsers') {
       browser = 'undefined';
     }
-    const { mode, os, maxN } = options;
+    const { mode, os, maxN, numCores } = options;
     const emptyDataset = {
       label: '',
       data: [],
@@ -40,7 +40,7 @@ function _addData(typesAndBrowsers, options, chart) {
 
     fetch(
       `/api/${type}_benchmarks?mode=${mode}&browser=${browser}&os=${os}` +
-        `&max_n=${maxN}`,
+        `&max_n=${maxN}&num_cores=${numCores}`,
       {
         method: 'GET',
       }

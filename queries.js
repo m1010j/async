@@ -38,10 +38,7 @@ function getAllBenchmarks(type) {
     if (req.query.os !== 'undefined') {
       os = req.query.os;
     }
-    let numCores;
-    if (req.query.num_cores !== 'undefined') {
-      numCores = req.query.num_cores;
-    }
+    let numCores = parseInt(req.query.num_cores) || undefined;
     if (isAvgMode) {
       if (browser) {
         if (browser === 'chromium based') {

@@ -124,6 +124,12 @@ export default function() {
     updateChart(chart);
   };
 
+  const numCoresSelect = document.getElementById('num-cores-select');
+  numCoresSelect.onchange = function(e) {
+    chart.options.numCores = this.value;
+    updateChart(chart);
+  };
+
   window.types.forEach(function(type) {
     const hyphenizedType = hyphenize(type);
     const snakeCasedType = snakeCaseize(type);
