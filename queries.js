@@ -21,6 +21,12 @@ var db = pgp(connectionConfig);
 
 function getAllBenchmarks(type) {
   return function(req, res, next) {
+    const chromiumBasedSqlStr = `LOWER(browser) LIKE 'chromium%'
+                OR LOWER(browser) LIKE 'chrome%'
+                OR LOWER(browser) LIKE 'opera%'
+                OR LOWER(browser) LIKE 'uc browser%'
+                OR LOWER(browser) LIKE 'samsung mobile%'`;
+
     const isAvgMode = req.query.mode === 'avg';
     const isMinMode = req.query.mode === 'min';
     const maxN = parseInt(req.query.max_n) || 45;
@@ -34,36 +40,214 @@ function getAllBenchmarks(type) {
     }
     if (isAvgMode) {
       if (browser) {
-        if (os) {
-          db.any(
-            `SELECT n, AVG(duration) FROM $1:name WHERE LOWER(browser) LIKE $2 
-              AND LOWER(os) LIKE $3 AND n <= $4 GROUP BY n ORDER BY n`,
-            [`${type}_benchmarks`, `${browser}%`, `${os}%`, maxN]
-          )
-            .then(avgSuccessCb(res))
-            .catch(errorCb);
+        if (browser === 'chromium based') {
+          if (os) {
+            db.any(
+              `SELECT
+                n, AVG(duration)
+              FROM $1:name
+              WHERE (
+                ${chromiumBasedSqlStr}
+                )
+                AND LOWER(os) LIKE $2
+                AND n <= $3
+              GROUP BY n
+              ORDER BY n`,
+              [`${type}_benchmarks`, `${os}%`, maxN]
+            )
+              .then(avgSuccessCb(res))
+              .catch(errorCb);
+          } else {
+            db.any(
+              `SELECT
+                n, AVG(duration)
+              FROM $1:name
+              WHERE (
+                ${chromiumBasedSqlStr}
+                )
+                AND n <= $2 
+              GROUP BY n
+              ORDER BY n`,
+              [`${type}_benchmarks`, maxN]
+            )
+              .then(avgSuccessCb(res))
+              .catch(errorCb);
+          }
+        } else if (browser === 'firefox based') {
+          if (os) {
+            db.any(
+              `SELECT
+                n, AVG(duration)
+              FROM $1:name
+              WHERE LOWER(browser) LIKE 'firefox%' 
+                AND LOWER(os) LIKE $2
+                AND n <= $3
+              GROUP BY n
+              ORDER BY n`,
+              [`${type}_benchmarks`, `${os}%`, maxN]
+            )
+              .then(avgSuccessCb(res))
+              .catch(errorCb);
+          } else {
+            db.any(
+              `SELECT
+                n, AVG(duration)
+              FROM 
+                $1:name 
+              WHERE LOWER(browser) LIKE 'firefox%' AND n <= $2
+              GROUP BY n
+              ORDER BY n`,
+              [`${type}_benchmarks`, maxN]
+            )
+              .then(avgSuccessCb(res))
+              .catch(errorCb);
+          }
+        } else if (browser === 'firefox') {
+          if (os) {
+            db.any(
+              `SELECT
+                n, AVG(duration)
+              FROM $1:name
+              WHERE LOWER(browser) LIKE 'firefox%'
+                AND NOT LOWER(browser) LIKE 'firefox mobile%'
+                AND LOWER(os) LIKE $2
+                AND n <= $3
+              GROUP BY n
+              ORDER BY n`,
+              [`${type}_benchmarks`, `${os}%`, maxN]
+            )
+              .then(avgSuccessCb(res))
+              .catch(errorCb);
+          } else {
+            db.any(
+              `SELECT
+                n, AVG(duration)
+              FROM 
+                $1:name 
+              WHERE LOWER(browser) LIKE 'firefox%'
+                AND NOT LOWER(browser) LIKE 'firefox mobile%'
+                AND n <= $2
+              GROUP BY n
+              ORDER BY n`,
+              [`${type}_benchmarks`, maxN]
+            )
+              .then(avgSuccessCb(res))
+              .catch(errorCb);
+          }
+        } else if (browser === 'chrome') {
+          if (os) {
+            db.any(
+              `SELECT
+                n, AVG(duration)
+              FROM $1:name
+              WHERE LOWER(browser) LIKE 'chrome%'
+                AND NOT LOWER(browser) LIKE 'chrome mobile%'
+                AND LOWER(os) LIKE $2
+                AND n <= $3
+              GROUP BY n
+              ORDER BY n`,
+              [`${type}_benchmarks`, `${os}%`, maxN]
+            )
+              .then(avgSuccessCb(res))
+              .catch(errorCb);
+          } else {
+            db.any(
+              `SELECT
+                n, AVG(duration)
+              FROM 
+                $1:name 
+              WHERE LOWER(browser) LIKE 'chrome%'
+                AND NOT LOWER(browser) LIKE 'chrome mobile%'
+                AND n <= $2
+              GROUP BY n
+              ORDER BY n`,
+              [`${type}_benchmarks`, maxN]
+            )
+              .then(avgSuccessCb(res))
+              .catch(errorCb);
+          }
+        } else if (browser === 'opera') {
+          if (os) {
+            db.any(
+              `SELECT
+                n, AVG(duration)
+              FROM $1:name
+              WHERE LOWER(browser) LIKE 'opera%'
+                AND NOT LOWER(browser) LIKE 'opera mobile%'
+                AND LOWER(os) LIKE $2
+                AND n <= $3
+              GROUP BY n
+              ORDER BY n`,
+              [`${type}_benchmarks`, `${os}%`, maxN]
+            )
+              .then(avgSuccessCb(res))
+              .catch(errorCb);
+          } else {
+            db.any(
+              `SELECT
+                n, AVG(duration)
+              FROM 
+                $1:name 
+              WHERE LOWER(browser) LIKE 'opera%'
+                AND NOT LOWER(browser) LIKE 'opera mobile%'
+                AND n <= $2
+              GROUP BY n
+              ORDER BY n`,
+              [`${type}_benchmarks`, maxN]
+            )
+              .then(avgSuccessCb(res))
+              .catch(errorCb);
+          }
         } else {
-          db.any(
-            `SELECT n, AVG(duration) FROM $1:name WHERE LOWER(browser) LIKE $2 
-               AND n <= $3 GROUP BY n ORDER BY n`,
-            [`${type}_benchmarks`, `${browser}%`, maxN]
-          )
-            .then(avgSuccessCb(res))
-            .catch(errorCb);
+          if (os) {
+            db.any(
+              `SELECT
+                n, AVG(duration)
+              FROM $1:name
+              WHERE LOWER(browser) LIKE $2
+                AND LOWER(os) LIKE $3
+                AND n <= $4
+              GROUP BY n
+              ORDER BY n`,
+              [`${type}_benchmarks`, `${browser}%`, `${os}%`, maxN]
+            )
+              .then(avgSuccessCb(res))
+              .catch(errorCb);
+          } else {
+            db.any(
+              `SELECT
+                n, AVG(duration)
+              FROM $1:name
+              WHERE LOWER(browser) LIKE $2 AND n <= $3
+              GROUP BY n
+              ORDER BY n`,
+              [`${type}_benchmarks`, `${browser}%`, maxN]
+            )
+              .then(avgSuccessCb(res))
+              .catch(errorCb);
+          }
         }
       } else {
         if (os) {
           db.any(
-            `SELECT n, AVG(duration) FROM $1:name WHERE LOWER(os) LIKE $2
-             AND n <= $3 GROUP BY n ORDER BY n`,
+            `SELECT
+              n, AVG(duration)
+            FROM $1:name
+            WHERE LOWER(os) LIKE $2 AND n <= $3
+            GROUP BY n
+            ORDER BY n`,
             [`${type}_benchmarks`, `${os}%`, maxN]
           )
             .then(avgSuccessCb(res))
             .catch(errorCb);
         } else {
           db.any(
-            `SELECT n, AVG(duration) FROM $1:name WHERE n <= $2  
-            GROUP BY n ORDER BY n`,
+            `SELECT
+              n, AVG(duration)
+            FROM $1:name
+            WHERE n <= $2  
+            GROUP BY n
+            ORDER BY n`,
             [`${type}_benchmarks`, maxN]
           )
             .then(avgSuccessCb(res))
@@ -72,36 +256,177 @@ function getAllBenchmarks(type) {
       }
     } else if (isMinMode) {
       if (browser) {
-        if (os) {
-          db.any(
-            `SELECT n, MIN(duration) FROM $1:name WHERE LOWER(browser) LIKE $2 
-              AND LOWER(os) LIKE $3 AND n <= $4 GROUP BY n ORDER BY n`,
-            [`${type}_benchmarks`, `${browser}%`, `${os}%`, maxN]
-          )
-            .then(minSuccessCb(res))
-            .catch(errorCb);
+        if (browser === 'chromium based') {
+          if (os) {
+            db.any(
+              `SELECT
+              n, MIN(duration)
+            FROM $1:name
+            WHERE (
+              ${chromiumBasedSqlStr}
+              )
+              AND LOWER(os) LIKE $2
+              AND n <= $3
+            GROUP BY n
+            ORDER BY n`,
+              [`${type}_benchmarks`, `${os}%`, maxN]
+            )
+              .then(minSuccessCb(res))
+              .catch(errorCb);
+          } else {
+            db.any(
+              `SELECT
+                n, MIN(duration)
+              FROM $1:name
+              WHERE (
+                ${chromiumBasedSqlStr}
+                )
+                AND n <= $2
+              GROUP BY n
+              ORDER BY n`,
+              [`${type}_benchmarks`, maxN]
+            )
+              .then(minSuccessCb(res))
+              .catch(errorCb);
+          }
+        } else if (browser === 'firefox based') {
+          if (os) {
+            db.any(
+              `SELECT
+              n, MIN(duration)
+            FROM $1:name
+            WHERE LOWER(browser) LIKE 'firefox%'
+              AND LOWER(os) LIKE $2
+              AND n <= $3
+            GROUP BY n
+            ORDER BY n`,
+              [`${type}_benchmarks`, `${os}%`, maxN]
+            )
+              .then(minSuccessCb(res))
+              .catch(errorCb);
+          } else {
+            db.any(
+              `SELECT
+              n, MIN(duration)
+            FROM $1:name
+            WHERE LOWER(browser) LIKE 'firefox%' AND n <= $2
+            GROUP BY n
+            ORDER BY n`,
+              [`${type}_benchmarks`, maxN]
+            )
+              .then(minSuccessCb(res))
+              .catch(errorCb);
+          }
+        } else if (browser === 'chrome') {
+          if (os) {
+            db.any(
+              `SELECT
+              n, MIN(duration)
+            FROM $1:name
+            WHERE LOWER(browser) LIKE 'chrome%'
+              AND NOT WHERE LOWER(browse) LIKE 'chrome mobile%'
+              AND LOWER(os) LIKE $2
+              AND n <= $3
+            GROUP BY n
+            ORDER BY n`,
+              [`${type}_benchmarks`, `${os}%`, maxN]
+            )
+              .then(minSuccessCb(res))
+              .catch(errorCb);
+          } else {
+            db.any(
+              `SELECT
+              n, MIN(duration)
+            FROM $1:name
+            WHERE LOWER(browser) LIKE 'chrome%'
+              AND NOT WHERE LOWER(browse) LIKE 'chrome mobile%'
+              AND n <= $2
+            GROUP BY n
+            ORDER BY n`,
+              [`${type}_benchmarks`, maxN]
+            )
+              .then(minSuccessCb(res))
+              .catch(errorCb);
+          }
+        } else if (browser === 'firefox') {
+          if (os) {
+            db.any(
+              `SELECT
+              n, MIN(duration)
+            FROM $1:name
+            WHERE LOWER(browser) LIKE 'firefox%'
+              AND NOT WHERE LOWER(browse) LIKE 'firefox mobile%'
+              AND LOWER(os) LIKE $2
+              AND n <= $3
+            GROUP BY n
+            ORDER BY n`,
+              [`${type}_benchmarks`, `${os}%`, maxN]
+            )
+              .then(minSuccessCb(res))
+              .catch(errorCb);
+          } else {
+            db.any(
+              `SELECT
+              n, MIN(duration)
+            FROM $1:name
+            WHERE LOWER(browser) LIKE 'firefox%'
+              AND NOT WHERE LOWER(browse) LIKE 'firefox mobile%'
+              AND n <= $2
+            GROUP BY n
+            ORDER BY n`,
+              [`${type}_benchmarks`, maxN]
+            )
+              .then(minSuccessCb(res))
+              .catch(errorCb);
+          }
         } else {
-          db.any(
-            `SELECT n, MIN(duration) FROM $1:name WHERE LOWER(browser) LIKE $2 
-              AND n <= $3 GROUP BY n ORDER BY n`,
-            [`${type}_benchmarks`, `${browser}%`, maxN]
-          )
-            .then(minSuccessCb(res))
-            .catch(errorCb);
+          if (os) {
+            db.any(
+              `SELECT
+              n, MIN(duration)
+            FROM $1:name
+            WHERE LOWER(browser) LIKE $2 AND LOWER(os) LIKE $3 AND n <= $4
+            GROUP BY n
+            ORDER BY n`,
+              [`${type}_benchmarks`, `${browser}%`, `${os}%`, maxN]
+            )
+              .then(minSuccessCb(res))
+              .catch(errorCb);
+          } else {
+            db.any(
+              `SELECT
+              n, MIN(duration)
+            FROM $1:name
+            WHERE LOWER(browser) LIKE $2 AND n <= $3
+            GROUP BY n
+            ORDER BY n`,
+              [`${type}_benchmarks`, `${browser}%`, maxN]
+            )
+              .then(minSuccessCb(res))
+              .catch(errorCb);
+          }
         }
       } else {
         if (os) {
           db.any(
-            `SELECT n, MIN(duration) FROM $1:name WHERE LOWER(os) LIKE $2
-              AND n <= $3 GROUP BY n ORDER BY n`,
+            `SELECT
+              n, MIN(duration)
+            FROM $1:name
+            WHERE LOWER(os) LIKE $2 AND n <= $3
+            GROUP BY n
+            ORDER BY n`,
             [`${type}_benchmarks`, `${os}%`, maxN]
           )
             .then(minSuccessCb(res))
             .catch(errorCb);
         } else {
           db.any(
-            `SELECT n, MIN(duration) FROM $1:name WHERE n <= $2
-              GROUP BY n ORDER BY n`,
+            `SELECT
+              n, MIN(duration)
+            FROM $1:name
+            WHERE n <= $2
+            GROUP BY n
+            ORDER BY n`,
             [`${type}_benchmarks`, maxN]
           )
             .then(minSuccessCb(res))
@@ -110,37 +435,155 @@ function getAllBenchmarks(type) {
       }
     } else {
       if (browser) {
-        if (os) {
-          db.any(
-            `SELECT * FROM $1:name WHERE LOWER(browser) LIKE $2 AND
-            LOWER(os) LIKE $3 AND n <= $4 `,
-            [`${type}_benchmarks`, `${browser}%`, `${os}%`, maxN]
-          )
-            .then(successCb(res))
-            .catch(errorCb);
+        if (browser === 'chromium based') {
+          if (os) {
+            db.any(
+              `SELECT
+                *
+              FROM $1:name
+              WHERE (
+                ${chromiumBasedSqlStr}
+                )
+                AND LOWER(os) LIKE $2
+                AND n <= $3`,
+              [`${type}_benchmarks`, `${os}%`, maxN]
+            )
+              .then(successCb(res))
+              .catch(errorCb);
+          } else {
+            db.any(
+              `SELECT
+                *
+              FROM $1:name
+              WHERE (
+                ${chromiumBasedSqlStr}
+                )
+                AND n <= $2`,
+              [`${type}_benchmarks`, maxN]
+            )
+              .then(successCb(res))
+              .catch(errorCb);
+          }
+        } else if (browser === 'firefox based') {
+          if (os) {
+            db.any(
+              `SELECT
+                *
+              FROM $1:name
+              WHERE LOWER(browser) LIKE 'firefox%'
+                AND LOWER(os) LIKE $2
+                AND n <= $3`,
+              [`${type}_benchmarks`, `${os}%`, maxN]
+            )
+              .then(successCb(res))
+              .catch(errorCb);
+          } else {
+            db.any(
+              `SELECT
+                *
+              FROM $1:name
+              WHERE LOWER(browser) LIKE 'firefox%' AND n <= $2`,
+              [`${type}_benchmarks`, maxN]
+            )
+              .then(successCb(res))
+              .catch(errorCb);
+          }
+        } else if (browser === 'chrome') {
+          if (os) {
+            db.any(
+              `SELECT
+                *
+              FROM $1:name
+              WHERE LOWER(browser) LIKE 'chrome%'
+                AND NOT LOWER(browser) LIKE 'chrome mobile%'
+                AND LOWER(os) LIKE $2
+                AND n <= $3`,
+              [`${type}_benchmarks`, `${os}%`, maxN]
+            )
+              .then(successCb(res))
+              .catch(errorCb);
+          } else {
+            db.any(
+              `SELECT
+                *
+              FROM $1:name
+              WHERE LOWER(browser) LIKE 'chrome%'
+                AND NOT LOWER(browser) LIKE 'chrome mobile%'
+                AND n <= $2`,
+              [`${type}_benchmarks`, maxN]
+            )
+              .then(successCb(res))
+              .catch(errorCb);
+          }
+        } else if (browser === 'firefox') {
+          if (os) {
+            db.any(
+              `SELECT
+                *
+              FROM $1:name
+              WHERE LOWER(browser) LIKE 'firefox%'
+                AND NOT LOWER(browser) LIKE 'firefox mobile%'
+                AND LOWER(os) LIKE $2
+                AND n <= $3`,
+              [`${type}_benchmarks`, `${os}%`, maxN]
+            )
+              .then(successCb(res))
+              .catch(errorCb);
+          } else {
+            db.any(
+              `SELECT
+                *
+              FROM $1:name
+              WHERE LOWER(browser) LIKE 'firefox%'
+                AND NOT LOWER(browser) LIKE 'firefox mobile%'
+                AND n <= $2`,
+              [`${type}_benchmarks`, maxN]
+            )
+              .then(successCb(res))
+              .catch(errorCb);
+          }
         } else {
-          db.any(
-            `SELECT * FROM $1:name WHERE LOWER(browser) LIKE $2
-            AND n <= $3`,
-            [`${type}_benchmarks`, `${browser}%`, maxN]
-          )
-            .then(successCb(res))
-            .catch(errorCb);
+          if (os) {
+            db.any(
+              `SELECT
+                *
+              FROM $1:name
+              WHERE LOWER(browser) LIKE $2 AND LOWER(os) LIKE $3 AND n <= $4 `,
+              [`${type}_benchmarks`, `${browser}%`, `${os}%`, maxN]
+            )
+              .then(successCb(res))
+              .catch(errorCb);
+          } else {
+            db.any(
+              `SELECT
+                *
+              FROM $1:name
+              WHERE LOWER(browser) LIKE $2 AND n <= $3`,
+              [`${type}_benchmarks`, `${browser}%`, maxN]
+            )
+              .then(successCb(res))
+              .catch(errorCb);
+          }
         }
       } else {
         if (os) {
-          db.any('SELECT * FROM $1:name WHERE LOWER(os) LIKE $2 AND n <= $3', [
-            `${type}_benchmarks`,
-            `${os}%`,
-            maxN,
-          ])
+          db.any(
+            `SELECT
+              *
+            FROM $1:name
+            WHERE LOWER(os) LIKE $2 AND n <= $3`,
+            [`${type}_benchmarks`, `${os}%`, maxN]
+          )
             .then(successCb(res))
             .catch(errorCb);
         } else {
-          db.any('SELECT * FROM $1:name WHERE n <= $2 ', [
-            `${type}_benchmarks`,
-            maxN,
-          ])
+          db.any(
+            `SELECT
+              *
+            FROM $1:name
+            WHERE n <= $2`,
+            [`${type}_benchmarks`, maxN]
+          )
             .then(successCb(res))
             .catch(errorCb);
         }
@@ -152,10 +595,13 @@ function getAllBenchmarks(type) {
 function getSingleBenchmark(type) {
   return function(req, res, next) {
     var benchmarkId = parseInt(req.params.id);
-    db.one('SELECT * FROM $1:name WHERE id = $2', [
-      `${type}_benchmarks`,
-      benchmarkId,
-    ])
+    db.one(
+      `SELECT
+        *
+      FROM $1:name
+      WHERE id = $2`,
+      [`${type}_benchmarks`, benchmarkId]
+    )
       .then(function(data) {
         res.status(200).json({
           status: 'success',

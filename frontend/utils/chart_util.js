@@ -15,12 +15,6 @@ export function addData(types, browsers, options, chart) {
       chart.browsers.push(browser);
     }
   });
-  if (chart.browsers.length > 1) {
-    const allIdx = chart.browsers.indexOf('all');
-    if (allIdx !== -1) {
-      chart.browsers.splice(allIdx, 1);
-    }
-  }
   const typesAndBrowsers = [];
   types.forEach(function(type) {
     browsers.forEach(function(browser) {
@@ -33,7 +27,7 @@ export function addData(types, browsers, options, chart) {
 function _addData(typesAndBrowsers, options, chart) {
   if (typesAndBrowsers.length) {
     let [type, browser] = typesAndBrowsers.pop();
-    if (browser === 'all') {
+    if (browser === 'all-browsers') {
       browser = 'undefined';
     }
     const { mode, os, maxN } = options;

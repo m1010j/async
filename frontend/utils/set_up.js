@@ -56,7 +56,7 @@ export default function() {
     maxN: 45,
   };
 
-  chart.browsers = ['all'];
+  chart.browsers = ['all-browsers'];
 
   addData(chart.types, chart.browsers, chart.options, chart);
 
@@ -86,8 +86,8 @@ export default function() {
     };
   });
 
-  const allBrowsersCheckbox = document.getElementById('all-browsers-checkbox');
-  const otherCheckboxes = [
+  const checkboxes = [
+    'all-browsers',
     'firefox',
     'chromium',
     'chrome',
@@ -100,30 +100,17 @@ export default function() {
     'mobile-safari',
     'uc-browser',
     'samsung-mobile',
+    'chromium-based',
+    'firefox-based',
   ].map(function(browserStr) {
     return document.getElementById(`${browserStr}-checkbox`);
   });
-  allBrowsersCheckbox.onchange = function() {
-    if (allBrowsersCheckbox.checked) {
-      otherCheckboxes.forEach(function(checkbox) {
-        checkbox.checked = false;
-      });
-      chart.browsers = ['all'];
-      addData(chart.types, chart.browsers, chart.options, chart);
-    } else {
-      removeDataForBrowsers(['all'], chart);
-    }
-    chart.options.browser = this.value.toLowerCase();
-    updateChart(chart);
-  };
-  otherCheckboxes.forEach(function(checkbox) {
+  checkboxes.forEach(function(checkbox) {
     checkbox.onchange = function() {
       const checkboxIdArr = checkbox.id.split('-');
       checkboxIdArr.pop();
       const browserStr = checkboxIdArr.join(' ');
       if (checkbox.checked) {
-        allBrowsersCheckbox.checked = false;
-        removeDataForBrowsers(['all'], chart);
         addData(chart.types, [browserStr], chart.options, chart);
       } else {
         removeDataForBrowsers([browserStr], chart);
