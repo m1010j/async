@@ -56,7 +56,7 @@ export default function() {
     maxN: 45,
   };
 
-  chart.browsers = ['all-browsers'];
+  chart.browsers = ['all browsers'];
 
   addData(chart.types, chart.browsers, chart.options, chart);
 

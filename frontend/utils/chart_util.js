@@ -27,7 +27,7 @@ export function addData(types, browsers, options, chart) {
 function _addData(typesAndBrowsers, options, chart) {
   if (typesAndBrowsers.length) {
     let [type, browser] = typesAndBrowsers.pop();
-    if (browser === 'all-browsers') {
+    if (browser === 'all browsers') {
       browser = 'undefined';
     }
     const { mode, os, maxN, numCores } = options;
@@ -104,14 +104,12 @@ export function removeDataForBrowsers(browsers, chart) {
       const dataset = datasets[i];
       const datasetLabelArr = dataset.label.split(' ');
       const browserArr = browser.split(' ');
+      debugger;
       if (datasetLabelArr.slice(0, browserArr.length).join(' ') === browser) {
         datasets.splice(i, 1);
         i--;
       }
     }
-    // chart.data.datasets = chart.data.datasets.filter(function(dataset) {
-    //   if (dataset) return dataset;
-    // });
 
     const browserIdx = chart.browsers.indexOf(browser);
     if (browserIdx !== -1) {
