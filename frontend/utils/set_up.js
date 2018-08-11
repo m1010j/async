@@ -26,6 +26,26 @@ export default function() {
     };
   }
 
+  const chartContainerContainer = document.getElementById(
+    'chart-container-container'
+  );
+  const main = document.getElementById('main');
+
+  const benchmarksButton = document.getElementById('benchmarks-span');
+  const resultsButton = document.getElementById('results-span');
+  benchmarksButton.onclick = function() {
+    chartContainerContainer.style.display = 'none';
+    main.style.display = 'flex';
+    benchmarksButton.classList.add('bold');
+    resultsButton.classList.remove('bold');
+  };
+  resultsButton.onclick = function() {
+    main.style.display = 'none';
+    chartContainerContainer.style.display = 'flex';
+    resultsButton.classList.add('bold');
+    benchmarksButton.classList.remove('bold');
+  };
+
   const ctx = document.getElementById('chart').getContext('2d');
   const chart = new Chart(ctx, {
     type: 'line',
@@ -60,8 +80,6 @@ export default function() {
   chart.browsers = ['all browsers'];
 
   addData(chart.types, chart.browsers, chart.options, chart);
-
-  const main = document.getElementById('main');
 
   const slider = document.getElementById('slider');
   slider.oninput = function() {

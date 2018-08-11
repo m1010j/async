@@ -75,12 +75,13 @@ h3,
 h4,
 .result,
 input,
-.subtitle,
+#subtitle,
 #privacy-notice,
 #agree-button,
 label,
 #slider-span,
-.form-label {
+.form-label,
+.navigation {
   font-family: 'Arsenal', sans-serif;
 }
 
@@ -99,13 +100,14 @@ h2,
 h3,
 h4,
 .result,
-.subtitle,
-.subtitle a {
+#subtitle,
+#subtitle a,
+.navigation {
   color: #ff635d;
   text-decoration: none;
 }
 
-.subtitle a {
+#subtitle a {
   font-weight: bold;
 }
 
@@ -132,27 +134,69 @@ h4 {
   width: 100%;
 }
 
-.subtitle {
-  width: 33rem;
+#subtitle,
+.navigation {
   display: flex;
   justify-content: space-between;
   margin: auto;
-  font-size: 1.3rem;
   margin-bottom: 1rem;
 }
 
+#subtitle {
+  width: 33rem;
+  font-size: 1rem;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.navigation {
+  width: 15rem;
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+
+.benchmarks-span {
+  font-weight: bold;
+}
+
+.navigation:hover span {
+  font-weight: normal;
+}
+
+#benchmarks-span:hover,
+#results-span:hover {
+  font-weight: bold;
+}
+
+#chart-container-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  display: none;
+}
+
+#chart-container,
 .container {
-  position: relative;
   padding: 0.5rem;
-  width: 48rem;
   max-width: 90vw;
   border: 0.05rem solid #42629d;
-  margin: 0.5rem;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
   background-color: #0b2942;
+  margin: 0.5rem;
+}
+
+#chart-container {
+  width: 90vw;
+}
+
+.container {
+  width: 48rem;
 }
 
 main > div > div {
