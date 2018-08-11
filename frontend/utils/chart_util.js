@@ -104,7 +104,6 @@ export function removeDataForBrowsers(browsers, chart) {
       const dataset = datasets[i];
       const datasetLabelArr = dataset.label.split(' ');
       const browserArr = browser.split(' ');
-      debugger;
       if (datasetLabelArr.slice(0, browserArr.length).join(' ') === browser) {
         datasets.splice(i, 1);
         i--;

@@ -72,8 +72,21 @@ h3,
 input,
 .subtitle,
 #privacy-notice,
-#agree-button {
+#agree-button,
+label,
+#slider-span,
+.form-label {
   font-family: 'Arsenal', sans-serif;
+}
+
+label,
+#slider-span {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+#slider-span {
+  margin: 0.1rem;
 }
 
 h1,
@@ -136,16 +149,14 @@ main > div > div {
   justify-content: center;
 }
 
-input {
+.n-input,
+.submit {
   margin: 0 0.2rem;
   font-size: 1.3rem;
   padding: 0.3rem;
   box-sizing: border-box;
   height: 2.7rem;
   text-align: center;
-}
-
-input[type='number'] {
   width: 2.7rem;
   background-color: #5f7e97;
   border: none;
@@ -153,21 +164,21 @@ input[type='number'] {
   -moz-appearance: textfield;
 }
 
-input[type='number']::placeholder {
+.n-input::placeholder {
   color: #ccc;
 }
 
-input[type='number']:hover {
+.n-input:hover {
   background-color: #6e90ad;
 }
 
-input[type='number']:focus {
+.n-input:focus {
   background-color: #769cbc;
   outline: none;
 }
 
-input[type='number']::-webkit-inner-spin-button,
-input[type='number']::-webkit-outer-spin-button {
+.n-input::-webkit-inner-spin-button,
+.n-input::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
@@ -291,168 +302,181 @@ code {
   }
 }
 
+.form-label {
+  width: 14rem;
+  font-weight: bold;
+}
+
+.form-container {
+  margin: 0.25rem 1rem 0.5rem 1rem;
+}
+
+.form-container,
+#slider-form,
+.checkboxes,
+.radios {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+#slider-form,
+.checkboxes,
+.radios {
+  width: calc(100% - 14rem);
+}
+
 /* Slider styling adapted from here: https://www.w3schools.com/howto/howto_js_rangeslider.asp */
 
 #slider {
-  -webkit-appearance: none; /* Override default CSS styles */
+  -webkit-appearance: none;
   appearance: none;
-  width: 100%; /* Full-width */
-  height: 0.5rem; /* Specified height */
+  width: 20rem;
+  height: 0.5rem;
   border-radius: 1rem;
-  background: #d3d3d3; /* Grey background */
-  outline: none; /* Remove outline */
-  opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
-  -webkit-transition: 0.2s; /* 0.2 seconds transition on hover */
-  transition: opacity 0.2s;
+  background: #ccc;
+  outline: none;
 }
 
-/* Mouse-over effects */
 #slider:hover {
-  opacity: 1; /* Fully shown on mouse-over */
+  background: #eee;
 }
 
-/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
 #slider::-webkit-slider-thumb {
-  -webkit-appearance: none; /* Override default look */
+  -webkit-appearance: none;
   appearance: none;
-  width: 1rem; /* Set a specific slider handle width */
-  height: 1rem; /* Slider handle height */
-  background: #ff635d; /* Green background */
-  cursor: pointer; /* Cursor on hover */
+  width: 1rem;
+  height: 1rem;
+  background: #ff635d;
+  cursor: pointer;
   border-radius: 50%;
 }
 
 #slider::-moz-range-thumb {
-  width: 1rem; /* Set a specific slider handle width */
-  height: 1rem; /* Slider handle height */
-  background: #ff635d; /* Green background */
-  cursor: pointer; /* Cursor on hover */
+  width: 1rem;
+  height: 1rem;
+  background: #ff635d;
+  cursor: pointer;
   border-radius: 50%;
 }
 
-/* Checkbox styling adapted from here: https://www.w3schools.com/howto/howto_css_custom_checkbox.asp */
+/* Checkbox and radio styling adapted from here: https://www.w3schools.com/howto/howto_css_custom_checkbox.asp */
 
-/* Customize the label (the container) */
 .checkbox-label {
   display: block;
   position: relative;
-  padding-left: 35px;
-  margin-bottom: 12px;
+  padding: 0 0.7rem 0.1rem 1.2rem;
   cursor: pointer;
-  font-size: 22px;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  width: 11rem;
 }
 
-/* Hide the browser's default checkbox */
 .checkbox-label input {
   position: absolute;
   opacity: 0;
   cursor: pointer;
 }
 
-/* Create a custom checkbox */
 .checkmark {
   position: absolute;
   top: 0;
   left: 0;
-  height: 0.8rem;
-  width: 0.8rem;
+  height: 1rem;
+  width: 1rem;
   background-color: #ccc;
 }
 
-/* On mouse-over, add a grey background color */
 .checkbox-label:hover input ~ .checkmark {
   background-color: #eee;
 }
 
-/* When the checkbox is checked, add a blue background */
 .checkbox-label input:checked ~ .checkmark {
   background-color: #ff635d;
 }
 
-/* Create the checkmark/indicator (hidden when not checked) */
 .checkmark:after {
   content: '';
   position: absolute;
   display: none;
 }
 
-/* Show the checkmark when checked */
 .checkbox-label input:checked ~ .checkmark:after {
   display: block;
 }
 
-/* Style the checkmark/indicator */
 .checkbox-label .checkmark:after {
-  left: 0.2rem;
-  top: 0.05rem;
-  width: 0.25rem;
+  left: 0.3rem;
+  top: 0.15rem;
+  width: 0.25em;
   height: 0.5rem;
   border: solid white;
-  border-width: 0 3px 3px 0;
+  border-width: 0 0.1rem 0.1rem 0;
   -webkit-transform: rotate(45deg);
   -ms-transform: rotate(45deg);
   transform: rotate(45deg);
 }
 
-/* The container */
+.avg-or-min-radio-label {
+  width: 4rem;
+}
+
+.os-radio-label {
+  width: 3.8rem;
+}
+
+.num-cores-radio-label {
+  width: 1rem;
+}
+
 .radio-label {
   display: block;
   position: relative;
-  padding-left: 1rem;
+  padding: 0 0.7rem 0 1.2rem;
   margin-bottom: 0.1rem;
   cursor: pointer;
-  font-size: 22px;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
 }
 
-/* Hide the browser's default radio button */
 .radio-label input {
   position: absolute;
   opacity: 0;
   cursor: pointer;
 }
 
-/* Create a custom radio button */
 .radio-span {
   position: absolute;
   top: 0;
   left: 0;
   height: 1rem;
   width: 1rem;
-  background-color: #eee;
+  background-color: #ccc;
   border-radius: 50%;
 }
 
-/* On mouse-over, add a grey background color */
 .radio-label:hover input ~ .radio-span {
-  background-color: #ccc;
+  background-color: #eee;
 }
 
-/* When the radio button is checked, add a blue background */
 .radio-label input:checked ~ .radio-span {
   background-color: #ff635d;
 }
 
-/* Create the indicator (the dot/circle - hidden when not checked) */
 .radio-span:after {
   content: '';
   position: absolute;
   display: none;
 }
 
-/* Show the indicator (dot/circle) when checked */
 .radio-label input:checked ~ .radio-span:after {
   display: block;
 }
 
-/* Style the indicator (dot/circle) */
 .radio-label .radio-span:after {
   top: 0.32rem;
   left: 0.32rem;

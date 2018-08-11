@@ -10,6 +10,7 @@ import {
   clearData,
   updateChart,
 } from './chart_util.js';
+import unselectOthers from './unselect_others.js';
 
 export default function() {
   const agreeButton = document.getElementById('agree-button');
@@ -75,38 +76,20 @@ export default function() {
     updateChart(chart);
   };
 
-  ['avg', 'min'].forEach(function(mode) {
-    const radio = document.getElementById(`${mode}-radio`);
-    const otherMode = mode === 'avg' ? 'min' : 'avg';
-    const otherRadio = document.getElementById(`${otherMode}-radio`);
+  const avgOrMinRadios = document.getElementById('avg-or-min-radios');
+  for (let i = 0; i < avgOrMinRadios.length; i++) {
+    const radio = avgOrMinRadios[i];
     radio.onclick = function() {
-      chart.options.mode = mode;
-      otherRadio.checked = false;
+      chart.options.mode = radio.value;
+      unselectOthers(i, avgOrMinRadios);
       updateChart(chart);
     };
-  });
+  }
 
-  const checkboxes = [
-    'all-browsers',
-    'firefox',
-    'chromium',
-    'chrome',
-    'opera',
-    'safari',
-    'edge',
-    'firefox-mobile',
-    'chrome-mobile',
-    'opera-mobile',
-    'mobile-safari',
-    'uc-browser',
-    'samsung-mobile',
-    'chromium-based',
-    'firefox-based',
-  ].map(function(browserStr) {
-    return document.getElementById(`${browserStr}-checkbox`);
-  });
-  checkboxes.forEach(function(checkbox) {
-    checkbox.onchange = function() {
+  const browserCheckboxes = document.getElementById('browser-checkboxes');
+  for (let i = 0; i < browserCheckboxes.length; i++) {
+    const checkbox = browserCheckboxes[i];
+    checkbox.onclick = function() {
       const checkboxIdArr = checkbox.id.split('-');
       checkboxIdArr.pop();
       const browserStr = checkboxIdArr.join(' ');
@@ -116,19 +99,27 @@ export default function() {
         removeDataForBrowsers([browserStr], chart);
       }
     };
-  });
+  }
 
-  const osSelect = document.getElementById('os-select');
-  osSelect.onchange = function(e) {
-    chart.options.os = this.value.toLowerCase();
-    updateChart(chart);
-  };
+  const osRadios = document.getElementById('os-radios');
+  for (let i = 0; i < osRadios.length; i++) {
+    const radio = osRadios[i];
+    radio.onclick = function() {
+      chart.options.os = radio.value;
+      unselectOthers(i, osRadios);
+      updateChart(chart);
+    };
+  }
 
-  const numCoresSelect = document.getElementById('num-cores-select');
-  numCoresSelect.onchange = function(e) {
-    chart.options.numCores = this.value;
-    updateChart(chart);
-  };
+  const numCores = document.getElementById('num-cores-radios');
+  for (let i = 0; i < numCores.length; i++) {
+    const radio = numCores[i];
+    radio.onclick = function() {
+      chart.options.numCores = radio.value;
+      unselectOthers(i, numCores);
+      updateChart(chart);
+    };
+  }
 
   window.types.forEach(function(type) {
     const hyphenizedType = hyphenize(type);
