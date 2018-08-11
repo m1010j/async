@@ -22,6 +22,7 @@ export function addData(types, browsers, options, chart) {
     });
   });
   _addData(typesAndBrowsers, options, chart);
+  updateTitle(chart);
 }
 
 function _addData(typesAndBrowsers, options, chart) {
@@ -141,7 +142,8 @@ function updateTitle(chart) {
   if (['undefined', undefined].includes(chart.options.numCores)) {
     numCores = 'any number of';
   }
-  chartTitle.innerText = `${avgOrMin} calculation times per input size on ${os} using ${numCores} cores (in milliseconds)`;
+  chartTitle.innerText = `${avgOrMin} calculation times per input size on ${os}
+    using ${numCores} cores (in milliseconds)`;
 }
 
 const osStrings = {

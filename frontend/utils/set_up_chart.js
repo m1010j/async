@@ -10,6 +10,9 @@ import {
 import unselectOthers from './unselect_others.js';
 
 export default function() {
+  const mode = localStorage.getItem('mode') || 'avg';
+  const types = JSON.parse(localStorage.getItem('types')) || ['sync', 'async'];
+
   const ctx = document.getElementById('chart').getContext('2d');
   const chart = new Chart(ctx, {
     type: 'line',
@@ -30,14 +33,16 @@ export default function() {
     },
   });
 
-  chart.types = window.types.filter(function(camelType) {
-    if (['sync', 'async'].includes(camelType)) {
-      return snakeCaseize(camelType);
+  chart.types = [];
+  window.types.forEach(function(camelType) {
+    if (types.includes(camelType)) {
+      const snakeCaseType = snakeCaseize(camelType);
+      chart.types.push(snakeCaseType);
     }
   });
 
   chart.options = {
-    mode: 'avg',
+    mode,
     maxN: 45,
   };
 
@@ -61,8 +66,14 @@ export default function() {
   const avgOrMinRadios = document.getElementById('avg-or-min-radios');
   for (let i = 0; i < avgOrMinRadios.length; i++) {
     const radio = avgOrMinRadios[i];
+    if (radio.value === mode) {
+      radio.checked = true;
+    } else {
+      radio.checked = false;
+    }
     radio.onclick = function() {
       chart.options.mode = radio.value;
+      localStorage.setItem('mode', radio.value);
       unselectOthers(i, avgOrMinRadios);
       updateChart(chart);
     };
@@ -108,13 +119,22 @@ export default function() {
     const snakeCasedType = snakeCaseize(type);
 
     const typeCheckbox = document.getElementById(`${hyphenizedType}-checkbox`);
-    if (['sync', 'async'].includes(type)) {
+    if (types.includes(type)) {
       typeCheckbox.checked = true;
     }
     typeCheckbox.onclick = function() {
       if (this.checked) {
+        if (!types.includes(type)) {
+          types.push(type);
+          localStorage.setItem('types', JSON.stringify(types));
+        }
         addData([snakeCasedType], chart.browsers, chart.options, chart);
       } else {
+        const typeIdx = types.indexOf(type);
+        if (typeIdx !== -1) {
+          types.splice(typeIdx, 1);
+          localStorage.setItem('types', JSON.stringify(types));
+        }
         removeDataForType(type, chart);
       }
     };
