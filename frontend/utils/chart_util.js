@@ -126,8 +126,32 @@ export function clearData(chart) {
 
 export function updateChart(chart) {
   clearData(chart);
+  updateTitle(chart);
   addData(chart.types, chart.browsers, chart.options, chart);
 }
+
+function updateTitle(chart) {
+  const chartTitle = document.getElementById('chart-title');
+  const avgOrMin = chart.options.mode === 'avg' ? 'Average' : 'Minimum';
+  let os = osStrings[chart.options.os];
+  if (['undefined', undefined].includes(chart.options.os)) {
+    os = 'any operating system';
+  }
+  let numCores = chart.options.numCores;
+  if (['undefined', undefined].includes(chart.options.numCores)) {
+    numCores = 'any number of';
+  }
+  chartTitle.innerText = `${avgOrMin} calculation times per input size on ${os} using ${numCores} cores (in milliseconds)`;
+}
+
+const osStrings = {
+  'mac os': 'macOS',
+  windows: 'Windows',
+  linux: 'Linux',
+  ubuntu: 'Ubuntu',
+  android: 'Android',
+  ios: 'iOS',
+};
 
 function mapValues(data, nums) {
   return nums.map(function(num) {
