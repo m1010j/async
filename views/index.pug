@@ -99,7 +99,7 @@ html
           h2= titles[idx]
           div.source(id= hyphenizedTypes[idx] + '-source')
           h3 Benchmark
-          form(id= hyphenizedTypes[idx] + '-form')
+          form.type-form(id= hyphenizedTypes[idx] + '-form')
             input.n-input(id= hyphenizedTypes[idx] + '-n', type='number', placeholder='n')
             input.submit(id= hyphenizedTypes[idx] + '-submit', type='submit', disabled, value='Invoke')
           div.result-container
