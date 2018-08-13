@@ -3,6 +3,7 @@ import startSync from '../click_handlers/sync.js';
 import appendCode from './append_code.js';
 import setUpChart from './set_up_chart.js';
 import { hyphenize, snakeCaseize } from './convert_string.js';
+import { renderResults, renderBenchmarks, render } from './render.js';
 
 export default function() {
   const agreeButton = document.getElementById('agree-button');
@@ -22,20 +23,17 @@ export default function() {
     'chart-container-container'
   );
   const main = document.getElementById('main');
-
   const benchmarksButton = document.getElementById('benchmarks-span');
   const resultsButton = document.getElementById('results-span');
+  render(main, chartContainerContainer, resultsButton, benchmarksButton);
+  window.onhashchange = function() {
+    render(main, chartContainerContainer, resultsButton, benchmarksButton);
+  };
   benchmarksButton.onclick = function() {
-    chartContainerContainer.style.display = 'none';
-    main.style.display = 'flex';
-    benchmarksButton.classList.add('bold');
-    resultsButton.classList.remove('bold');
+    window.location.hash = 'benchmarks';
   };
   resultsButton.onclick = function() {
-    main.style.display = 'none';
-    chartContainerContainer.style.display = 'flex';
-    resultsButton.classList.add('bold');
-    benchmarksButton.classList.remove('bold');
+    window.location.hash = 'results';
   };
 
   setUpChart();
