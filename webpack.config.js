@@ -3,7 +3,8 @@ var path = require('path');
 module.exports = {
   entry: './frontend/entry.js',
   output: {
-    filename: './bundle.js',
+    filename: './[name].bundle.js',
+    chunkFilename: './[name].bundle.js',
     path: path.resolve(__dirname, 'public'),
   },
   module: {
