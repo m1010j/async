@@ -12,6 +12,9 @@ import unselectOthers from './unselect_others.js';
 export default function() {
   const mode = localStorage.getItem('mode') || 'avg';
   const types = JSON.parse(localStorage.getItem('types')) || ['sync', 'async'];
+  const browsers = JSON.parse(localStorage.getItem('browsers')) || [
+    'all browsers',
+  ];
   const os = localStorage.getItem('os') || 'undefined';
 
   const ctx = document.getElementById('chart').getContext('2d');
@@ -48,7 +51,7 @@ export default function() {
     os,
   };
 
-  chart.browsers = ['all browsers'];
+  chart.browsers = browsers;
 
   addData(chart.types, chart.browsers, chart.options, chart);
 
@@ -84,15 +87,26 @@ export default function() {
   const browserCheckboxes = document.getElementById('browser-checkboxes');
   for (let i = 0; i < browserCheckboxes.length; i++) {
     const checkbox = browserCheckboxes[i];
+    const checkboxIdArr = checkbox.id.split('-');
+    checkboxIdArr.pop();
+    const browserStr = checkboxIdArr.join(' ');
+    if (browsers.includes(browserStr)) {
+      checkbox.checked = true;
+    } else {
+      checkbox.checked = false;
+    }
     checkbox.onclick = function() {
-      const checkboxIdArr = checkbox.id.split('-');
-      checkboxIdArr.pop();
-      const browserStr = checkboxIdArr.join(' ');
       if (checkbox.checked) {
+        browsers.push(browserStr);
         addData(chart.types, [browserStr], chart.options, chart);
       } else {
+        const browserIdx = browsers.indexOf(browserStr);
+        if (browserIdx !== -1) {
+          browsers.splice(browserIdx, 1);
+        }
         removeDataForBrowsers([browserStr], chart);
       }
+      localStorage.setItem('browsers', JSON.stringify(browsers));
     };
   }
 
