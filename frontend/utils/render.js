@@ -1,3 +1,5 @@
+import setUpChart from './set_up_chart.js';
+
 export function renderResults(
   main,
   chartContainerContainer,
@@ -30,6 +32,10 @@ export function render(
 ) {
   const hash = window.location.hash.slice(1);
   if (hash === 'results') {
+    if (!window.chartIsSetUp) {
+      setUpChart();
+      window.chartIsSetUp = true;
+    }
     renderResults(
       main,
       chartContainerContainer,

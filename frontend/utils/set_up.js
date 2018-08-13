@@ -36,7 +36,10 @@ export default function() {
     window.location.hash = 'results';
   };
 
-  setUpChart();
+  if (window.location.hash === 'benchmarks') {
+    setUpChart();
+    window.chartIsSetUp = true;
+  }
 
   window.types.forEach(function(type) {
     const hyphenizedType = hyphenize(type);
