@@ -4,7 +4,7 @@
   "description": "",
   "engines": {
     "node": "8.9.0",
-    "yarn": "1.9.2"
+    "yarn": "1.9.4"
   },
   "main": "app.js",
   "scripts": {
@@ -33,6 +33,7 @@
     "express": "~4.16.0",
     "http-errors": "~1.6.2",
     "lodash": "^4.17.10",
+    "memory-cache": "^0.2.0",
     "morgan": "~1.9.0",
     "nodemon": "^1.18.3",
     "pg-promise": "^8.4.5",

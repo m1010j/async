@@ -1,5 +1,6 @@
 var express = require('express');
 var csurf = require('csurf');
+var mcache = require('memory-cache');
 
 var router = express.Router();
 
@@ -8,6 +9,24 @@ var csrfMiddleware = csurf({
 });
 
 var db = require('../queries');
+
+var cache = function(duration) {
+  return function(req, res, next) {
+    let key = '__express__' + req.originalUrl || req.url;
+    let cachedBody = mcache.get(key);
+    if (cachedBody) {
+      res.send(cachedBody);
+      return;
+    } else {
+      res.sendResponse = res.send;
+      res.send = function(body) {
+        mcache.put(key, body, duration * 1000);
+        res.sendResponse(body);
+      };
+      next();
+    }
+  };
+};
 
 router.get('/', csrfMiddleware, function(req, res) {
   res.render('index', {
@@ -23,35 +42,72 @@ router.get('/agree_to_privacy_notice', function(req, res) {
     message: 'Successfully agreed to privacy notice',
   });
 });
-router.get('/api/sync_benchmarks', db.getAllSyncBenchmarks);
-router.get('/api/sync_benchmarks/:id', db.getSingleSyncBenchmark);
-router.post('/api/sync_benchmarks', csrfMiddleware, db.createSyncBenchmark);
-router.get('/api/sync_busy_benchmarks', db.getAllSyncBusyBenchmarks);
-router.get('/api/sync_busy_benchmarks/:id', db.getSingleSyncBusyBenchmark);
+router.get('/api/sync_benchmarks', cache(600), db.getAllSyncBenchmarks);
+router.get('/api/sync_benchmarks/:id', cache(600), db.getSingleSyncBenchmark);
+router.post(
+  '/api/sync_benchmarks',
+  cache(600),
+  csrfMiddleware,
+  db.createSyncBenchmark
+);
+router.get(
+  '/api/sync_busy_benchmarks',
+  cache(600),
+  db.getAllSyncBusyBenchmarks
+);
+router.get(
+  '/api/sync_busy_benchmarks/:id',
+  cache(600),
+  db.getSingleSyncBusyBenchmark
+);
 router.post(
   '/api/sync_busy_benchmarks',
   csrfMiddleware,
   db.createSyncBusyBenchmark
 );
-router.get('/api/sync_memo_benchmarks', db.getAllSyncMemoBenchmarks);
-router.get('/api/sync_memo_benchmarks/:id', db.getSingleSyncMemoBenchmark);
+router.get(
+  '/api/sync_memo_benchmarks',
+  cache(600),
+  db.getAllSyncMemoBenchmarks
+);
+router.get(
+  '/api/sync_memo_benchmarks/:id',
+  cache(600),
+  db.getSingleSyncMemoBenchmark
+);
 router.post(
   '/api/sync_memo_benchmarks',
   csrfMiddleware,
   db.createSyncMemoBenchmark
 );
-router.get('/api/async_benchmarks', db.getAllAsyncBenchmarks);
-router.get('/api/async_benchmarks/:id', db.getSingleAsyncBenchmark);
+router.get('/api/async_benchmarks', cache(600), db.getAllAsyncBenchmarks);
+router.get('/api/async_benchmarks/:id', cache(600), db.getSingleAsyncBenchmark);
 router.post('/api/async_benchmarks', csrfMiddleware, db.createAsyncBenchmark);
-router.get('/api/async_busy_benchmarks', db.getAllAsyncBusyBenchmarks);
-router.get('/api/async_busy_benchmarks/:id', db.getSingleAsyncBusyBenchmark);
+router.get(
+  '/api/async_busy_benchmarks',
+  cache(600),
+  db.getAllAsyncBusyBenchmarks
+);
+router.get(
+  '/api/async_busy_benchmarks/:id',
+  cache(600),
+  db.getSingleAsyncBusyBenchmark
+);
 router.post(
   '/api/async_busy_benchmarks',
   csrfMiddleware,
   db.createAsyncBusyBenchmark
 );
-router.get('/api/async_memo_benchmarks', db.getAllAsyncMemoBenchmarks);
-router.get('/api/async_memo_benchmarks/:id', db.getSingleAsyncMemoBenchmark);
+router.get(
+  '/api/async_memo_benchmarks',
+  cache(600),
+  db.getAllAsyncMemoBenchmarks
+);
+router.get(
+  '/api/async_memo_benchmarks/:id',
+  cache(600),
+  db.getSingleAsyncMemoBenchmark
+);
 router.post(
   '/api/async_memo_benchmarks',
   csrfMiddleware,
