@@ -12,6 +12,7 @@ import unselectOthers from './unselect_others.js';
 export default function() {
   const mode = localStorage.getItem('mode') || 'avg';
   const types = JSON.parse(localStorage.getItem('types')) || ['sync', 'async'];
+  const os = localStorage.getItem('os') || 'undefined';
 
   const ctx = document.getElementById('chart').getContext('2d');
   const chart = new Chart(ctx, {
@@ -44,6 +45,7 @@ export default function() {
   chart.options = {
     mode,
     maxN: 45,
+    os,
   };
 
   chart.browsers = ['all browsers'];
@@ -97,8 +99,12 @@ export default function() {
   const osRadios = document.getElementById('os-radios');
   for (let i = 0; i < osRadios.length; i++) {
     const radio = osRadios[i];
+    if (radio.value === chart.options.os) {
+      radio.checked = true;
+    }
     radio.onclick = function() {
       chart.options.os = radio.value;
+      localStorage.setItem('os', radio.value);
       unselectOthers(i, osRadios);
       updateChart(chart);
     };
