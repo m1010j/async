@@ -171,4 +171,78 @@ export default function() {
       }
     };
   });
+
+  const resetChartButton = document.getElementById('reset-chart-button');
+  resetChartButton.onclick = function(e) {
+    e.preventDefault();
+    chart.types = ['sync', 'async'];
+    localStorage.setItem('types', JSON.stringify(chart.types));
+    window.types.forEach(function(type) {
+      const hyphenizedType = hyphenize(type);
+      const snakeCasedType = snakeCaseize(type);
+
+      const typeCheckbox = document.getElementById(
+        `${hyphenizedType}-checkbox`
+      );
+      if (chart.types.includes(type)) {
+        typeCheckbox.checked = true;
+      } else {
+        typeCheckbox.checked = false;
+      }
+    });
+
+    chart.options.mode = 'avg';
+    localStorage.setItem('mode', chart.options.mode);
+    for (let i = 0; i < avgOrMinRadios.length; i++) {
+      const radio = avgOrMinRadios[i];
+      if (radio.value === chart.options.mode) {
+        radio.checked = true;
+      } else {
+        radio.checked = false;
+      }
+    }
+
+    chart.browsers = ['all browsers'];
+    localStorage.setItem('browsers', JSON.stringify(chart.browsers));
+    for (let i = 0; i < browserCheckboxes.length; i++) {
+      const checkbox = browserCheckboxes[i];
+      const checkboxIdArr = checkbox.id.split('-');
+      checkboxIdArr.pop();
+      const browserStr = checkboxIdArr.join(' ');
+      if (chart.browsers.includes(browserStr)) {
+        checkbox.checked = true;
+      } else {
+        checkbox.checked = false;
+      }
+    }
+
+    chart.options.os = 'undefined';
+    localStorage.setItem('os', chart.options.os);
+    for (let i = 0; i < osRadios.length; i++) {
+      const radio = osRadios[i];
+      if (radio.value === chart.options.os) {
+        radio.checked = true;
+      } else {
+        radio.checked = false;
+      }
+    }
+
+    chart.options.numCores = 'undefined';
+    localStorage.setItem('numCores', chart.options.numCores);
+    for (let i = 0; i < numCoresRadios.length; i++) {
+      const radio = numCoresRadios[i];
+      if (radio.value === chart.options.numCores) {
+        radio.checked = true;
+      } else {
+        radio.checked = false;
+      }
+    }
+
+    chart.options.maxN = '45';
+    localStorage.setItem('maxN', chart.options.maxN);
+    slider.value = chart.options.maxN;
+    sliderSpan.innerText = chart.options.maxN;
+
+    updateChart(chart);
+  };
 }

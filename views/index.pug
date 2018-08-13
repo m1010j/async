@@ -92,7 +92,7 @@ html
           form#slider-form
             input#slider(type='range', min='1', max='100', value='45')
             span#slider-span 45
-        div#reset-chart-button Reset to default options
+        input.submit(id='reset-chart-button', type='submit' value='Reset to default options')
 
     main#main
       each type, idx in types

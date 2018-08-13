@@ -81,7 +81,8 @@ input,
 label,
 #slider-span,
 .form-label,
-.navigation {
+.navigation,
+#reset-chart-button {
   font-family: 'Arsenal', sans-serif;
 }
 
@@ -193,6 +194,11 @@ h4 {
 
 #chart-container {
   width: 90vw;
+}
+
+#reset-chart-button {
+  margin: auto;
+  width: 16rem;
 }
 
 .container {
