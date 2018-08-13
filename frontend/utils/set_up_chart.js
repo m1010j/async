@@ -17,6 +17,7 @@ export default function() {
   ];
   const os = localStorage.getItem('os') || 'undefined';
   const numCores = localStorage.getItem('numCores') || 'undefined';
+  const maxN = localStorage.getItem('maxN') || '45';
 
   const ctx = document.getElementById('chart').getContext('2d');
   const chart = new Chart(ctx, {
@@ -48,7 +49,7 @@ export default function() {
 
   chart.options = {
     mode,
-    maxN: 45,
+    maxN,
     os,
     numCores,
   };
@@ -58,14 +59,17 @@ export default function() {
   addData(chart.types, chart.browsers, chart.options, chart);
 
   const slider = document.getElementById('slider');
+  slider.value = maxN;
+  const sliderSpan = document.getElementById('slider-span');
+  sliderSpan.innerText = maxN;
   slider.oninput = function() {
     const value = slider.value;
-    const sliderSpan = document.getElementById('slider-span');
     sliderSpan.innerText = value;
   };
   slider.onchange = function() {
     const value = slider.value;
-    chart.options.maxN = parseInt(value);
+    localStorage.setItem('maxN', value);
+    chart.options.maxN = value;
     clearData(chart);
     updateChart(chart);
   };
