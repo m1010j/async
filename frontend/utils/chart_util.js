@@ -143,7 +143,7 @@ function updateTitle(chart) {
     numCores = 'any number of';
   }
   chartTitle.innerText = `${avgOrMin} calculation times per input size on ${os}
-    using ${numCores} cores (in milliseconds)`;
+    using ${numCores} logical cores (in milliseconds)`;
 }
 
 const osStrings = {

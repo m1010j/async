@@ -39,7 +39,7 @@ html
 
     div#chart-container-container        
       div#chart-container
-        h4#chart-title Average calculation times per input size on any operating system using any number of cores (in milliseconds)
+        h4#chart-title Average calculation times per input size on any operating system using any number of logical cores (in milliseconds)
         canvas#chart
         div.form-container
           span.form-label Algorithms:
@@ -92,6 +92,7 @@ html
           form#slider-form
             input#slider(type='range', min='1', max='100', value='45')
             span#slider-span 45
+        div#reset-chart-button Reset to default options
 
     main#main
       each type, idx in types
