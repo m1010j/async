@@ -16,6 +16,7 @@ export default function() {
     'all browsers',
   ];
   const os = localStorage.getItem('os') || 'undefined';
+  const numCores = localStorage.getItem('numCores') || 'undefined';
 
   const ctx = document.getElementById('chart').getContext('2d');
   const chart = new Chart(ctx, {
@@ -49,6 +50,7 @@ export default function() {
     mode,
     maxN: 45,
     os,
+    numCores,
   };
 
   chart.browsers = browsers;
@@ -124,12 +126,18 @@ export default function() {
     };
   }
 
-  const numCores = document.getElementById('num-cores-radios');
-  for (let i = 0; i < numCores.length; i++) {
-    const radio = numCores[i];
+  const numCoresRadios = document.getElementById('num-cores-radios');
+  for (let i = 0; i < numCoresRadios.length; i++) {
+    const radio = numCoresRadios[i];
+    if (chart.options.numCores === radio.value) {
+      radio.checked = true;
+    } else {
+      radio.checked = false;
+    }
     radio.onclick = function() {
+      localStorage.setItem('numCores', radio.value);
       chart.options.numCores = radio.value;
-      unselectOthers(i, numCores);
+      unselectOthers(i, numCoresRadios);
       updateChart(chart);
     };
   }
