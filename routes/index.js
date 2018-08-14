@@ -42,22 +42,18 @@ router.get('/agree_to_privacy_notice', function(req, res) {
     message: 'Successfully agreed to privacy notice',
   });
 });
-router.get('/api/sync_benchmarks', cache(600), db.getAllSyncBenchmarks);
-router.get('/api/sync_benchmarks/:id', cache(600), db.getSingleSyncBenchmark);
+router.get('/api/sync_benchmarks', cache(10), db.getAllSyncBenchmarks);
+router.get('/api/sync_benchmarks/:id', cache(10), db.getSingleSyncBenchmark);
 router.post(
   '/api/sync_benchmarks',
-  cache(600),
+  cache(10),
   csrfMiddleware,
   db.createSyncBenchmark
 );
-router.get(
-  '/api/sync_busy_benchmarks',
-  cache(600),
-  db.getAllSyncBusyBenchmarks
-);
+router.get('/api/sync_busy_benchmarks', cache(10), db.getAllSyncBusyBenchmarks);
 router.get(
   '/api/sync_busy_benchmarks/:id',
-  cache(600),
+  cache(10),
   db.getSingleSyncBusyBenchmark
 );
 router.post(
@@ -65,14 +61,10 @@ router.post(
   csrfMiddleware,
   db.createSyncBusyBenchmark
 );
-router.get(
-  '/api/sync_memo_benchmarks',
-  cache(600),
-  db.getAllSyncMemoBenchmarks
-);
+router.get('/api/sync_memo_benchmarks', cache(10), db.getAllSyncMemoBenchmarks);
 router.get(
   '/api/sync_memo_benchmarks/:id',
-  cache(600),
+  cache(10),
   db.getSingleSyncMemoBenchmark
 );
 router.post(
@@ -80,17 +72,17 @@ router.post(
   csrfMiddleware,
   db.createSyncMemoBenchmark
 );
-router.get('/api/async_benchmarks', cache(600), db.getAllAsyncBenchmarks);
-router.get('/api/async_benchmarks/:id', cache(600), db.getSingleAsyncBenchmark);
+router.get('/api/async_benchmarks', cache(10), db.getAllAsyncBenchmarks);
+router.get('/api/async_benchmarks/:id', cache(10), db.getSingleAsyncBenchmark);
 router.post('/api/async_benchmarks', csrfMiddleware, db.createAsyncBenchmark);
 router.get(
   '/api/async_busy_benchmarks',
-  cache(600),
+  cache(10),
   db.getAllAsyncBusyBenchmarks
 );
 router.get(
   '/api/async_busy_benchmarks/:id',
-  cache(600),
+  cache(10),
   db.getSingleAsyncBusyBenchmark
 );
 router.post(
@@ -100,12 +92,12 @@ router.post(
 );
 router.get(
   '/api/async_memo_benchmarks',
-  cache(600),
+  cache(10),
   db.getAllAsyncMemoBenchmarks
 );
 router.get(
   '/api/async_memo_benchmarks/:id',
-  cache(600),
+  cache(10),
   db.getSingleAsyncMemoBenchmark
 );
 router.post(
