@@ -1,13 +1,15 @@
-import { Chart } from 'chart.js';
-import { hyphenize, snakeCaseize } from '../../utils/convert_string.js';
+import { snakeCaseize } from '../../utils/convert_string.js';
+import { addData } from './chart_util.js';
 import {
-  addData,
-  removeDataForType,
-  removeDataForBrowsers,
-  clearData,
-  updateChart,
-} from './chart_util.js';
-import unselectOthers from './unselect_others.js';
+  setUpTypes,
+  setUpAvgOrMin,
+  setUpBrowserCheckboxes,
+  setUpOsRadios,
+  setUpNumCoresRadios,
+  setUpSlider,
+  setUpResetChartButton,
+} from './set_up_utils.js';
+import getBrowserStr from './get_browser_str.js';
 
 export default function() {
   const mode = localStorage.getItem('mode') || 'avg';
@@ -41,213 +43,29 @@ export default function() {
       },
     });
 
-    chart.types = [];
-    window.types.forEach(function(camelType) {
-      if (types.includes(camelType)) {
-        const snakeCaseType = snakeCaseize(camelType);
-        chart.types.push(snakeCaseType);
-      }
-    });
-
     chart.options = {
       mode,
       maxN,
       os,
       numCores,
+      browsers,
+      types: [],
     };
-
-    chart.browsers = browsers;
-
-    addData(chart.types, chart.browsers, chart.options, chart);
-
-    const slider = document.getElementById('slider');
-    slider.value = maxN;
-    const sliderSpan = document.getElementById('slider-span');
-    sliderSpan.innerText = maxN;
-    slider.oninput = function() {
-      const value = slider.value;
-      sliderSpan.innerText = value;
-    };
-    slider.onchange = function() {
-      const value = slider.value;
-      localStorage.setItem('maxN', value);
-      chart.options.maxN = value;
-      clearData(chart);
-      updateChart(chart);
-    };
-
-    const avgOrMinRadios = document.getElementById('avg-or-min-radios');
-    for (let i = 0; i < avgOrMinRadios.length; i++) {
-      const radio = avgOrMinRadios[i];
-      if (radio.value === mode) {
-        radio.checked = true;
-      } else {
-        radio.checked = false;
+    window.types.forEach(function(camelType) {
+      if (types.includes(camelType)) {
+        const snakeCaseType = snakeCaseize(camelType);
+        chart.options.types.push(snakeCaseType);
       }
-      radio.onclick = function() {
-        chart.options.mode = radio.value;
-        localStorage.setItem('mode', radio.value);
-        unselectOthers(i, avgOrMinRadios);
-        updateChart(chart);
-      };
-    }
-
-    const browserCheckboxes = document.getElementById('browser-checkboxes');
-    for (let i = 0; i < browserCheckboxes.length; i++) {
-      const checkbox = browserCheckboxes[i];
-      const checkboxIdArr = checkbox.id.split('-');
-      checkboxIdArr.pop();
-      const browserStr = checkboxIdArr.join(' ');
-      if (browsers.includes(browserStr)) {
-        checkbox.checked = true;
-      } else {
-        checkbox.checked = false;
-      }
-      checkbox.onclick = function() {
-        if (checkbox.checked) {
-          browsers.push(browserStr);
-          addData(chart.types, [browserStr], chart.options, chart);
-        } else {
-          const browserIdx = browsers.indexOf(browserStr);
-          if (browserIdx !== -1) {
-            browsers.splice(browserIdx, 1);
-          }
-          removeDataForBrowsers([browserStr], chart);
-        }
-        localStorage.setItem('browsers', JSON.stringify(browsers));
-      };
-    }
-
-    const osRadios = document.getElementById('os-radios');
-    for (let i = 0; i < osRadios.length; i++) {
-      const radio = osRadios[i];
-      if (radio.value === chart.options.os) {
-        radio.checked = true;
-      }
-      radio.onclick = function() {
-        chart.options.os = radio.value;
-        localStorage.setItem('os', radio.value);
-        unselectOthers(i, osRadios);
-        updateChart(chart);
-      };
-    }
-
-    const numCoresRadios = document.getElementById('num-cores-radios');
-    for (let i = 0; i < numCoresRadios.length; i++) {
-      const radio = numCoresRadios[i];
-      if (chart.options.numCores === radio.value) {
-        radio.checked = true;
-      } else {
-        radio.checked = false;
-      }
-      radio.onclick = function() {
-        localStorage.setItem('numCores', radio.value);
-        chart.options.numCores = radio.value;
-        unselectOthers(i, numCoresRadios);
-        updateChart(chart);
-      };
-    }
-
-    window.types.forEach(function(type) {
-      const hyphenizedType = hyphenize(type);
-      const snakeCasedType = snakeCaseize(type);
-
-      const typeCheckbox = document.getElementById(
-        `${hyphenizedType}-checkbox`
-      );
-      if (types.includes(type)) {
-        typeCheckbox.checked = true;
-      }
-      typeCheckbox.onclick = function() {
-        if (this.checked) {
-          if (!types.includes(type)) {
-            types.push(type);
-            localStorage.setItem('types', JSON.stringify(types));
-          }
-          addData([snakeCasedType], chart.browsers, chart.options, chart);
-        } else {
-          const typeIdx = types.indexOf(type);
-          if (typeIdx !== -1) {
-            types.splice(typeIdx, 1);
-            localStorage.setItem('types', JSON.stringify(types));
-          }
-          removeDataForType(type, chart);
-        }
-      };
     });
 
-    const resetChartButton = document.getElementById('reset-chart-button');
-    resetChartButton.onclick = function(e) {
-      e.preventDefault();
-      chart.types = ['sync', 'async'];
-      localStorage.setItem('types', JSON.stringify(chart.types));
-      window.types.forEach(function(type) {
-        const hyphenizedType = hyphenize(type);
-        const snakeCasedType = snakeCaseize(type);
+    addData(chart.options.types, chart.options.browsers, chart.options, chart);
 
-        const typeCheckbox = document.getElementById(
-          `${hyphenizedType}-checkbox`
-        );
-        if (chart.types.includes(type)) {
-          typeCheckbox.checked = true;
-        } else {
-          typeCheckbox.checked = false;
-        }
-      });
-
-      chart.options.mode = 'avg';
-      localStorage.setItem('mode', chart.options.mode);
-      for (let i = 0; i < avgOrMinRadios.length; i++) {
-        const radio = avgOrMinRadios[i];
-        if (radio.value === chart.options.mode) {
-          radio.checked = true;
-        } else {
-          radio.checked = false;
-        }
-      }
-
-      chart.browsers = ['all browsers'];
-      localStorage.setItem('browsers', JSON.stringify(chart.browsers));
-      for (let i = 0; i < browserCheckboxes.length; i++) {
-        const checkbox = browserCheckboxes[i];
-        const checkboxIdArr = checkbox.id.split('-');
-        checkboxIdArr.pop();
-        const browserStr = checkboxIdArr.join(' ');
-        if (chart.browsers.includes(browserStr)) {
-          checkbox.checked = true;
-        } else {
-          checkbox.checked = false;
-        }
-      }
-
-      chart.options.os = 'undefined';
-      localStorage.setItem('os', chart.options.os);
-      for (let i = 0; i < osRadios.length; i++) {
-        const radio = osRadios[i];
-        if (radio.value === chart.options.os) {
-          radio.checked = true;
-        } else {
-          radio.checked = false;
-        }
-      }
-
-      chart.options.numCores = 'undefined';
-      localStorage.setItem('numCores', chart.options.numCores);
-      for (let i = 0; i < numCoresRadios.length; i++) {
-        const radio = numCoresRadios[i];
-        if (radio.value === chart.options.numCores) {
-          radio.checked = true;
-        } else {
-          radio.checked = false;
-        }
-      }
-
-      chart.options.maxN = '45';
-      localStorage.setItem('maxN', chart.options.maxN);
-      slider.value = chart.options.maxN;
-      sliderSpan.innerText = chart.options.maxN;
-
-      updateChart(chart);
-    };
+    setUpTypes(chart);
+    setUpAvgOrMin(chart);
+    setUpBrowserCheckboxes(chart);
+    setUpOsRadios(chart);
+    setUpNumCoresRadios(chart);
+    setUpSlider(chart);
+    setUpResetChartButton(chart);
   });
 }

@@ -3,16 +3,16 @@ import randomColor from 'randomcolor';
 import { camelize, snakeCaseize } from '../../utils/convert_string.js';
 
 export function addData(types, browsers, options, chart) {
-  const newTypes = chart.types.slice();
+  const newTypes = chart.options.types.slice();
   types.forEach(function(type) {
     if (!newTypes.includes(type)) {
       newTypes.push(type);
     }
   });
-  chart.types = newTypes;
+  chart.options.types = newTypes;
   browsers.forEach(function(browser) {
-    if (!chart.browsers.includes(browser)) {
-      chart.browsers.push(browser);
+    if (!chart.options.browsers.includes(browser)) {
+      chart.options.browsers.push(browser);
     }
   });
   const typesAndBrowsers = [];
@@ -91,9 +91,9 @@ export function removeDataForType(type, chart) {
       i--;
     }
   }
-  const typeIdx = chart.types.indexOf(snakeCaseize(type));
+  const typeIdx = chart.options.types.indexOf(snakeCaseize(type));
   if (typeIdx !== -1) {
-    chart.types.splice(typeIdx, 1);
+    chart.options.types.splice(typeIdx, 1);
   }
   chart.update();
 }
@@ -111,9 +111,9 @@ export function removeDataForBrowsers(browsers, chart) {
       }
     }
 
-    const browserIdx = chart.browsers.indexOf(browser);
+    const browserIdx = chart.options.browsers.indexOf(browser);
     if (browserIdx !== -1) {
-      chart.browsers.splice(browserIdx, 1);
+      chart.options.browsers.splice(browserIdx, 1);
     }
   });
   chart.update();
@@ -128,7 +128,7 @@ export function clearData(chart) {
 export function updateChart(chart) {
   clearData(chart);
   updateTitle(chart);
-  addData(chart.types, chart.browsers, chart.options, chart);
+  addData(chart.options.types, chart.options.browsers, chart.options, chart);
 }
 
 function updateTitle(chart) {

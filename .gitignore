@@ -1,8 +1,8 @@
 node_modules
 bundle.js
 bundle.js.map
-main.bundle.js
-main.bundle.js.map
+*.bundle.js
+*.bundle.js.map
 *.worker.js
 *.worker.js.map
 latest.dump
