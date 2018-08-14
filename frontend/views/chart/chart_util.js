@@ -1,6 +1,6 @@
 import merge from 'lodash/merge';
 import randomColor from 'randomcolor';
-import { camelize, snakeCaseize } from './convert_string.js';
+import { camelize, snakeCaseize } from '../../utils/convert_string.js';
 
 export function addData(types, browsers, options, chart) {
   const newTypes = chart.types.slice();

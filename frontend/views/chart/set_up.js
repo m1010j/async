@@ -1,5 +1,5 @@
 import { Chart } from 'chart.js';
-import { hyphenize, snakeCaseize } from './convert_string.js';
+import { hyphenize, snakeCaseize } from '../../utils/convert_string.js';
 import {
   addData,
   removeDataForType,

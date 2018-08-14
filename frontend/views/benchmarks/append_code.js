@@ -1,5 +1,5 @@
-import functions from './functions.js';
-import { busywork } from './busywork.js';
+import functions from '../../utils/functions.js';
+import { busywork } from '../../utils/busywork.js';
 
 export default function(type, htmlElement) {
   const codeTag = document.createElement('code');
