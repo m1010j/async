@@ -67,9 +67,9 @@ export function setUpBrowserCheckboxes(chart) {
         chart.options.browsers.push(browserStr);
         addData(chart.options.types, [browserStr], chart.options, chart);
       } else {
-        const browserIdx = browsers.indexOf(browserStr);
+        const browserIdx = chart.options.browsers.indexOf(browserStr);
         if (browserIdx !== -1) {
-          browsers.splice(browserIdx, 1);
+          chart.options.browsers.splice(browserIdx, 1);
         }
         removeDataForBrowsers([browserStr], chart);
       }
