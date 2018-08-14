@@ -17,9 +17,14 @@ html
     script(type='text/javascript', src='https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js')
     link(href='https://fonts.googleapis.com/css?family=Arsenal|Oxygen+Mono')
     link(rel='stylesheet', href='./stylesheets/reset.css')
+    if isMobile
+      link(rel='stylesheet', href='./stylesheets/mobile.css')
+    else
+      link(rel='stylesheet', href='./stylesheets/desktop.css')
     link(rel='stylesheet', href='./stylesheets/styles.css')
     link(rel='stylesheet', href='./stylesheets/sunburst.css')
     script(defer='', src='https://use.fontawesome.com/releases/v5.0.1/js/all.js')
+    script= 'window.isMobile = ' + isMobile
     script(id='types')= 'window.types = [' + types.map(function(type) { return `'${type}'` }).toString() + '];'
   body
     if !agreedToPivacyNotice

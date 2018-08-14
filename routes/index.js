@@ -1,6 +1,7 @@
 var express = require('express');
 var csurf = require('csurf');
 var mcache = require('memory-cache');
+var useragent = require('useragent');
 
 var router = express.Router();
 
@@ -29,10 +30,14 @@ var cache = function(duration) {
 };
 
 router.get('/', csrfMiddleware, function(req, res) {
+  const os = useragent.parse(req.headers['user-agent']).os.toString();
+  const isMobile = os.slice(0, 3) === 'iOS' || os.slice(0, 7) === 'Android';
+
   res.render('index', {
     title: 'Explorations in Asynchronicity',
     csrf: req.csrfToken(),
     agreedToPivacyNotice: req.cookies.agreed_to_privacy_notice,
+    isMobile: isMobile,
   });
 });
 router.get('/agree_to_privacy_notice', function(req, res) {
