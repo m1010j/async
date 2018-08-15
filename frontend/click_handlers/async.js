@@ -11,7 +11,9 @@ export default function(type) {
     const hyphenizedType = hyphenize(type);
 
     const button = document.getElementById(`${hyphenizedType}-submit`);
+    const numberInput = document.getElementById(`${hyphenizedType}-n`);
     button.disabled = true;
+    numberInput.disabled = true;
 
     const spinnerContainer = document.getElementById(
       `${hyphenizedType}-spinner-container`

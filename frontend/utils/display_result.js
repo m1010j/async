@@ -2,7 +2,10 @@ import nth from './nth.js';
 import stringify from './stringify.js';
 
 export default function(n, duration, result, type) {
-  document.getElementById(`${type}-submit`).disabled = false;
+  const button = document.getElementById(`${type}-submit`);
+  const numberInput = document.getElementById(`${type}-n`);
+  button.disabled = false;
+  numberInput.disabled = false;
   const spinnerContainer = document.getElementById(`${type}-spinner-container`);
   spinnerContainer.classList.add('hidden');
   let resultString = result.toString();
