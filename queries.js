@@ -35,7 +35,7 @@ function getAllBenchmarks(type) {
     let numCores = parseInt(req.query.num_cores) || undefined;
 
     const selectStr = escape(
-      'SELECT n, %s(duration) ',
+      'SELECT n, %s(COALESCE(duration, 0)) ',
       req.query.mode && req.query.mode.toUpperCase()
     );
     const fromStr = escape('FROM %s_benchmarks ', type);
@@ -176,7 +176,7 @@ function avgSuccessCb(res) {
   return function(data) {
     const structuredData = {};
     data.forEach(function(item) {
-      structuredData[item.n] = item.avg || 0;
+      structuredData[item.n] = item.avg;
     });
     res.status(200).json({
       status: 'success',
@@ -190,7 +190,7 @@ function minSuccessCb(res) {
   return function(data) {
     const structuredData = {};
     data.forEach(function(item) {
-      structuredData[item.n] = item.min || 0;
+      structuredData[item.n] = item.min;
     });
     res.status(200).json({
       status: 'success',
