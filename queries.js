@@ -16,8 +16,7 @@ var options = {
 var pgp = require('pg-promise')(options);
 
 var connectionConfig =
-  process.env.DATABASE_URL ||
-  'postgres://matthias:matthias@localhost:5432/async';
+  process.env.DATABASE_URL || 'postgres://localhost:5432/async';
 var db = pgp(connectionConfig);
 
 function getAllBenchmarks(type) {
