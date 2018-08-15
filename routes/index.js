@@ -49,12 +49,7 @@ router.get('/agree_to_privacy_notice', function(req, res) {
 });
 router.get('/api/sync_benchmarks', cache(10), db.getAllSyncBenchmarks);
 router.get('/api/sync_benchmarks/:id', cache(10), db.getSingleSyncBenchmark);
-router.post(
-  '/api/sync_benchmarks',
-  cache(10),
-  csrfMiddleware,
-  db.createSyncBenchmark
-);
+router.post('/api/sync_benchmarks', csrfMiddleware, db.createSyncBenchmark);
 router.get('/api/sync_busy_benchmarks', cache(10), db.getAllSyncBusyBenchmarks);
 router.get(
   '/api/sync_busy_benchmarks/:id',
