@@ -6,6 +6,8 @@ export default function(n, duration, result, type) {
   const numberInput = document.getElementById(`${type}-n`);
   button.disabled = false;
   numberInput.disabled = false;
+  numberInput.focus();
+
   const spinnerContainer = document.getElementById(`${type}-spinner-container`);
   spinnerContainer.classList.add('hidden');
   let resultString = result.toString();
