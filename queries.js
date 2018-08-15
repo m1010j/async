@@ -176,7 +176,7 @@ function avgSuccessCb(res) {
   return function(data) {
     const structuredData = {};
     data.forEach(function(item) {
-      structuredData[item.n] = item.avg;
+      structuredData[item.n] = item.avg || 0;
     });
     res.status(200).json({
       status: 'success',
@@ -190,7 +190,7 @@ function minSuccessCb(res) {
   return function(data) {
     const structuredData = {};
     data.forEach(function(item) {
-      structuredData[item.n] = item.min;
+      structuredData[item.n] = item.min || 0;
     });
     res.status(200).json({
       status: 'success',
