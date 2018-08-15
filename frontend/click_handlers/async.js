@@ -27,14 +27,12 @@ export default function(type) {
     let worker;
     if (window.Worker) {
       worker = new Worker('./workers/async.js');
-      const beforeTime = new Date().getTime();
+
       worker.postMessage({ n, type });
       worker.onmessage = function(e) {
-        const afterTime = new Date().getTime();
-        const duration = afterTime - beforeTime;
-        displayResult(n, duration, e.data.n, hyphenizedType);
+        displayResult(n, e.data.duration, e.data.result, hyphenizedType);
         worker.terminate();
-        post(`${snakeCaseize(type)}`, n, duration);
+        post(`${snakeCaseize(type)}`, n, e.data.duration);
       };
     } else {
       const beforeTime = new Date().getTime();

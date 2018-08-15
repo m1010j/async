@@ -3,9 +3,11 @@ import { asyncBusyFib } from '../fib_functions/async_busy.js';
 import { asyncMemoFib } from '../fib_functions/async_memo.js';
 import functions from '../utils/functions.js';
 
-onmessage = function(e) {
+onmessage = async function(e) {
   const { n, type } = e.data;
-  functions[type](n).then(function(result) {
-    postMessage({ n: result });
-  });
+  const beforeTime = new Date().getTime();
+  const result = await functions[type](n);
+  const afterTime = new Date().getTime();
+  const duration = afterTime - beforeTime;
+  postMessage({ result, duration });
 };
