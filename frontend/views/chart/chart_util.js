@@ -65,7 +65,7 @@ function _addData(typesAndBrowsers, options, chart) {
         const newData = mapValues(res.data, chart.data.labels);
         const dataset = merge({}, emptyDataset);
         dataset.resData = res.data;
-        dataset.borderColor = [randomColor()];
+        dataset.borderColor = [randomColor({ luminosity: 'light' })];
         let browserLabel = browser;
         if (browserLabel === 'undefined') {
           browserLabel = 'all browsers';
