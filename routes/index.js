@@ -40,6 +40,11 @@ router.get('/', csrfMiddleware, function(req, res) {
     isMobile: isMobile,
   });
 });
+router.get('/incompatible', function(req, res) {
+  res.render('incompatibility_notice', {
+    title: 'Explorations in Asynchronicity',
+  });
+});
 router.get('/agree_to_privacy_notice', function(req, res) {
   res.cookie('agreed_to_privacy_notice', true);
   res.status(200).json({

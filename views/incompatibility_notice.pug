@@ -1,0 +1,27 @@
+doctype html
+html
+  head
+    meta(name='csrf-token', content= csrf)
+    title= title
+    link(rel='shortcut icon', type='image/x-icon', href='./favicon.ico')
+    script(type='text/javascript', src='https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js')
+    link(href='https://fonts.googleapis.com/css?family=Arsenal|Oxygen+Mono')
+    link(rel='stylesheet', href='./stylesheets/reset.css')
+    if isMobile
+      link(rel='stylesheet', href='./stylesheets/mobile.css')
+    else
+      link(rel='stylesheet', href='./stylesheets/desktop.css')
+    link(rel='stylesheet', href='./stylesheets/styles.css')
+    link(rel='stylesheet', href='./stylesheets/sunburst.css')
+    script(defer='', src='https://use.fontawesome.com/releases/v5.0.1/js/all.js')
+  body
+    h1= title
+    div#subtitle
+      span by
+        a(href='http://www.matthiasjenny.com')= ' Matthias Jenny'
+      a(href='https://github.com/m1010j/async-explorations/')
+        i.fab.fa-github
+    main#main
+      div.container
+        div.result
+          p The benchmarks on this website use #[a(href='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function') async functions], which your browser doesn't seem to support. Please refer to #[a(href='https://caniuse.com/#feat=async-functions') this list] of browsers that support async functions.
