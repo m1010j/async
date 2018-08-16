@@ -77,8 +77,10 @@ function getAllBenchmarks(type) {
       default:
         whereStrs.push(escape("LOWER(browser) LIKE '%s%%'", browser));
     }
-    if (os !== undefined && os !== 'undefined') {
+    if (os !== undefined && os !== 'linux') {
       whereStrs.push(escape("LOWER(os) LIKE '%s%%'", os));
+    } else if (os === 'linux') {
+      whereStrs.push("(LOWER(os) LIKE 'linux%' OR LOWER(os) LIKE 'ubuntu%')");
     }
     whereStrs.push(escape('n <= %s', `${maxN}`));
     if (numCores !== undefined) {
