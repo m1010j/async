@@ -46,7 +46,9 @@ router.get('/incompatible', function(req, res) {
   });
 });
 router.get('/agree_to_privacy_notice', function(req, res) {
-  res.cookie('agreed_to_privacy_notice', true);
+  res.cookie('agreed_to_privacy_notice', true, {
+    expires: new Date('2038-01-17T22:14:07'),
+  });
   res.status(200).json({
     status: 'success',
     message: 'Successfully agreed to privacy notice',
