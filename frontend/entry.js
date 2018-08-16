@@ -4,6 +4,10 @@ import setUpAgreeButton from './views/agree_button/set_up.js';
 import setUpChart from './views/chart/set_up.js';
 
 document.addEventListener('DOMContentLoaded', function() {
+  if (navigator.userAgent.match(/iPad/i) !== null) {
+    document.getElementsByTagName('html')[0].style.fontSize = '1em';
+  }
+
   setUpAgreeButton();
 
   const chartContainerContainer = document.getElementById(
