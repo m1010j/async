@@ -36,10 +36,11 @@ export function setUpTypes(chart) {
           chart
         );
       } else {
-        const typeIdx = chart.appOptions.types.indexOf(snakeCasedType);
+        const typesCopy = chart.appOptions.types.slice();
+        const typeIdx = typesCopy.indexOf(type);
         if (typeIdx !== -1) {
-          chart.appOptions.types.splice(typeIdx, 1);
-          localStorage.setItem('types', JSON.stringify(chart.appOptions.types));
+          typesCopy.splice(typeIdx, 1);
+          localStorage.setItem('types', JSON.stringify(typesCopy));
         }
         removeDataForType(snakeCasedType, chart);
       }

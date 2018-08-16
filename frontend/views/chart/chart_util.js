@@ -1,6 +1,6 @@
 import merge from 'lodash/merge';
 import randomColor from 'randomcolor';
-import { camelize, snakeCaseize } from '../../utils/convert_string.js';
+import { camelize } from '../../utils/convert_string.js';
 
 export function addData(types, browsers, options, chart) {
   const newTypes = chart.appOptions.types.slice();
@@ -84,18 +84,20 @@ function _addData(typesAndBrowsers, options, chart) {
 }
 
 export function removeDataForType(type, chart) {
+  const camelType = camelize(type);
   const datasets = chart.data.datasets;
   for (let i = 0; i < datasets.length; i++) {
     const dataset = datasets[i];
     const datasetLabelArr = dataset.label.split(' ');
-    if (datasetLabelArr[datasetLabelArr.length - 1] === type) {
+    if (datasetLabelArr[datasetLabelArr.length - 1] === camelType) {
       datasets.splice(i, 1);
       i--;
     }
   }
-  const typeIdx = chart.appOptions.types.indexOf(snakeCaseize(type));
+  const typeIdx = chart.appOptions.types.indexOf(type);
   if (typeIdx !== -1) {
     chart.appOptions.types.splice(typeIdx, 1);
+    localStorage.setItem('types', JSON.stringify(chart.appOptions.types));
   }
   chart.update();
 }
