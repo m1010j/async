@@ -35,7 +35,7 @@ function getAllBenchmarks(type) {
     let numCores = parseInt(req.query.num_cores) || undefined;
 
     const selectStr = escape(
-      'SELECT n, %s(COALESCE(duration, 0)) ',
+      'SELECT n, ROUND(%s(COALESCE(duration, 0)), 2) AS duration ',
       req.query.mode && req.query.mode.toUpperCase()
     );
     const fromStr = escape('FROM %s_benchmarks ', type);
@@ -97,11 +97,11 @@ function getAllBenchmarks(type) {
         groupAndOrderStr;
       if (isAvgMode) {
         db.any(queryStr)
-          .then(avgSuccessCb(res))
+          .then(avgOrMinSuccessCb(res))
           .catch(errorCb);
       } else if (isMinMode) {
         db.any(queryStr)
-          .then(minSuccessCb(res))
+          .then(avgOrMinSuccessCb(res))
           .catch(errorCb);
       }
     } else {
@@ -174,25 +174,11 @@ function createBenchmark(type) {
   };
 }
 
-function avgSuccessCb(res) {
+function avgOrMinSuccessCb(res) {
   return function(data) {
     const structuredData = {};
     data.forEach(function(item) {
-      structuredData[item.n] = item.avg;
-    });
-    res.status(200).json({
-      status: 'success',
-      data: structuredData,
-      message: 'Retrieved ALL benchmarks',
-    });
-  };
-}
-
-function minSuccessCb(res) {
-  return function(data) {
-    const structuredData = {};
-    data.forEach(function(item) {
-      structuredData[item.n] = item.min;
+      structuredData[item.n] = item.duration;
     });
     res.status(200).json({
       status: 'success',
