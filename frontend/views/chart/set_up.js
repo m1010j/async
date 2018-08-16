@@ -24,6 +24,13 @@ export default function() {
   const ctx = document.getElementById('chart').getContext('2d');
 
   import(/* webpackChunkName: "Chart" */ 'chart.js').then(function({ Chart }) {
+    const color = '#d6deeb';
+    const fontSize = 15;
+    const fontStyle = {
+      fontColor: color,
+      fontFamily: '"Arsenal", sans-serif',
+      fontSize,
+    };
     const chart = new Chart(ctx, {
       type: 'line',
       data: {
@@ -31,14 +38,40 @@ export default function() {
         datasets: [],
       },
       options: {
+        tooltips: {
+          titleFontSize: fontSize + 2,
+          bodyFontSize: fontSize,
+          backgroundColor: '#011627',
+        },
         scales: {
           yAxes: [
             {
-              ticks: {
-                beginAtZero: true,
+              ticks: Object.assign(
+                {
+                  beginAtZero: true,
+                },
+                fontStyle
+              ),
+              gridLines: { color },
+            },
+          ],
+          xAxes: [
+            {
+              ticks: Object.assign(
+                {
+                  beginAtZero: true,
+                },
+                fontStyle
+              ),
+              gridLines: {
+                color,
+                borderDash: [1, 10],
               },
             },
           ],
+        },
+        legend: {
+          labels: fontStyle,
         },
       },
     });

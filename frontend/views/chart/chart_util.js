@@ -37,6 +37,8 @@ function _addData(typesAndBrowsers, options, chart) {
       data: [],
       backgroundColor: ['rgba(255, 255, 255, 0)'],
       borderWidth: 2,
+      pointHoverRadius: 8,
+      pointHoverBackgroundColor: '#ff635d',
     };
 
     fetch(
