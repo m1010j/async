@@ -130,12 +130,6 @@ h3 {
   line-height: 2;
 }
 
-h4 {
-  padding-left: 1rem;
-  padding-right: 1rem;
-  width: 85vw;
-}
-
 #subtitle,
 .navigation {
   display: flex;
@@ -555,4 +549,10 @@ code {
   height: 0.36rem;
   border-radius: 50%;
   background: white;
+}
+
+@media (orientation: landscape) {
+  #chart-container {
+    width: 65vw;
+  }
 }
