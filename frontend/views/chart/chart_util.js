@@ -3,16 +3,16 @@ import randomColor from 'randomcolor';
 import { camelize, snakeCaseize } from '../../utils/convert_string.js';
 
 export function addData(types, browsers, options, chart) {
-  const newTypes = chart.options.types.slice();
+  const newTypes = chart.appOptions.types.slice();
   types.forEach(function(type) {
     if (!newTypes.includes(type)) {
       newTypes.push(type);
     }
   });
-  chart.options.types = newTypes;
+  chart.appOptions.types = newTypes;
   browsers.forEach(function(browser) {
-    if (!chart.options.browsers.includes(browser)) {
-      chart.options.browsers.push(browser);
+    if (!chart.appOptions.browsers.includes(browser)) {
+      chart.appOptions.browsers.push(browser);
     }
   });
   const typesAndBrowsers = [];
@@ -91,9 +91,9 @@ export function removeDataForType(type, chart) {
       i--;
     }
   }
-  const typeIdx = chart.options.types.indexOf(snakeCaseize(type));
+  const typeIdx = chart.appOptions.types.indexOf(snakeCaseize(type));
   if (typeIdx !== -1) {
-    chart.options.types.splice(typeIdx, 1);
+    chart.appOptions.types.splice(typeIdx, 1);
   }
   chart.update();
 }
@@ -111,9 +111,9 @@ export function removeDataForBrowsers(browsers, chart) {
       }
     }
 
-    const browserIdx = chart.options.browsers.indexOf(browser);
+    const browserIdx = chart.appOptions.browsers.indexOf(browser);
     if (browserIdx !== -1) {
-      chart.options.browsers.splice(browserIdx, 1);
+      chart.appOptions.browsers.splice(browserIdx, 1);
     }
   });
   chart.update();
@@ -128,18 +128,23 @@ export function clearData(chart) {
 export function updateChart(chart) {
   clearData(chart);
   updateTitle(chart);
-  addData(chart.options.types, chart.options.browsers, chart.options, chart);
+  addData(
+    chart.appOptions.types,
+    chart.appOptions.browsers,
+    chart.appOptions,
+    chart
+  );
 }
 
 function updateTitle(chart) {
   const chartTitle = document.getElementById('chart-title');
-  const avgOrMin = chart.options.mode === 'avg' ? 'Average' : 'Minimum';
-  let os = osStrings[chart.options.os];
-  if (['undefined', undefined].includes(chart.options.os)) {
+  const avgOrMin = chart.appOptions.mode === 'avg' ? 'Average' : 'Minimum';
+  let os = osStrings[chart.appOptions.os];
+  if (['undefined', undefined].includes(chart.appOptions.os)) {
     os = 'any operating system';
   }
-  let numCores = chart.options.numCores;
-  if (['undefined', undefined].includes(chart.options.numCores)) {
+  let numCores = chart.appOptions.numCores;
+  if (['undefined', undefined].includes(chart.appOptions.numCores)) {
     numCores = 'any number of';
   }
   chartTitle.innerText =

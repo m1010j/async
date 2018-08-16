@@ -17,7 +17,7 @@ import {
 import getBrowserStr from './get_browser_str.js';
 
 export function setUpTypes(chart) {
-  setTypes(window.types, chart.options.types);
+  setTypes(window.types, chart.appOptions.types);
   window.types.forEach(function(type) {
     const hyphenizedType = hyphenize(type);
     const snakeCasedType = snakeCaseize(type);
@@ -25,18 +25,23 @@ export function setUpTypes(chart) {
     const typeCheckbox = document.getElementById(`${hyphenizedType}-checkbox`);
     typeCheckbox.onclick = function() {
       if (this.checked) {
-        if (!chart.options.types.includes(type)) {
-          chart.options.types.push(type);
-          localStorage.setItem('types', JSON.stringify(chart.options.types));
+        if (!chart.appOptions.types.includes(snakeCasedType)) {
+          chart.appOptions.types.push(snakeCasedType);
+          localStorage.setItem('types', JSON.stringify(chart.appOptions.types));
         }
-        addData([snakeCasedType], chart.options.browsers, chart.options, chart);
+        addData(
+          [snakeCasedType],
+          chart.appOptions.browsers,
+          chart.appOptions,
+          chart
+        );
       } else {
-        const typeIdx = chart.options.types.indexOf(type);
+        const typeIdx = chart.appOptions.types.indexOf(snakeCasedType);
         if (typeIdx !== -1) {
-          chart.options.types.splice(typeIdx, 1);
-          localStorage.setItem('types', JSON.stringify(chart.options.types));
+          chart.appOptions.types.splice(typeIdx, 1);
+          localStorage.setItem('types', JSON.stringify(chart.appOptions.types));
         }
-        removeDataForType(type, chart);
+        removeDataForType(snakeCasedType, chart);
       }
     };
   });
@@ -44,11 +49,11 @@ export function setUpTypes(chart) {
 
 export function setUpAvgOrMin(chart) {
   const avgOrMinRadios = document.getElementById('avg-or-min-radios');
-  setAvgOrMin(avgOrMinRadios, chart.options.mode);
+  setAvgOrMin(avgOrMinRadios, chart.appOptions.mode);
   for (let i = 0; i < avgOrMinRadios.length; i++) {
     const radio = avgOrMinRadios[i];
     radio.onclick = function() {
-      chart.options.mode = radio.value;
+      chart.appOptions.mode = radio.value;
       localStorage.setItem('mode', radio.value);
       unselectOthers(i, avgOrMinRadios);
       updateChart(chart);
@@ -61,19 +66,22 @@ export function setUpBrowserCheckboxes(chart) {
   for (let i = 0; i < browserCheckboxes.length; i++) {
     const checkbox = browserCheckboxes[i];
     const browserStr = getBrowserStr(checkbox);
-    setBrowserCheckboxes(browserCheckboxes, chart.options.browsers);
+    setBrowserCheckboxes(browserCheckboxes, chart.appOptions.browsers);
     checkbox.onclick = function() {
       if (checkbox.checked) {
-        chart.options.browsers.push(browserStr);
-        addData(chart.options.types, [browserStr], chart.options, chart);
+        chart.appOptions.browsers.push(browserStr);
+        addData(chart.appOptions.types, [browserStr], chart.appOptions, chart);
       } else {
-        const browserIdx = chart.options.browsers.indexOf(browserStr);
+        const browserIdx = chart.appOptions.browsers.indexOf(browserStr);
         if (browserIdx !== -1) {
-          chart.options.browsers.splice(browserIdx, 1);
+          chart.appOptions.browsers.splice(browserIdx, 1);
         }
         removeDataForBrowsers([browserStr], chart);
       }
-      localStorage.setItem('browsers', JSON.stringify(chart.options.browsers));
+      localStorage.setItem(
+        'browsers',
+        JSON.stringify(chart.appOptions.browsers)
+      );
     };
   }
 }
@@ -82,9 +90,9 @@ export function setUpOsRadios(chart) {
   const osRadios = document.getElementById('os-radios');
   for (let i = 0; i < osRadios.length; i++) {
     const radio = osRadios[i];
-    setOsRadios(osRadios, chart.options.os);
+    setOsRadios(osRadios, chart.appOptions.os);
     radio.onclick = function() {
-      chart.options.os = radio.value;
+      chart.appOptions.os = radio.value;
       localStorage.setItem('os', radio.value);
       unselectOthers(i, osRadios);
       updateChart(chart);
@@ -95,11 +103,11 @@ export function setUpOsRadios(chart) {
 export function setUpNumCoresRadios(chart) {
   const numCoresRadios = document.getElementById('num-cores-radios');
   for (let i = 0; i < numCoresRadios.length; i++) {
-    setNumCoresRadios(numCoresRadios, chart.options.numCores);
+    setNumCoresRadios(numCoresRadios, chart.appOptions.numCores);
     const radio = numCoresRadios[i];
     radio.onclick = function() {
       localStorage.setItem('numCores', radio.value);
-      chart.options.numCores = radio.value;
+      chart.appOptions.numCores = radio.value;
       unselectOthers(i, numCoresRadios);
       updateChart(chart);
     };
@@ -108,9 +116,9 @@ export function setUpNumCoresRadios(chart) {
 
 export function setUpSlider(chart) {
   const slider = document.getElementById('slider');
-  slider.value = chart.options.maxN;
+  slider.value = chart.appOptions.maxN;
   const sliderSpan = document.getElementById('slider-span');
-  sliderSpan.innerText = chart.options.maxN;
+  sliderSpan.innerText = chart.appOptions.maxN;
   slider.oninput = function() {
     const value = slider.value;
     sliderSpan.innerText = value;
@@ -118,7 +126,7 @@ export function setUpSlider(chart) {
   slider.onchange = function() {
     const value = slider.value;
     localStorage.setItem('maxN', value);
-    chart.options.maxN = value;
+    chart.appOptions.maxN = value;
     clearData(chart);
     updateChart(chart);
   };
@@ -135,30 +143,30 @@ export function setUpResetChartButton(chart) {
   const resetChartButton = document.getElementById('reset-chart-button');
   resetChartButton.onclick = function(e) {
     e.preventDefault();
-    chart.options.types = ['sync', 'async'];
-    localStorage.setItem('types', JSON.stringify(chart.options.types));
+    chart.appOptions.types = ['sync', 'async'];
+    localStorage.setItem('types', JSON.stringify(chart.appOptions.types));
 
-    setTypes(window.types, chart.options.types);
+    setTypes(window.types, chart.appOptions.types);
 
-    chart.options.mode = 'avg';
-    setAvgOrMin(avgOrMinRadios, chart.options.mode);
+    chart.appOptions.mode = 'avg';
+    setAvgOrMin(avgOrMinRadios, chart.appOptions.mode);
 
-    chart.options.browsers = ['all browsers'];
-    localStorage.setItem('browsers', JSON.stringify(chart.options.browsers));
-    setBrowserCheckboxes(browserCheckboxes, chart.options.browsers);
+    chart.appOptions.browsers = ['all browsers'];
+    localStorage.setItem('browsers', JSON.stringify(chart.appOptions.browsers));
+    setBrowserCheckboxes(browserCheckboxes, chart.appOptions.browsers);
 
-    chart.options.os = 'undefined';
-    localStorage.setItem('os', chart.options.os);
-    setOsRadios(osRadios, chart.options.os);
+    chart.appOptions.os = 'undefined';
+    localStorage.setItem('os', chart.appOptions.os);
+    setOsRadios(osRadios, chart.appOptions.os);
 
-    chart.options.numCores = 'undefined';
-    localStorage.setItem('numCores', chart.options.numCores);
-    setNumCoresRadios(numCoresRadios, chart.options.numCores);
+    chart.appOptions.numCores = 'undefined';
+    localStorage.setItem('numCores', chart.appOptions.numCores);
+    setNumCoresRadios(numCoresRadios, chart.appOptions.numCores);
 
-    chart.options.maxN = '45';
-    localStorage.setItem('maxN', chart.options.maxN);
-    slider.value = chart.options.maxN;
-    sliderSpan.innerText = chart.options.maxN;
+    chart.appOptions.maxN = '45';
+    localStorage.setItem('maxN', chart.appOptions.maxN);
+    slider.value = chart.appOptions.maxN;
+    sliderSpan.innerText = chart.appOptions.maxN;
 
     updateChart(chart);
   };

@@ -43,7 +43,7 @@ export default function() {
       },
     });
 
-    chart.options = {
+    chart.appOptions = {
       mode,
       maxN,
       os,
@@ -52,13 +52,18 @@ export default function() {
       types: [],
     };
     window.types.forEach(function(camelType) {
-      if (types.includes(camelType)) {
-        const snakeCaseType = snakeCaseize(camelType);
-        chart.options.types.push(snakeCaseType);
+      const snakeCaseType = snakeCaseize(camelType);
+      if (types.includes(snakeCaseType)) {
+        chart.appOptions.types.push(snakeCaseType);
       }
     });
 
-    addData(chart.options.types, chart.options.browsers, chart.options, chart);
+    addData(
+      chart.appOptions.types,
+      chart.appOptions.browsers,
+      chart.appOptions,
+      chart
+    );
 
     setUpTypes(chart);
     setUpAvgOrMin(chart);
