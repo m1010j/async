@@ -141,7 +141,6 @@ export function updateChart(chart) {
 }
 
 function updateTitle(chart) {
-  const chartTitle = document.getElementById('chart-title');
   const avgOrMin = chart.appOptions.mode === 'avg' ? 'Average' : 'Minimum';
   let os = osStrings[chart.appOptions.os];
   if (['undefined', undefined].includes(chart.appOptions.os)) {
@@ -151,9 +150,9 @@ function updateTitle(chart) {
   if (['undefined', undefined].includes(chart.appOptions.numCores)) {
     numCores = 'any number of';
   }
-  chartTitle.innerText =
+  chart.options.title.text =
     `${avgOrMin} calculation times (in milliseconds) per input size on ` +
-    `${os} using ${numCores} logical cores`;
+    `${os} on devices with ${numCores} logical cores`;
 }
 
 const osStrings = {

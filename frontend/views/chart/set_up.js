@@ -24,11 +24,12 @@ export default function() {
   const ctx = document.getElementById('chart').getContext('2d');
 
   import(/* webpackChunkName: "Chart" */ 'chart.js').then(function({ Chart }) {
-    const color = '#d6deeb';
+    const lightGray = '#d6deeb';
     const fontSize = 15;
+    const fontFamily = '"Arsenal", sans-serif';
     const fontStyle = {
-      fontColor: color,
-      fontFamily: '"Arsenal", sans-serif',
+      fontColor: lightGray,
+      fontFamily: fontFamily,
       fontSize,
     };
     const chart = new Chart(ctx, {
@@ -52,7 +53,7 @@ export default function() {
                 },
                 fontStyle
               ),
-              gridLines: { color },
+              gridLines: { color: lightGray },
             },
           ],
           xAxes: [
@@ -64,7 +65,7 @@ export default function() {
                 fontStyle
               ),
               gridLines: {
-                color,
+                color: lightGray,
                 borderDash: [1, 10],
               },
             },
@@ -72,6 +73,12 @@ export default function() {
         },
         legend: {
           labels: fontStyle,
+        },
+        title: {
+          display: true,
+          fontSize: fontSize + 2,
+          fontFamily,
+          fontColor: '#ff635d',
         },
       },
     });
