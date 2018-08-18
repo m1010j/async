@@ -183,7 +183,7 @@ function avgOrMinSuccessCb(res) {
     res.status(200).json({
       status: 'success',
       data: structuredData,
-      message: 'Retrieved ALL benchmarks',
+      message: 'Retrieved benchmarks',
     });
   };
 }
@@ -193,7 +193,7 @@ function successCb(res) {
     res.status(200).json({
       status: 'success',
       data: data,
-      message: 'Retrieved ALL benchmarks',
+      message: 'Retrieved benchmarks',
     });
   };
 }
