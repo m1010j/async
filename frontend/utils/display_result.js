@@ -11,7 +11,7 @@ export default function(n, duration, result, type) {
   const spinnerContainer = document.getElementById(`${type}-spinner-container`);
   spinnerContainer.classList.add('hidden');
   let resultString = result.toString();
-  if (!(resultString[1] === '.')) {
+  if (resultString[1] !== '.' && resultString !== 'Infinity') {
     resultString = stringify(result);
   }
   document.getElementById(`${type}-result`).innerHTML =
