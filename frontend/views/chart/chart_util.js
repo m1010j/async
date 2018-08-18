@@ -53,10 +53,13 @@ function _addData(typesAndBrowsers, options, chart) {
       })
       .then(function(res) {
         const nums = Object.keys(res.data);
-        chart.data.labels = merge([], chart.data.labels, nums).sort(function(
-          a,
-          b
-        ) {
+        const newLabels = chart.data.labels.slice();
+        nums.forEach(function(num) {
+          if (!newLabels.includes(num)) {
+            newLabels.push(num);
+          }
+        });
+        chart.data.labels = newLabels.sort(function(a, b) {
           return parseInt(a) - parseInt(b);
         });
 
