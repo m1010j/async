@@ -1,4 +1,4 @@
-import { syncFib } from '../fib_functions/sync.js';
+import functions from '../utils/functions.js';
 import displayResult from '../utils/display_result.js';
 import Worker from 'worker-loader!../workers/sync.js';
 import { post } from '../utils/fetch.js';
@@ -35,7 +35,7 @@ export default function(type) {
       };
     } else {
       const beforeTime = new Date().getTime();
-      const result = eval(`${type}Fib`)(n);
+      const result = functions[type](n);
       const afterTime = new Date().getTime();
       const duration = afterTime - beforeTime;
       displayResult(n, duration, result, hyphenizedType);
