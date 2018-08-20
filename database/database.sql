@@ -26,7 +26,8 @@ CREATE TABLE sync_benchmarks
   os VARCHAR,
   num_cores INTEGER,
   n INTEGER,
-  duration INTEGER
+  duration INTEGER,
+  with_worker BOOLEAN
 );
 
 CREATE TABLE sync_busy_benchmarks
@@ -36,7 +37,8 @@ CREATE TABLE sync_busy_benchmarks
   os VARCHAR,
   num_cores INTEGER,
   n INTEGER,
-  duration INTEGER
+  duration INTEGER,
+  with_worker BOOLEAN
 );
 
 CREATE TABLE sync_memo_benchmarks
@@ -46,7 +48,8 @@ CREATE TABLE sync_memo_benchmarks
   os VARCHAR,
   num_cores INTEGER,
   n INTEGER,
-  duration INTEGER
+  duration INTEGER,
+  with_worker BOOLEAN
 );
 
 CREATE TABLE async_benchmarks
@@ -56,7 +59,8 @@ CREATE TABLE async_benchmarks
   os VARCHAR,
   num_cores INTEGER,
   n INTEGER,
-  duration INTEGER
+  duration INTEGER,
+  with_worker BOOLEAN
 );
 
 CREATE TABLE async_busy_benchmarks
@@ -66,7 +70,8 @@ CREATE TABLE async_busy_benchmarks
   os VARCHAR,
   num_cores INTEGER,
   n INTEGER,
-  duration INTEGER
+  duration INTEGER,
+  with_worker BOOLEAN
 );
 
 CREATE TABLE async_memo_benchmarks
@@ -76,7 +81,8 @@ CREATE TABLE async_memo_benchmarks
   os VARCHAR,
   num_cores INTEGER,
   n INTEGER,
-  duration INTEGER
+  duration INTEGER,
+  with_worker BOOLEAN
 );
 
 CREATE INDEX sync_benchmarks_num_cores ON sync_benchmarks ( num_cores );
@@ -92,6 +98,13 @@ CREATE INDEX sync_memo_benchmarks_n ON sync_memo_benchmarks ( n );
 CREATE INDEX async_benchmarks_n ON async_benchmarks ( n );
 CREATE INDEX async_busy_benchmarks_n ON async_busy_benchmarks ( n );
 CREATE INDEX async_memo_benchmarks_n ON async_memo_benchmarks ( n );
+
+CREATE INDEX sync_benchmarks_with_worker ON sync_benchmarks ( with_worker );
+CREATE INDEX sync_busy_benchmarks_with_worker ON sync_busy_benchmarks ( with_worker );
+CREATE INDEX sync_memo_benchmarks_with_worker ON sync_memo_benchmarks ( with_worker );
+CREATE INDEX async_benchmarks_with_worker ON async_benchmarks ( with_worker );
+CREATE INDEX async_busy_benchmarks_with_worker ON async_busy_benchmarks ( with_worker );
+CREATE INDEX async_memo_benchmarks_with_worker ON async_memo_benchmarks ( with_worker );
 
 CREATE INDEX sync_browser_firefox ON sync_benchmarks ( browser )
 WHERE LOWER(browser) LIKE 'firefox%' AND LOWER(browser) NOT LIKE 'firefox mobile%';
