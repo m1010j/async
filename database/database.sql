@@ -26,7 +26,7 @@ CREATE TABLE sync_benchmarks
   os VARCHAR,
   num_cores INTEGER,
   n INTEGER,
-  duration INTEGER DEFAULT 0,
+  duration INTEGER DEFAULT 0 NOT NULL,
   with_worker BOOLEAN
 );
 
@@ -37,7 +37,7 @@ CREATE TABLE sync_busy_benchmarks
   os VARCHAR,
   num_cores INTEGER,
   n INTEGER,
-  duration INTEGER DEFAULT 0,
+  duration INTEGER DEFAULT 0 NOT NULL,
   with_worker BOOLEAN
 );
 
@@ -48,7 +48,7 @@ CREATE TABLE sync_memo_benchmarks
   os VARCHAR,
   num_cores INTEGER,
   n INTEGER,
-  duration INTEGER DEFAULT 0,
+  duration INTEGER DEFAULT 0 NOT NULL,
   with_worker BOOLEAN
 );
 
@@ -59,7 +59,7 @@ CREATE TABLE async_benchmarks
   os VARCHAR,
   num_cores INTEGER,
   n INTEGER,
-  duration INTEGER DEFAULT 0,
+  duration INTEGER DEFAULT 0 NOT NULL,
   with_worker BOOLEAN
 );
 
@@ -70,7 +70,7 @@ CREATE TABLE async_busy_benchmarks
   os VARCHAR,
   num_cores INTEGER,
   n INTEGER,
-  duration INTEGER DEFAULT 0,
+  duration INTEGER DEFAULT 0 NOT NULL,
   with_worker BOOLEAN
 );
 
@@ -81,7 +81,7 @@ CREATE TABLE async_memo_benchmarks
   os VARCHAR,
   num_cores INTEGER,
   n INTEGER,
-  duration INTEGER DEFAULT 0,
+  duration INTEGER DEFAULT 0 NOT NULL,
   with_worker BOOLEAN
 );
 

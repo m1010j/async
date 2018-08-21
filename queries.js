@@ -35,7 +35,7 @@ function getAllBenchmarks(type) {
     let numCores = parseInt(req.query.num_cores) || undefined;
 
     const selectStr = escape(
-      'SELECT n, ROUND(%s(COALESCE(duration, 0)), 2) AS duration ',
+      'SELECT n, ROUND(%s(duration), 2) AS duration ',
       req.query.mode && req.query.mode.toUpperCase()
     );
     const fromStr = escape('FROM %s_benchmarks ', type);
@@ -147,10 +147,11 @@ function createBenchmark(type) {
     req.body.duration = parseInt(req.body.duration);
     req.body.n = parseInt(req.body.n);
     req.body.num_cores = parseInt(req.body.num_cores);
-    const properties = ['num_cores', 'n', 'duration'];
+    const properties = ['num_cores', 'n'];
     properties.forEach(property => {
       req.body[property] = req.body[property] || null;
     });
+    req.body.duration = req.body.duration || 0;
     req.body.type = `${type}_benchmarks`;
 
     const agent = useragent.parse(req.headers['user-agent']);
