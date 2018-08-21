@@ -1,5 +1,4 @@
 import { hyphenize, snakeCaseize } from '../../utils/convert_string.js';
-import unselectOthers from './unselect_others.js';
 import {
   addData,
   removeDataForType,
@@ -56,7 +55,6 @@ export function setUpAvgOrMin(chart) {
     radio.onclick = function() {
       chart.appOptions.mode = radio.value;
       localStorage.setItem('mode', radio.value);
-      unselectOthers(i, avgOrMinRadios);
       updateChart(chart);
     };
   }
@@ -95,7 +93,6 @@ export function setUpOsRadios(chart) {
     radio.onclick = function() {
       chart.appOptions.os = radio.value;
       localStorage.setItem('os', radio.value);
-      unselectOthers(i, osRadios);
       updateChart(chart);
     };
   }
@@ -109,7 +106,6 @@ export function setUpNumCoresRadios(chart) {
     radio.onclick = function() {
       localStorage.setItem('numCores', radio.value);
       chart.appOptions.numCores = radio.value;
-      unselectOthers(i, numCoresRadios);
       updateChart(chart);
     };
   }
