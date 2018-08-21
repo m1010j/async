@@ -2,17 +2,18 @@ import { hyphenize, snakeCaseize } from '../../utils/convert_string.js';
 import {
   addData,
   removeDataForType,
+  removeDataForWorkers,
   removeDataForBrowsers,
   clearData,
   updateChart,
 } from './chart_util.js';
 import {
   setAvgOrMin,
+  setWorkerCheckboxes,
   setBrowserCheckboxes,
   setOsRadios,
   setTypes,
   setNumCoresRadios,
-  setWorkerCheckboxes,
 } from './set.js';
 import getBrowserStr from './get_browser_str.js';
 
@@ -31,6 +32,7 @@ export function setUpTypes(chart) {
         }
         addData(
           [snakeCasedType],
+          chart.appOptions.workers,
           chart.appOptions.browsers,
           chart.appOptions,
           chart
@@ -70,7 +72,13 @@ export function setUpBrowserCheckboxes(chart) {
     checkbox.onclick = function() {
       if (checkbox.checked) {
         chart.appOptions.browsers.push(browserStr);
-        addData(chart.appOptions.types, [browserStr], chart.appOptions, chart);
+        addData(
+          chart.appOptions.types,
+          chart.appOptions.workers,
+          [browserStr],
+          chart.appOptions,
+          chart
+        );
       } else {
         const browserIdx = chart.appOptions.browsers.indexOf(browserStr);
         if (browserIdx !== -1) {
@@ -94,13 +102,19 @@ export function setUpWorkerCheckboxes(chart) {
     checkbox.onclick = function() {
       if (checkbox.checked) {
         chart.appOptions.workers.push(checkbox.value);
-        // addData(chart.appOptions.types, [workerStr], chart.appOptions, chart);
+        addData(
+          chart.appOptions.types,
+          [checkbox.value],
+          chart.appOptions.browsers,
+          chart.appOptions,
+          chart
+        );
       } else {
         const workerIdx = chart.appOptions.workers.indexOf(checkbox.value);
         if (workerIdx !== -1) {
           chart.appOptions.workers.splice(workerIdx, 1);
         }
-        // removeDataForWorkers([workerStr], chart);
+        removeDataForWorkers([checkbox.value], chart);
       }
       localStorage.setItem('workers', JSON.stringify(chart.appOptions.workers));
     };
@@ -175,7 +189,7 @@ export function setUpResetChartButton(chart) {
     localStorage.setItem('browsers', JSON.stringify(chart.appOptions.browsers));
     setBrowserCheckboxes(browserCheckboxes, chart.appOptions.browsers);
 
-    chart.appOptions.workers = ['yes'];
+    chart.appOptions.workers = ['with worker'];
     localStorage.setItem('workers', JSON.stringify(chart.appOptions.workers));
     setWorkerCheckboxes(workerCheckboxes, chart.appOptions.workers);
 

@@ -2,7 +2,7 @@ import merge from 'lodash/merge';
 import randomColor from 'randomcolor';
 import { camelize } from '../../utils/convert_string.js';
 
-export function addData(types, browsers, options, chart) {
+export function addData(types, workers, browsers, options, chart) {
   const newTypes = chart.appOptions.types.slice();
   types.forEach(function(type) {
     if (!newTypes.includes(type)) {
@@ -15,21 +15,31 @@ export function addData(types, browsers, options, chart) {
       chart.appOptions.browsers.push(browser);
     }
   });
-  const typesAndBrowsers = [];
+  const typesAndBrowsersAndWorkers = [];
   types.forEach(function(type) {
-    browsers.forEach(function(browser) {
-      typesAndBrowsers.push([type, browser]);
+    workers.forEach(function(worker) {
+      browsers.forEach(function(browser) {
+        typesAndBrowsersAndWorkers.push([type, worker, browser]);
+      });
     });
   });
-  _addData(typesAndBrowsers, options, chart);
+  _addData(typesAndBrowsersAndWorkers, options, chart);
   updateTitle(chart);
 }
 
-function _addData(typesAndBrowsers, options, chart) {
-  if (typesAndBrowsers.length) {
-    let [type, browser] = typesAndBrowsers.pop();
+function _addData(typesAndBrowsersAndWorkers, options, chart) {
+  if (typesAndBrowsersAndWorkers.length) {
+    let [type, worker, browser] = typesAndBrowsersAndWorkers.pop();
     if (browser === 'all browsers') {
       browser = 'undefined';
+    }
+    let withWorker;
+    if (!worker) {
+      withWorker = 'undefined';
+    } else if (worker === 'with worker') {
+      withWorker = 'true';
+    } else if (worker === 'without worker') {
+      withWorker = 'false';
     }
     const { mode, os, maxN, numCores } = options;
     const emptyDataset = {
@@ -42,7 +52,7 @@ function _addData(typesAndBrowsers, options, chart) {
     };
 
     fetch(
-      `/api/${type}_benchmarks?mode=${mode}&browser=${browser}&os=${os}` +
+      `/api/${type}_benchmarks?mode=${mode}&with_worker=${withWorker}&browser=${browser}&os=${os}` +
         `&max_n=${maxN}&num_cores=${numCores}`,
       {
         method: 'GET',
@@ -75,13 +85,15 @@ function _addData(typesAndBrowsers, options, chart) {
         if (browserLabel === 'undefined') {
           browserLabel = 'all browsers';
         }
-        dataset.label = `${browserLabel} ${mode} time ${camelize(type)}`;
+        dataset.label = `${browserLabel} ${mode} time ${camelize(
+          type
+        )} ${worker}`;
         dataset.data = newData;
         chart.data.datasets.push(dataset);
         chart.update();
       })
       .then(function() {
-        _addData(typesAndBrowsers, options, chart);
+        _addData(typesAndBrowsersAndWorkers, options, chart);
       });
   }
 }
@@ -107,6 +119,19 @@ export function removeDataForBrowsers(browsers, chart) {
     const browserIdx = chart.appOptions.browsers.indexOf(browser);
     if (browserIdx !== -1) {
       chart.appOptions.browsers.splice(browserIdx, 1);
+    }
+  });
+  chart.update();
+}
+
+export function removeDataForWorkers(workers, chart) {
+  const datasets = chart.data.datasets;
+  workers.forEach(function(worker) {
+    removeDataset(datasets, worker);
+
+    const workerIdx = chart.appOptions.workers.indexOf(worker);
+    if (workerIdx !== -1) {
+      chart.appOptions.workers.splice(workerIdx, 1);
     }
   });
   chart.update();

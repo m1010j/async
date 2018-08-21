@@ -78,7 +78,7 @@ function getAllBenchmarks(type) {
       default:
         whereStrs.push(escape("LOWER(browser) LIKE '%s%%'", browser));
     }
-    if (withWorker) {
+    if (withWorker && withWorker !== 'undefined') {
       whereStrs.push(escape('with_worker = %s', withWorker));
     }
     if (os !== undefined && os !== 'linux') {

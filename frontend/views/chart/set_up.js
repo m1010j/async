@@ -18,7 +18,9 @@ export default function() {
   const browsers = JSON.parse(localStorage.getItem('browsers')) || [
     'all browsers',
   ];
-  const workers = JSON.parse(localStorage.getItem('workers')) || ['yes'];
+  const workers = JSON.parse(localStorage.getItem('workers')) || [
+    'with worker',
+  ];
   const os = localStorage.getItem('os') || 'undefined';
   const numCores = localStorage.getItem('numCores') || 'undefined';
   const maxN = localStorage.getItem('maxN') || '45';
@@ -103,6 +105,7 @@ export default function() {
 
     addData(
       chart.appOptions.types,
+      chart.appOptions.workers,
       chart.appOptions.browsers,
       chart.appOptions,
       chart
