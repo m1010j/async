@@ -63,7 +63,14 @@ function getAllBenchmarks(type) {
       case 'firefox':
         whereStrs.push(
           "LOWER(browser) LIKE 'firefox%' " +
-            "AND NOT LOWER(browser) LIKE 'firefox mobile%'"
+            "AND NOT LOWER(browser) LIKE 'firefox mobile%'" +
+            "AND NOT LOWER(browser) LIKE 'firefox ios%'"
+        );
+        break;
+      case 'firefox mobile':
+        whereStrs.push(
+          "(LOWER(browser) LIKE 'firefox mobile%'" +
+            "OR LOWER(browser) LIKE 'firefox ios%')"
         );
         break;
       case 'opera':
