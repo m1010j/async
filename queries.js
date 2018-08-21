@@ -24,6 +24,7 @@ function getAllBenchmarks(type) {
     const isAvgMode = req.query.mode === 'avg';
     const isMinMode = req.query.mode === 'min';
     const maxN = req.query.max_n || '45';
+    const withWorker = req.query.with_worker;
     let browser;
     if (req.query.browser !== 'undefined') {
       browser = req.query.browser;
@@ -76,6 +77,9 @@ function getAllBenchmarks(type) {
         break;
       default:
         whereStrs.push(escape("LOWER(browser) LIKE '%s%%'", browser));
+    }
+    if (withWorker) {
+      whereStrs.push(escape('with_worker = %s', withWorker));
     }
     if (os !== undefined && os !== 'linux') {
       whereStrs.push(escape("LOWER(os) LIKE '%s%%'", os));
