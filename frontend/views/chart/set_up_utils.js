@@ -12,6 +12,7 @@ import {
   setOsRadios,
   setTypes,
   setNumCoresRadios,
+  setWorkerCheckboxes,
 } from './set.js';
 import getBrowserStr from './get_browser_str.js';
 
@@ -85,6 +86,27 @@ export function setUpBrowserCheckboxes(chart) {
   }
 }
 
+export function setUpWorkerCheckboxes(chart) {
+  const workerCheckboxes = document.getElementById('worker-checkboxes');
+  for (let i = 0; i < workerCheckboxes.length; i++) {
+    const checkbox = workerCheckboxes[i];
+    setWorkerCheckboxes(workerCheckboxes, chart.appOptions.workers);
+    checkbox.onclick = function() {
+      if (checkbox.checked) {
+        chart.appOptions.workers.push(checkbox.value);
+        // addData(chart.appOptions.types, [workerStr], chart.appOptions, chart);
+      } else {
+        const workerIdx = chart.appOptions.workers.indexOf(checkbox.value);
+        if (workerIdx !== -1) {
+          chart.appOptions.workers.splice(workerIdx, 1);
+        }
+        // removeDataForWorkers([workerStr], chart);
+      }
+      localStorage.setItem('workers', JSON.stringify(chart.appOptions.workers));
+    };
+  }
+}
+
 export function setUpOsRadios(chart) {
   const osRadios = document.getElementById('os-radios');
   for (let i = 0; i < osRadios.length; i++) {
@@ -132,6 +154,7 @@ export function setUpSlider(chart) {
 export function setUpResetChartButton(chart) {
   const avgOrMinRadios = document.getElementById('avg-or-min-radios');
   const browserCheckboxes = document.getElementById('browser-checkboxes');
+  const workerCheckboxes = document.getElementById('worker-checkboxes');
   const osRadios = document.getElementById('os-radios');
   const numCoresRadios = document.getElementById('num-cores-radios');
   const slider = document.getElementById('slider');
@@ -151,6 +174,10 @@ export function setUpResetChartButton(chart) {
     chart.appOptions.browsers = ['all browsers'];
     localStorage.setItem('browsers', JSON.stringify(chart.appOptions.browsers));
     setBrowserCheckboxes(browserCheckboxes, chart.appOptions.browsers);
+
+    chart.appOptions.workers = ['yes'];
+    localStorage.setItem('workers', JSON.stringify(chart.appOptions.workers));
+    setWorkerCheckboxes(workerCheckboxes, chart.appOptions.workers);
 
     chart.appOptions.os = 'undefined';
     localStorage.setItem('os', chart.appOptions.os);

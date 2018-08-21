@@ -4,6 +4,7 @@ import {
   setUpTypes,
   setUpAvgOrMin,
   setUpBrowserCheckboxes,
+  setUpWorkerCheckboxes,
   setUpOsRadios,
   setUpNumCoresRadios,
   setUpSlider,
@@ -17,6 +18,7 @@ export default function() {
   const browsers = JSON.parse(localStorage.getItem('browsers')) || [
     'all browsers',
   ];
+  const workers = JSON.parse(localStorage.getItem('workers')) || ['yes'];
   const os = localStorage.getItem('os') || 'undefined';
   const numCores = localStorage.getItem('numCores') || 'undefined';
   const maxN = localStorage.getItem('maxN') || '45';
@@ -89,6 +91,7 @@ export default function() {
       os,
       numCores,
       browsers,
+      workers,
       types: [],
     };
     window.types.forEach(function(camelType) {
@@ -108,6 +111,7 @@ export default function() {
     setUpTypes(chart);
     setUpAvgOrMin(chart);
     setUpBrowserCheckboxes(chart);
+    setUpWorkerCheckboxes(chart);
     setUpOsRadios(chart);
     setUpNumCoresRadios(chart);
     setUpSlider(chart);

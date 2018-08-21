@@ -45,6 +45,17 @@ export function setBrowserCheckboxes(browserCheckboxes, browsers) {
   }
 }
 
+export function setWorkerCheckboxes(workerCheckboxes, workers) {
+  for (let i = 0; i < workerCheckboxes.length; i++) {
+    const checkbox = workerCheckboxes[i];
+    if (workers.includes(checkbox.value)) {
+      checkbox.checked = true;
+    } else {
+      checkbox.checked = false;
+    }
+  }
+}
+
 export function setOsRadios(osRadios, os) {
   for (let i = 0; i < osRadios.length; i++) {
     const radio = osRadios[i];

@@ -77,6 +77,15 @@ html
                 input.checkbox(type='checkbox', id=browser +'-checkbox', name='browser', value=browser)
                 span.checkmark
         div.form-container
+          span.form-label Using Web Worker?
+          form.radios#worker-checkboxes
+            label.checkbox-label.worker-checkbox-label(for='worker-yes-checkbox') Yes
+              input(type='checkbox', id='worker-yes-checkbox', name='worker', checked=true, value='yes')
+              span.checkmark
+            label.checkbox-label.worker-checkbox-label(for='worker-no-checkbox') No
+              input(type='checkbox', id='worker-no-checkbox', name='worker', value='no')
+              span.checkmark
+        div.form-container
           span.form-label Operating system:
           form.radios#os-radios
             label.radio-label.os-radio-label(for='all-radio') All
