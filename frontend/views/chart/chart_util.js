@@ -185,7 +185,7 @@ function mapValues(data, nums) {
 }
 
 function removeDataset(datasets, str) {
-  str = str + ' ';
+  str = ' ' + str + ' ';
   for (let i = 0; i < datasets.length; i++) {
     const dataset = datasets[i];
     const datasetLabel = dataset.label + ' ';
