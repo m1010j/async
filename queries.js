@@ -152,6 +152,7 @@ function createBenchmark(type) {
       req.body[property] = req.body[property] || null;
     });
     req.body.duration = req.body.duration || 0;
+    req.body.with_worker = req.body.with_worker || false;
     req.body.type = `${type}_benchmarks`;
 
     const agent = useragent.parse(req.headers['user-agent']);
@@ -159,8 +160,8 @@ function createBenchmark(type) {
     req.body.os = agent.os.toString();
 
     db.none(
-      'INSERT INTO ${type:name} (browser, os, num_cores, n, duration)' +
-        'VALUES (${browser}, ${os}, ${num_cores}, ${n}, ${duration})',
+      'INSERT INTO ${type:name} (browser, os, num_cores, n, duration, with_worker)' +
+        'VALUES (${browser}, ${os}, ${num_cores}, ${n}, ${duration}, ${with_worker})',
       req.body
     )
       .then(function() {

@@ -1,7 +1,7 @@
 import functions from '../utils/functions.js';
 import displayResult from '../utils/display_result.js';
 import Worker from 'worker-loader!../workers/sync.js';
-import { post } from '../utils/fetch.js';
+import post from '../utils/fetch.js';
 import { hyphenize, snakeCaseize } from '../utils/convert_string.js';
 
 export default function(type) {
@@ -31,7 +31,7 @@ export default function(type) {
       worker.onmessage = function(e) {
         displayResult(n, e.data.duration, e.data.result, hyphenizedType);
         worker.terminate();
-        post(`${snakeCaseize(type)}`, n, e.data.duration);
+        post(`${snakeCaseize(type)}`, n, e.data.duration, true);
       };
     } else {
       const beforeTime = new Date().getTime();
@@ -39,7 +39,7 @@ export default function(type) {
       const afterTime = new Date().getTime();
       const duration = afterTime - beforeTime;
       displayResult(n, duration, result, hyphenizedType);
-      post(`${snakeCaseize(type)}`, n, duration);
+      post(`${snakeCaseize(type)}`, n, duration, false);
     }
   };
 }

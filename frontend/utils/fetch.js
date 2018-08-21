@@ -1,4 +1,4 @@
-export function post(type, n, duration) {
+export default function(type, n, duration, withWorker) {
   const token = document
     .querySelector('meta[name="csrf-token"]')
     .getAttribute('content');
@@ -6,6 +6,7 @@ export function post(type, n, duration) {
     n,
     duration,
     num_cores: navigator.hardwareConcurrency,
+    with_worker: withWorker,
   };
 
   return fetch(`/api/${type}_benchmarks`, {
