@@ -35,6 +35,7 @@ export default function() {
       fontColor: lightGray,
       fontFamily: fontFamily,
       fontSize,
+      fontVariant: 'small-caps',
     };
     const chart = new Chart(ctx, {
       type: 'line',

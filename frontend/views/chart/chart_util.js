@@ -85,9 +85,7 @@ function _addData(typesAndBrowsersAndWorkers, options, chart) {
         if (browserLabel === 'undefined') {
           browserLabel = 'all browsers';
         }
-        dataset.label = `${browserLabel} ${mode} time ${camelize(
-          type
-        )} ${worker}`;
+        dataset.label = `${camelize(type)} ${browserLabel} ${worker}`;
         dataset.data = newData;
         chart.data.datasets.push(dataset);
         chart.update();
