@@ -111,6 +111,15 @@ html
           h3 Benchmark
           form.type-form(id= hyphenizedTypes[idx] + '-form')
             input.n-input(id= hyphenizedTypes[idx] + '-n', type='number', placeholder='n')
+            div.worker-radios-container(id= hyphenizedTypes[idx] + '-worker-radios-container')
+              p.worker-radios-title Use Web Worker?
+              div.radios.worker-radios(id= hyphenizedTypes[idx] + '-worker-radios')
+                label.radio-label.worker-radio-label(for= hyphenizedTypes[idx] + '-worker-radios-yes') Yes
+                  input.worker-radio-yes(type='radio', name= hyphenizedTypes[idx] + '-worker-radios', id= hyphenizedTypes[idx] + '-worker-radios-yes', value='yes')
+                  span.radio-span
+                label.radio-label.worker-radio-label(for= hyphenizedTypes[idx] + '-worker-radios-no') No
+                  input.worker-radio-no(type='radio', name= hyphenizedTypes[idx] + '-worker-radios', id= hyphenizedTypes[idx] + '-worker-radios-no', value='no')
+                  span.radio-span
             input.submit(id= hyphenizedTypes[idx] + '-submit', type='submit', disabled, value='Invoke')
           div.result-container
             div.result(id= hyphenizedTypes[idx] + '-result')

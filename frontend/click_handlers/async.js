@@ -25,7 +25,7 @@ export default function(type) {
     const timeDiv = document.getElementById(`${hyphenizedType}-time`);
 
     let worker;
-    if (window.Worker) {
+    if (window.useWorker[type]) {
       worker = new Worker('./workers/async.js');
 
       worker.postMessage({ n, type });
