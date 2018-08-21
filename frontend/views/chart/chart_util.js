@@ -148,6 +148,7 @@ export function updateChart(chart) {
   updateTitle(chart);
   addData(
     chart.appOptions.types,
+    chart.appOptions.workers,
     chart.appOptions.browsers,
     chart.appOptions,
     chart
@@ -188,7 +189,7 @@ function removeDataset(datasets, str) {
   str = ' ' + str + ' ';
   for (let i = 0; i < datasets.length; i++) {
     const dataset = datasets[i];
-    const datasetLabel = dataset.label + ' ';
+    const datasetLabel = ' ' + dataset.label + ' ';
     for (let j = 0; j < datasetLabel.length - str.length + 1; j++) {
       const labelSubStr = datasetLabel.slice(j, j + str.length);
       const nextCh = datasetLabel.slice(j + str.length, j + str.length + 1);
