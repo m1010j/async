@@ -89,14 +89,8 @@ function _addData(typesAndBrowsers, options, chart) {
 export function removeDataForType(type, chart) {
   const camelType = camelize(type);
   const datasets = chart.data.datasets;
-  for (let i = 0; i < datasets.length; i++) {
-    const dataset = datasets[i];
-    const datasetLabelArr = dataset.label.split(' ');
-    if (datasetLabelArr[datasetLabelArr.length - 1] === camelType) {
-      datasets.splice(i, 1);
-      i--;
-    }
-  }
+  removeDataset(datasets, camelize(type));
+
   const typeIdx = chart.appOptions.types.indexOf(type);
   if (typeIdx !== -1) {
     chart.appOptions.types.splice(typeIdx, 1);
@@ -108,15 +102,7 @@ export function removeDataForType(type, chart) {
 export function removeDataForBrowsers(browsers, chart) {
   const datasets = chart.data.datasets;
   browsers.forEach(function(browser) {
-    for (let i = 0; i < datasets.length; i++) {
-      const dataset = datasets[i];
-      const datasetLabelArr = dataset.label.split(' ');
-      const browserArr = browser.split(' ');
-      if (datasetLabelArr.slice(0, browserArr.length).join(' ') === browser) {
-        datasets.splice(i, 1);
-        i--;
-      }
-    }
+    removeDataset(datasets, browser);
 
     const browserIdx = chart.appOptions.browsers.indexOf(browser);
     if (browserIdx !== -1) {
@@ -171,4 +157,21 @@ function mapValues(data, nums) {
   return nums.map(function(num) {
     return data[num];
   });
+}
+
+function removeDataset(datasets, str) {
+  str = str + ' ';
+  for (let i = 0; i < datasets.length; i++) {
+    const dataset = datasets[i];
+    const datasetLabel = dataset.label + ' ';
+    for (let j = 0; j < datasetLabel.length - str.length + 1; j++) {
+      const labelSubStr = datasetLabel.slice(j, j + str.length);
+      const nextCh = datasetLabel.slice(j + str.length, j + str.length + 1);
+      if (labelSubStr === str && nextCh !== 'b') {
+        datasets.splice(i, 1);
+        i--;
+        break;
+      }
+    }
+  }
 }
