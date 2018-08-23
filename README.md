@@ -2,6 +2,8 @@
 
 [Explorations in Asynchronicity](https://async.matthiasjenny.com/) is a benchmark and analysis tool for asynchronous recursive functions. See [here](https://github.com/m1010j/async-explorations-writeup/blob/master/README.md) of a discussion of some preliminary results.
 
+See [async-explorations-cli](https://www.npmjs.com/package/async-explorations-cli) for a companion command-line tool to run these benchmarks in Node.js.
+
 ### Overview
 
 Users can benchmark the following six functions:
