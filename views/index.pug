@@ -33,16 +33,7 @@ html
         div#privacy-notice When using any of the benchmarks on this website, information about your operating system, your browser, and your device's number of logical cores is stored on a server. This is information is stored purely to further the understanding of asynchronicity. By using these benchmarks, you agree to this use of your information. No uniquely identifying information, including your IP address, will ever be stored, and no stored information will ever be used for commercial purposes. 
         span#agree-button Agree
 
-    h1= title
-    div#subtitle
-      span#subtitle-name by
-        a(href='http://www.matthiasjenny.com')= ' Matthias Jenny'
-      span#subtitle-discussion
-        a(href='https://github.com/m1010j/async-explorations-writeup/blob/master/README.md') Discussion
-      span#subtitle-api
-        a(href='https://github.com/m1010j/async-explorations#api') API
-      a(href='https://github.com/m1010j/async-explorations/')
-        i.fab.fa-github
+    include title.pug
     div.navigation
       span.bold#benchmarks-span Benchmarks
       span#results-span Results
