@@ -25,7 +25,7 @@
   "homepage": "https://github.com/m1010j/async-vs-sync-fib#readme",
   "dependencies": {
     "bluebird": "^3.5.1",
-    "chart.js": "^2.7.2",
+    "chart.js": "^2.9.4",
     "compression": "^1.7.3",
     "cookie-parser": "^1.4.3",
     "csurf": "^1.9.0",
